@@ -1,19 +1,14 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var handlebars  = require('express-handlebars'), hbs;
 var app = express();
 
 app.set('port', 1337);
 app.set('views', path.join(__dirname, 'views'));
 
-hbs = handlebars.create({
-   defaultLayout: 'Main'
-});
 
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
-
+app.set('view engine', 'jade');
+app.set('view options', {layout: true});
 
 app.use(express.static(path.join(__dirname, 'static')));
 
