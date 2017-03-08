@@ -1,10 +1,16 @@
 {
-  "name": "MVC-Express-Application",
-  "description": "An Express.js application using the MVC design pattern...",
-  "version": "0.0.1",
+  "name": "WeJoin",
+  "description": "An activity sharing platform",
+  "version": "0.0.2",
+  "repository":{
+  	"type":"git",
+  	"url":"git@github.com:404noahfound/WeJoin.git"
+  },
+  "license": "UNLICENSED",
   "dependencies": {
     "express": "4.4.4",
     "express-handlebars": "1.1.0",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "mongoose":"4.8.6"
   }
 }
