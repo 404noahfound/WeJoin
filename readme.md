@@ -1,3 +1,4 @@
-# install npm
-# install nodejs
-# run 'npm install'
+install npm
+install nodejs
+run 'sudo apt install mongodb-server'
+run 'npm install'
