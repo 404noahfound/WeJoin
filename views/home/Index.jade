@@ -1,4 +1,7 @@
 extends ../layout
 
 block content
-	p Welcome to !{title}. This is a different route using a different view...
+	p Welcome to #{title}.
+	p Below is the list of activities
+	each activity in activities
+		p #{activity.title} : #{activity.description}

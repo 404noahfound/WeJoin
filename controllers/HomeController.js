@@ -3,8 +3,11 @@ const Activity = mongoose.model('Activity');
 
 exports.Index = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.title = Activity.test();
-    response.render('home/Index', response.pageInfo);
+	response.pageInfo.title = 'HomePage';
+	Activity.find({}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('home/Index', response.pageInfo);
+	});
 };
  
 exports.Other = function(request, response){

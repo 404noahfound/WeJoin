@@ -7,6 +7,7 @@ const fs = require('fs');
 
 //database setting
 var mongoose = require('mongoose');
+mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
