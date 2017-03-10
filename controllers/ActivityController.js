@@ -13,12 +13,13 @@ exports.View = function(request, response){
 exports.Create = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Create. Generate create account page."
-	response.render('home/Functionality', response.pageInfo);
+	response.render('home/activity/Create', response.pageInfo);
 };
 
 exports.UponCreate = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.UponCreate"
+    console.log(request.body);
 	response.render('home/Functionality', response.pageInfo);
 };
 
