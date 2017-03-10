@@ -12,6 +12,8 @@
     "express-handlebars": "1.1.0",
     "jade": "^1.11.0",
     "mongoose":"4.8.6",
-    "mongodb":"2.2.24"
+    "mongodb":"2.2.24",
+    "body-parser":"1.17.1",
+    "only":"0.0.2"
   }
 }

@@ -4,6 +4,11 @@ var path = require('path');
 const join = require('path').join;
 var app = express();
 const fs = require('fs');
+var bodyParser = require('body-parser');
+
+//bodyparse setting
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //database setting
 var mongoose = require('mongoose');
