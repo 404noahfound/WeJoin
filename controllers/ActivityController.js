@@ -1,3 +1,8 @@
+const mongoose = require('mongoose');
+const only = require('only');
+const Activity = mongoose.model('Activity');
+
+
 exports.Search = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Search"
@@ -13,13 +18,14 @@ exports.View = function(request, response){
 exports.Create = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Create. Generate create account page."
-	response.render('home/activity/Create', response.pageInfo);
+	response.render('activity/Create', response.pageInfo);
 };
 
 exports.UponCreate = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.UponCreate"
-    console.log(request.body);
+	const activity = new Activity(only(request.body, "title description"));
+	activity.save();
 	response.render('home/Functionality', response.pageInfo);
 };
 
