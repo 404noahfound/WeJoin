@@ -1,7 +1,9 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+const join = require('path').join;
 var app = express();
+const fs = require('fs');
 
 //database setting
 var mongoose = require('mongoose');
@@ -11,6 +13,13 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("mongodb connected!");
 });
+
+//models setting
+const models = join(__dirname, 'models');
+//require all files in the models folder
+fs.readdirSync(models)
+  .filter(file => ~file.search(/^[^\.].*\.js$/))
+  .forEach(file => require(join(models, file)));
 
 app.set('port', 1337);
 

@@ -1,6 +1,9 @@
+const mongoose = require('mongoose');
+const Activity = mongoose.model('Activity');
+
 exports.Index = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.title = 'Hello Yo';
+	response.pageInfo.title = Activity.test();
     response.render('home/Index', response.pageInfo);
 };
  
