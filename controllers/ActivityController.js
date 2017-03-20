@@ -57,7 +57,7 @@ exports.OrganizerModifyActivity = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.title="OrganizerModifyActivity"
 	response.pageInfo.id=id;
-	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
+	response.pageInfo.functionality = "Activity.OrganizerModifyActivity. Generate page for each activity."
 	Activity.find({'_id':id}, function(err, docs){
 		response.pageInfo.activities = docs;
 		response.render('activity/OrganizerModifyActivity', response.pageInfo);
@@ -65,8 +65,15 @@ exports.OrganizerModifyActivity = function(request, response){
 };
 
 exports.UponOrganizerModifyActivity = function(request, response){
+	var id = request.params.id;
+	var new_description=request.body.description
 	response.pageInfo = {};
 	response.pageInfo.title="UponOrganizerModifyActivity"
 	response.pageInfo.functionality = "Activity.Modify"
+	Activity.findOneAndUpdate({'_id':id}, {'description':new_description}, {upsert:true}, function(err, doc){
+		if(err) console.log('error!');
+		response.pageInfo.description=new_description;
+	});
+	console.log("hello");
 	response.render('home/Functionality', response.pageInfo);
 };
