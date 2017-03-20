@@ -38,7 +38,7 @@ exports.CustomerModify = function(request, response){
 exports.OrganizerModify = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
-	response.render('home/Functionality', response.pageInfo);
+	response.render('activity/OrganizerModify', response.pageInfo);
 };
 
 exports.UponOrganizerModify = function(request, response){
