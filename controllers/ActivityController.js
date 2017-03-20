@@ -54,17 +54,22 @@ exports.UponOrganizerModify = function(request, response){
 };
 
 exports.OrganizerModifyActivity = function(request, response){
-	reponse.pageInfo = {};
+	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.OrganizerModifyActivity. Generate page for showing activity information to be modified."
 	response.pageInfo.title = "OrganizerModifyActivity";
-	Activity.find({id: request.activity.id},function(err,docs){
+	response.pageInfo.activityID=request.params.id;
+	Activity.find({'_id':request.params.id},function(err,docs){
 		response.pageInfo.activities=docs;
 		response.render('activity/OrganizerModifyActivity',response.pageInfo);
 	});
 }
 
-exports.UponOrganizerModifyActivity = fucntion(request,resopnse){
-	resopnse.pageInfo = {};
-	resopnse.pageInfo.functionality = "Activity.UponOrganizerModifyActivity"
+exports.UponOrganizerModifyActivity = function(request,response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Activity.UponOrganizerModifyActivity";
+	Activity.findOneAndUpdate({'_id':request.params.id},{'description':request.body.description}, {upsert:true}, function(err,docs){
+		response.pageInfo.description=request.body.description;
+	});
+	console.log("upon organizer modify activity");
 	response.render('home/Functionality',response.pageInfo);
 }

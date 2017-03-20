@@ -14,5 +14,10 @@ module.exports = function(app){
     //OrganizerModify
     app.get('/activity/organizermodify', ActivityController.OrganizerModify);
     app.post('/activity/organizermodify', ActivityController.UponOrganizerModify);
-
+    //OrganzerModifyActivity
+  //  app.get('/activity/organizermodifyactivity', ActivityController.OrganzerModifyActivity);
+ //   app.post('/activity/organizermodifyactivity', ActivityController.UponOrganizerModifyActivity);
+//
+    app.get('/activity/:id', ActivityController.OrganizerModifyActivity);
+    app.post('/activity/:id', ActivityController.UponOrganizerModifyActivity);
 };

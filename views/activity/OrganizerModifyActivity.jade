@@ -1,17 +1,19 @@
 extends ../layout
 
+
 block content
+	p Welcome to OrganizerModifyActivity!
+	p Activity information:
+	each activity in activities	
+		p Title: #{activity.title}
+		p Description: #{activity.description}
 	form(name="organizer modify", method="post")
-	div.input
-		span.label Activity Title
-		input(type="text", name="activitytitle")
-		each activity in activities
-			#{activity.title}
-	div.input
-		span.label Description
-		br
-		textarea(name="description", cols="40", rows="5")
-		each activity in activities
-			#{activity.description}
-	div.actions
-		input(type="submit", value="update")
+		div.input
+			span.label Activity Title
+			each activity in activities
+				input(type="text", placeholder='#{activity.title}' name="activitytitle")
+				br
+				span.label Description
+				textarea(name="description", cols="40",placeholder='#{activity.description}' rows="5")
+		div.actions
+			input(type="submit", value="update")
