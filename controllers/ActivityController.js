@@ -36,9 +36,15 @@ exports.CustomerModify = function(request, response){
 };
 
 exports.OrganizerModify = function(request, response){
+	var id = request.params.id;
 	response.pageInfo = {};
+	response.pageInfo.title="Modify"
+	response.pageInfo.id=id;
 	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
-	response.render('activity/OrganizerModify', response.pageInfo);
+	Activity.find({'_id':id}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/OrganizerModify', response.pageInfo);
+	});
 };
 
 exports.UponOrganizerModify = function(request, response){

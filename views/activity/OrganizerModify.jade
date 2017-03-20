@@ -2,6 +2,8 @@ extends ../layout
 
 block content
     h1= title
+    each activity in activities
+                        p #{activity.title} : #{activity.description}
     form(name="modify", method="post")
         div.input
             span.label Title
