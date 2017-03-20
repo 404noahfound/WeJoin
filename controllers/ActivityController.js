@@ -50,7 +50,5 @@ exports.OrganizerModify = function(request, response){
 exports.UponOrganizerModify = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.UponOrganizerModify"
-	const activity = new Actvity(only(request.body,"title description"));
-	activity.save()
 	response.render('home/Functionality', response.pageInfo);
 };
