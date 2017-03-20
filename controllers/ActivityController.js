@@ -37,12 +37,36 @@ exports.CustomerModify = function(request, response){
 
 exports.OrganizerModify = function(request, response){
 	response.pageInfo = {};
+	response.pageInfo.title="OrganizerModify"
 	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
-	response.render('home/Functionality', response.pageInfo);
+	Activity.find({}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/OrganizerModify', response.pageInfo);
+	});
 };
 
 exports.UponOrganizerModify = function(request, response){
 	response.pageInfo = {};
+	response.pageInfo.title="OrganizerModify"
+	response.pageInfo.functionality = "Activity.Modify"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.OrganizerModifyActivity = function(request, response){
+	var id = request.params.id;
+	response.pageInfo = {};
+	response.pageInfo.title="OrganizerModifyActivity"
+	response.pageInfo.id=id;
+	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
+	Activity.find({'_id':id}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/OrganizerModifyActivity', response.pageInfo);
+	});
+};
+
+exports.UponOrganizerModifyActivity = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.title="UponOrganizerModifyActivity"
 	response.pageInfo.functionality = "Activity.Modify"
 	response.render('home/Functionality', response.pageInfo);
 };

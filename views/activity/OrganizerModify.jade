@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+	h1= title
+	p Welcome to #{title}.
+	p Choose the activity you want to modify:
+		each activity in activities
+			p 
+				a(href="/activity/#{activity._id}") #{activity.title} : #{activity.description}
