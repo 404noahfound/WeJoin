@@ -2,11 +2,6 @@ extends ../layout
 
 block content
     h1= title
+    p following are the activities can be modified
     each activity in activities
-                        p #{activity.title} : #{activity.description}
-    form(name="modify", method="post")
-        div.input
-            span.label Title
-            input(type="text", name="title")
-        div.actions
-            input(type="submit", value="add")
+            p #{activity.title} : #{activity.description}
