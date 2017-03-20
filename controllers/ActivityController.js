@@ -47,8 +47,24 @@ exports.OrganizerModify = function(request, response){
 
 exports.UponOrganizerModify = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.functionality = "Activity.Modify"
+	response.pageInfo.functionality = "Activity.UponOrganizerModify"
 	const activity = new Activity(only(request.body, "title description"));
 	activity.save();
 	response.render('home/Functionality', response.pageInfo);
 };
+
+exports.OrganizerModifyActivity = function(request, response){
+	reponse.pageInfo = {};
+	response.pageInfo.functionality = "Activity.OrganizerModifyActivity. Generate page for showing activity information to be modified."
+	response.pageInfo.title = "OrganizerModifyActivity";
+	Activity.find({id: request.activity.id},function(err,docs){
+		response.pageInfo.activities=docs;
+		response.render('activity/OrganizerModifyActivity',response.pageInfo);
+	});
+}
+
+exports.UponOrganizerModifyActivity = fucntion(request,resopnse){
+	resopnse.pageInfo = {};
+	resopnse.pageInfo.functionality = "Activity.UponOrganizerModifyActivity"
+	response.render('home/Functionality',response.pageInfo);
+}
