@@ -1,0 +1,15 @@
+extends ..layout
+
+block content
+	form(name="organizer modify", method="post")
+	div.input
+		span.label Activity Title
+		input(type="text", name="activitytitle")
+		#{activity.title}
+	div.input
+		span.label Description
+		br
+		textarea(name="description", cols="40", rows="5")
+		#{activity.description}
+	div.actions
+		input(type="submit", value="update")

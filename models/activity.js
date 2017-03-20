@@ -10,7 +10,11 @@ const ActivitySchema = new Schema({
 ActivitySchema.path('title').required(true, 'Acitivity title cannot be blank');
 
 ActivitySchema.methods = {
-
+	OrganizerModify: function(title,description,createdAt){
+		this.title=title;
+		this.description=description;
+		this.createdAt=createdAt;
+	}
 };
 
 ActivitySchema.statics = {

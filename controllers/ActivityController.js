@@ -37,12 +37,18 @@ exports.CustomerModify = function(request, response){
 
 exports.OrganizerModify = function(request, response){
 	response.pageInfo = {};
+	response.pageInfo.title = "OrganizerModify"
 	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
-	response.render('home/Functionality', response.pageInfo);
+	Activity.find({}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/OrganizerModify', response.pageInfo);
+	});
 };
 
 exports.UponOrganizerModify = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Modify"
+	const activity = new Activity(only(request.body, "title description"));
+	activity.save();
 	response.render('home/Functionality', response.pageInfo);
 };

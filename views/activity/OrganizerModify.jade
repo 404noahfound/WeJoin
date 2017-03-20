@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+	h1= title
+	ul
+		li
+			each activity in activities
+				a(href="/") #{activity.title}
+				br
+	form(name="organizer modify", method="post")
+		div.input
+			span.label Activity Title
+			input(type="text", name="activitytitle")
+		div.input
+			span.label Description
+			br
+			textarea(name="description", cols="40", rows="5")
+		div.actions
+			input(type="submit", value="update")
