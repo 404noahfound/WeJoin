@@ -23,7 +23,7 @@ const ActivitySchema = new Schema({
 	participation_method: { type : String, enum : ['public', 'approval', 'only_invite'], default : 'public' },
 	remind_time: { type : Date, default : null },
 	participants: { type : [String], default : [] },
-	createdAt: { type : Date, default : Date.now }
+	created_at: { type : Date, default : Date.now }
 });
 
 ActivitySchema.methods = {
@@ -38,11 +38,11 @@ ActivitySchema.methods = {
 	},
 
 	/**
-	 * Update function:
+	 * Modify function:
 	 *   @param {JSON} attr (attributes of a activity)
 	 *   @return {bool} success or fail
 	 */
-	Update: function(attr) {
+	Modify: function(attr) {
 
 	},
 
