@@ -2,18 +2,24 @@
   "name": "WeJoin",
   "description": "An activity sharing platform",
   "version": "0.0.2",
-  "repository":{
-  	"type":"git",
-  	"url":"git@github.com:404noahfound/WeJoin.git"
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:404noahfound/WeJoin.git"
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "body-parser": "1.17.1",
+    "connect-flash": "~0.1.1",
+    "cookie-parser": "1.4.3",
     "express": "4.4.4",
+    "express-flash": "0.0.2",
     "express-handlebars": "1.1.0",
+    "express-session": "^1.15.1",
     "jade": "^1.11.0",
-    "mongoose":"4.8.6",
-    "mongodb":"2.2.24",
-    "body-parser":"1.17.1",
-    "only":"0.0.2"
+    "mongodb": "2.2.24",
+    "mongoose": "4.8.6",
+    "only": "0.0.2",
+    "passport": "0.3.2",
+    "passport-local": "1.0.0"
   }
 }
