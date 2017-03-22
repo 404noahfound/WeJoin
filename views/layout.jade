@@ -16,6 +16,14 @@ html
 				li
 					a(href="/activity/organizermodify") Organizer Modify
 			li
+				a(href="/user") User List
+			li
+				a(href="/user/reg") Create User
+			li
+				a(href="/user/login") Log In
+			li
 				a(href="/other") Other
 		#wrapper
+			if username
+				p Welcome #{username}
 			block content

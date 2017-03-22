@@ -11,31 +11,31 @@ const Request = mongoose.model('Request');
 exports.Search = function(request, response){
 	response.pageInfo.keyword=request.body.keyword;
 	response.pageInfo.resultActivities=Activity.Search(response.pageInfo.keyword);
+	if (!response.pageInfo.resultActivities) console.log("No Activity!")
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys"
 	response.render('activity/Search', response.pageInfo);
 };
 
+/*
 exports.UponSearch = function(request, response){
 	response.pageInfo.title = "Search Result"
 	response.pageInfo.functionality = "Activity.UponSearch";
-	response.render('home/Functionality',response.pageInfo);
+	response.render('activity/UponSearch',response.pageInfo);
 };
+*/
 
 exports.View = function(request, response){
 	response.pageInfo.title = "Activity Information"
 	response.pageInfo.functionality = "Activity.View. Generate page for viewing activity"
 	response.pageInfo.activityID=request.params.id;
 	Activity.find({'_id':request.params.id},function(err,docs){
-		if(err) response.pageInfo.err="Error! Can't find the activity page!";
+		if(err) console.log("Error! Can't find the activity page!");
 		response.pageInfo.activities=docs;
 		response.render('activity/View',response.pageInfo);
 	});
 };
 
-exports.UponView = function(request.response){
-	response.pageInfo.functionality = "Activity.UponView."
-	response.render('home/Functionality',response.pageInfo);
-};
+
 
 exports.Create = function(request, response){
 	response.pageInfo.title = "Create Activity";
@@ -62,23 +62,36 @@ exports.CustomerModify = function(request, response){
 exports.OrganizerModify = function(request, response){
 	response.pageInfo.title = "OrganizerModify"
 	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
-	Activity.find({}, function(err, docs){
+	Activity.find({'_id':request.params.id}, function(err, docs){
+		if(err) console.log("Error! Can't find activity page for organizer to modify!")
 		response.pageInfo.activities = docs;
 		response.render('activity/OrganizerModify', response.pageInfo);
 	});
 };
 
 exports.UponOrganizerModify = function(request, response){
+	response.pageInfo.title= "Organizer modify success";
 	response.pageInfo.functionality = "Activity.UponOrganizerModify";
-	response.render('home/Functionality', response.pageInfo);
+	if(!Activity.modify(only(request.body, "organizer title location time type description "
+		+"expense status rating rated_participants content_for_participants participation_method remind_time "
+		+"participants created_at"))) console.log("Organizer modify failed!");
+
+	response.render('activity/View', response.pageInfo);
 };
 
-exports.GetActivityDescription = function(request, response){
-	response.pageInfo.functionality = "Activity.GetActivityDescription. Generate page for activity description. "
-	response.render('activity/GetActivityDescription',response.pageInfo);
+/*
+exports.AddParticipant = function(request, response){
+	if(!Activity.AddParticipant(RegUser._id)) console.log("Add participant failed!");
+	response.render('activity/View',response.pageInfo);
 };
+*/
 
-exports.UponGetActivityDescription = function(request,response){
-	response.pageInfo.functionality = "Activity.UponGetActivityDescription"
-	response.render('home/Functionality', response.pageInfo);
+/*
+exports.GetByUser = function(request,response){
+	response.pageInfo.title = "User's activities";
+	response.pageInfo.activities=Activity.GetByUser(RegUser);
+	if(!response.pageInfo.activities) console.log("User get activities failed!");
+	response.render('activity/GetByUser',response.pageInfo);
 };
+*/
+
