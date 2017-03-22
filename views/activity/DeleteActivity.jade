@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+	h1= title
+	p Welcome to #{title}.
+		each activity in activities
+			p Activity #{activity.title}
+			p #{activity.description}
+	form(name="activity", method="post")
+		div.input
+			span.label Description
+			br
+			input(type="text", name="description")
+		div.actions
+			input(type="submit", value="modify")

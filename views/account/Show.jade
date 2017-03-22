@@ -1,0 +1,6 @@
+extends ../layout
+
+block content
+	p Below is the list of accounts
+		each account in accounts
+			p #{account.username} : #{account.password}

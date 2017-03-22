@@ -3,7 +3,27 @@ const only = require('only');
 const Activity = mongoose.model('Activity');
 
 
+
+exports.Show = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Activity.Show. Generate the activities page"
+	Activity.find({}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/Show', response.pageInfo);
+	});
+};
+exports.UponShow = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Activity.Show. Generate the activities page"
+	response.render('activity/Show', response.pageInfo);
+};
+
 exports.Search = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Activity.Search. Generate search activity page"
+	response.render('activity/Search', response.pageInfo);
+};
+exports.UponSearch = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Search"
 	response.render('home/Functionality', response.pageInfo);
@@ -17,7 +37,7 @@ exports.View = function(request, response){
 
 exports.Create = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.functionality = "Activity.Create. Generate create account page."
+	response.pageInfo.functionality = "Activity.Create. Generate create activity page."
 	response.render('activity/Create', response.pageInfo);
 };
 
@@ -65,8 +85,58 @@ exports.OrganizerModifyActivity = function(request, response){
 };
 
 exports.UponOrganizerModifyActivity = function(request, response){
+	var id = request.params.id;
+	var new_description=request.body.description
 	response.pageInfo = {};
 	response.pageInfo.title="UponOrganizerModifyActivity"
 	response.pageInfo.functionality = "Activity.Modify"
+	Activity.findOneAndUpdate({'_id':id}, {'description':new_description}, {upsert:true}, function(err, doc){
+		if(err) console.log('error!');
+		response.pageInfo.description=new_description;
+		//delete response.pageInfo.description;
+	});
+	console.log("hello");
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.Delete = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.title="OrganizerDelete"
+	response.pageInfo.functionality = "Activity.OrganizerDelete. Generate page for Deleting the activity by organizer."
+	Activity.find({}, function(err, docs){
+	response.pageInfo.activities = docs;
+		response.render('activity/Delete', response.pageInfo);
+	});
+};
+
+exports.UponDelete = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.title="OrganizerDelete"
+	response.pageInfo.functionality = "Activity.Delete"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.DeleteActivity = function(request, response){
+	var id = request.params.id;
+	response.pageInfo = {};
+	response.pageInfo.title="OrganizerDeleteActivity"
+	response.pageInfo.id=id;
+	response.pageInfo.functionality = "Activity.OrganizerDelete. Generate page for Deleteing the activity by organizer."
+	Activity.find({'id1':id}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/DeleteActivity', response.pageInfo);
+	});
+};
+
+exports.UponDeleteActivity = function(request, response){
+	var id = request.params.id;
+	var new_description=request.body.description
+	response.pageInfo = {};
+	response.pageInfo.title="UponOrganizerDeleteActivity"
+	response.pageInfo.functionality = "Activity.Delete"
+	Activity.findOneAndUpdate({'id1':id}, {'description':new_description}, {upsert:true}, function(err, doc){
+		if(err) console.log('error!');
+		response.pageInfo.description=new_description;
+	});
 	response.render('home/Functionality', response.pageInfo);
 };

@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+	h1= title
+		each account in accounts
+			p Account #{account.username}
+			p #{account.password}
+	form(name="account", method="post")
+		div.input
+			span.label Password
+			br
+			input(type="text", name="password")
+		div.actions
+			input(type="submit", value="modify")
