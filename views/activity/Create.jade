@@ -8,3 +8,33 @@ block content
             input(type="text", name="title")
         div.actions
             input(type="submit", value="add")
+    p 
+    link(href="https://cdn.quilljs.com/1.2.2/quill.snow.css", rel="stylesheet")
+    div#editor
+        p Hello World!
+    script(src="https://cdn.quilljs.com/1.2.2/quill.js")
+    script.
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+
+
+//- <link href="https://cdn.quilljs.com/1.2.2/quill.snow.css" rel="stylesheet">
+
+//- <!-- Create the editor container -->
+//- <div id="editor">
+//-   <p>Hello World!</p>
+//-   <p>Some initial <strong>bold</strong> text</p>
+//-   <p><br></p>
+//- </div>
+
+//- <!-- Include the Quill library -->
+//- <script src="https://cdn.quilljs.com/1.2.2/quill.js"></script>
+
+//- <!-- Initialize Quill editor -->
+//- <script>
+  var quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+//- </script>
