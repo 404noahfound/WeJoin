@@ -34,7 +34,7 @@ ActivitySchema.methods = {
 	 *   create a new activity
 	 */
 	Create: function(attr) {
-
+		console.log("activity.Create");
 	},
 
 	/**
@@ -43,7 +43,7 @@ ActivitySchema.methods = {
 	 *   @return {bool} success or fail
 	 */
 	Modify: function(attr) {
-
+		console.log("activity.Modify");
 	},
 
 	/**
@@ -52,7 +52,7 @@ ActivitySchema.methods = {
 	 *   @return {bool} success or fail
 	 */
 	Delete: function(activity_id) {
-
+		console.log("activity.Delete");
 	},
 
 	/** 
@@ -61,7 +61,7 @@ ActivitySchema.methods = {
 	 *   @return {bool} success or fail
 	 */
 	AddParticipant: function(user_id) {
-
+		console.log("activity.AddParticipant");
 	},
 
 	/**
@@ -70,7 +70,7 @@ ActivitySchema.methods = {
 	 *   @return {bool} success or fail
 	 */
 	Rate: function(rating) {
-
+		console.log("activity.Rate");
 	},
 	
 
@@ -86,12 +86,6 @@ ActivitySchema.statics = {
 		return 'this is a test string.'
 	},
 
-	list: function () {
-		this.find({}, function(err, docs) {
-			return docs;
-		});
-	},
-
 	/**
 	 * search function:
 	 *   @param {JSON} attr (attributes of a activity)
@@ -99,7 +93,7 @@ ActivitySchema.statics = {
 	 *   search for activities that fit the requirements
 	 */
 	Search: function(attr) {
-		return new Array();
+		console.log("Activity.Search");
 	},
 
 	/**
@@ -109,7 +103,7 @@ ActivitySchema.statics = {
 	 *   get the activities joined by the given user
 	 */
 	GetByUser: function(user) {
-		return new Array();
+		console.log("Activity.GetByUser");
 	},
 };
 
