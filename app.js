@@ -5,10 +5,20 @@ const join = require('path').join;
 var app = express();
 const fs = require('fs');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+var flash = require('express-flash');
 
 //bodyparse setting
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Flash Setting
+app.use(cookieParser('keyboard cat'));
+app.use(session({secret: 'anything', cookie: { maxAge: 360000 }}));
+app.use(flash());
 
 //database setting
 var mongoose = require('mongoose');
@@ -37,9 +47,49 @@ app.set('view options', {layout: true});
 //static path setting
 app.use(express.static(path.join(__dirname, 'static')));
 
+const User = mongoose.model('User');
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+app.use(passport.initialize());
+app.use(passport.session());
+// passport(user authentication) setting
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+// Add page Info and user info
+var pageInfo = function(req, res, next) {
+  res.pageInfo = {title: 'WeJoin'};
+  if (req.user) res.pageInfo.username = req.user.username;
+  next();
+}
+app.use(pageInfo);
+
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
 
 // send app to router
 require('./router')(app);

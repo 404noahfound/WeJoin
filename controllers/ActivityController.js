@@ -9,6 +9,7 @@ exports.Search = function(request, response){
 	response.render('home/Functionality', response.pageInfo);
 };
 
+
 exports.View = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.View"
@@ -23,7 +24,7 @@ exports.Create = function(request, response){
 
 exports.UponCreate = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.functionality = "Activity.UponCreate"
+	response.pageInfo.functionality = "Activity.UponCreate";
 	const activity = new Activity(only(request.body, "title description"));
 	activity.save();
 	response.render('home/Functionality', response.pageInfo);
@@ -31,7 +32,7 @@ exports.UponCreate = function(request, response){
 
 exports.CustomerModify = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.functionality = "Activity.CustomerModify. Include Join/Quit/Rate"
+	response.pageInfo.functionality = "Activity.CustomerModify. Include Join/Quit/Rate";
 	response.render('home/Functionality', response.pageInfo);
 };
 
