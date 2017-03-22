@@ -79,3 +79,142 @@ exports.UponSignin = function(request, response){
 	response.pageInfo.functionality = "Account.UponSignin"
 	response.render('home/Functionality', response.pageInfo);
 };
+
+exports.Signout = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('account/Signin', response.pageInfo);
+};
+
+exports.UponSignout = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.Guest = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('account/guest', response.pageInfo);
+};
+
+exports.UponGuest = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.Reguser = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('account/reguser', response.pageInfo);
+};
+
+exports.UponReguser = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.Follow = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('account/reguser', response.pageInfo);
+};
+
+exports.UponFollow = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.Recommondation = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('account/reguser', response.pageInfo);
+};
+
+exports.UponRecommondation = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+exports.Notification = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('notification/show', response.pageInfo);
+};
+
+exports.UponNotification = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+exports.NotificationCreate = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('notification/create', response.pageInfo);
+};
+
+exports.UponNotificationCreate = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+exports.NotificationDelete = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('notification/delete', response.pageInfo);
+};
+
+exports.UponNotificationDelete = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+//note
+exports.Note = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('note/show', response.pageInfo);
+};
+
+exports.UponNote = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+exports.NoteCreate = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('note/create', response.pageInfo);
+};
+
+exports.UponNoteCreate = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+exports.NoteModify = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('note/modify', response.pageInfo);
+};
+
+exports.UponNoteModify = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
+exports.NoteDelete = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.Create. Generate create account page."
+	response.render('notification/delete', response.pageInfo);
+};
+
+exports.UponNoteDelete = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Account.UponSignin"
+	response.render('home/Functionality', response.pageInfo);
+};
