@@ -58,7 +58,7 @@ html
 					a(href="/note/delete") Delete Note
 			li
 				a(href="/other") Other
-
-
 		#wrapper
+			if username
+				p Welcome #{username}
 			block content

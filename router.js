@@ -1,6 +1,7 @@
 var HomeController = require('./controllers/HomeController');
 var ActivityController = require('./controllers/ActivityController');
-var AccountController = require('./controllers/AccountController');
+var UserController = require('./controllers/UserController');
+var passport = require('passport');
 
 
 module.exports = function(app){
@@ -44,4 +45,15 @@ module.exports = function(app){
 	//note delete
 	app.get('/note/delete', AccountController.NoteDelete);
 	app.post('/note/delete', AccountController.UponNoteDelete);
+
+    // User Routes
+    app.post('/user/login', 
+        passport.authenticate('local', 
+            { successRedirect: '/', failureRedirect: '/user/login', failureFlash: true }
+        )
+    );
+    app.get('/user/login', UserController.LogIn);
+    app.get('/user/reg', UserController.Create);
+    app.post('/user/reg', UserController.UponCreate);
+    app.get('/user', UserController.Index);
 };
