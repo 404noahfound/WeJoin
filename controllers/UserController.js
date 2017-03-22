@@ -3,18 +3,30 @@ const User = mongoose.model('User');
 const only = require('only');
 const flash = require('express-flash');
 
+/**
+ * The create form for user
+ * @author Su
+ */
 exports.Create = function(req, res){
 	res.pageInfo.title = 'Register';
 	res.pageInfo.error = req.flash('error');
 	res.render('user/Create', res.pageInfo);
 };
 
+/**
+ * @description log in page
+ * @author Su
+ */
 exports.LogIn = function(req, response){
 	response.pageInfo.error_flash = req.flash('error');
 	response.pageInfo.title = 'Log In';
 	response.render('user/LogIn', response.pageInfo);
 };
 
+/**
+ * @description Handle the create form from user
+ * @author Su
+ */
 exports.UponCreate = function(req, res){
 	res.pageInfo.title = "Reg success";
 	res.pageInfo.functionality = "Reg success";
@@ -36,6 +48,10 @@ exports.UponCreate = function(req, res){
 	// res.render('home/Functionality', res.pageInfo);
 };
 
+/**
+ * @description List all users, this is only a page for debugging
+ * @author Su
+ */
 exports.Index = function(req, res){
 	res.pageInfo = {title:"Users"};
 	// User.find({}, function(err, docs){

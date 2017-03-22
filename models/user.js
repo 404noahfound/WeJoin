@@ -19,6 +19,12 @@ UserSchema.path('username').required(true, 'User password cannot be blank');
 UserSchema.path('gender').required(true, 'Gender cannot be blank');
 
 UserSchema.methods = {
+	/**
+	 * check if the password matches the password in the database
+	 * @param  {String}
+	 * @return {Boolean}
+	 * @author Su
+	 */		
 	validPassword: function(password) {
 		return this.password === password;
 	}
@@ -29,6 +35,7 @@ UserSchema.statics = {
 	/**
 	 * test function description
 	 * @return {String}
+	 * @author Su
 	 */
 	test: function() {
 		return 'this is a test string.'
