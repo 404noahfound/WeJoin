@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+	h1= title
+	p Choose the account you want to modify:
+		each account in accounts
+			p 
+				a(href="/account/#{account.id}") #{account.username} : #{account.password}

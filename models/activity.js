@@ -51,8 +51,8 @@ ActivitySchema.methods = {
 	 *   @param {String} activity_id (the ObjectId of a activity)
 	 *   @return {bool} success or fail
 	 */
-	Delete: function(activity_id) {
-		console.log("activity.Delete");
+	Cancel: function(activity_id) {
+		console.log("activity.Cancel");
 	},
 
 	/** 

@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+	h1= title
+	form(name="activity", method="post")
+		div.input
+			span.label UserName
+			br
+			input(type="text", name="username")
+		div.input
+			span.label Password
+			br
+			input(type="text", name="password")
+		div.actions
+			input(type="submit", value="sign up")
