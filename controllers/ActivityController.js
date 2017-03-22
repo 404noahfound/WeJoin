@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const only = require('only');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
-const RegUser = mongoose.model('RegUser');
-const Guest = mongoose.model('Guest');
-const Note = mongoose.model('Note');
-const Notification = mongoose.model('Notification');
-const Request = mongoose.model('Request');
+//const RegUser = mongoose.model('RegUser');
+//const Guest = mongoose.model('Guest');
+//const Note = mongoose.model('Note');
+//const Notification = mongoose.model('Notification');
+//const Request = mongoose.model('Request');
 
 exports.Search = function(request, response){
-	response.pageInfo.keyword=request.body.keyword;
-	response.pageInfo.resultActivities=Activity.Search(response.pageInfo.keyword);
+	response.pageInfo.keyword = request.body.keyword;
+	response.pageInfo.resultActivities = Activity.Search(response.pageInfo.keyword);
 	if (!response.pageInfo.resultActivities) console.log("No Activity!")
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys"
 	response.render('activity/Search', response.pageInfo);
@@ -27,15 +27,13 @@ exports.UponSearch = function(request, response){
 exports.View = function(request, response){
 	response.pageInfo.title = "Activity Information"
 	response.pageInfo.functionality = "Activity.View. Generate page for viewing activity"
-	response.pageInfo.activityID=request.params.id;
+	response.pageInfo.activityID = request.params.id;
 	Activity.find({'_id':request.params.id},function(err,docs){
 		if(err) console.log("Error! Can't find the activity page!");
-		response.pageInfo.activities=docs;
+		response.pageInfo.activities = docs;
 		response.render('activity/View',response.pageInfo);
 	});
 };
-
-
 
 exports.Create = function(request, response){
 	response.pageInfo.title = "Create Activity";
@@ -44,13 +42,24 @@ exports.Create = function(request, response){
 };
 
 exports.UponCreate = function(request, response){
-	response.pageInfo.title="Create success!"
+	response.pageInfo.title = "Create success!"
 	response.pageInfo.functionality = "Create success!"
-	const activity = new Activity(only(request.body, "organizer title location time type description "
-		+"expense status rating rated_participants content_for_participants participation_method remind_time "
-		+"participants created_at"));
-	activity.save();
-	response.render('home/Functionality', response.pageInfo);
+	const activity = new Activity();
+	activity.Create(only(request.body, "organizer \
+										title \
+										location \
+										time \
+										type \
+										description \
+										expense \
+										status \
+										rating \
+										rated_participants \
+										content_for_participants \
+										participation_method \
+										remind_time \
+										participants created_at"));
+	response.render('activity/View', response.pageInfo);
 };
 
 exports.CustomerModify = function(request, response){

@@ -2,10 +2,8 @@ extends ../layout
 
 block content
 	h1 Search Activities
-	form(name="activity", method="post")
-		div.input
-			span.label The Activity Title
-			br
-			input(type="text", name="title")
-		div.actions
-			input(type="submit", value="search")
+	form(name="activity", method="get")
+		span.label The Activity Title
+		br
+		input(type="text", name="title")
+		input(type="submit", value="search")

@@ -23,6 +23,7 @@ module.exports = function(app){
     app.get('/activity/:id/organizermodify', ActivityController.OrganizerModify);
     app.post('/activity/:id/organizermodify', ActivityController.UponOrganizerModify);
 
+    /*
 	//notification
 	app.get('/notification', AccountController.Notification);
 	app.post('/notification', AccountController.UponNotification);
@@ -45,7 +46,7 @@ module.exports = function(app){
 	//note delete
 	app.get('/note/delete', AccountController.NoteDelete);
 	app.post('/note/delete', AccountController.UponNoteDelete);
-
+	*/
     // User Routes
     app.post('/user/login', 
         passport.authenticate('local', 
