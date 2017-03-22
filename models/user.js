@@ -2,12 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-	password: { type : String, trim : true },
-	username: { type : String, trim : true },
-	createdAt  : { type : Date, default : Date.now }
+	password: { type : String, trim : true},
+	username: { type : String, trim : true, unique: true/*the unique constraint is not working*/ },
+	created_at  : { type : Date, default : Date.now }
 });
 
-UserSchema.path('password').required(true, 'User password cannot be blank');
+UserSchema.path('password').required(true, 'User name cannot be blank');
+UserSchema.path('username').required(true, 'User password cannot be blank');
+// UserSchema.path('username').index({ unique: true });
+
 
 UserSchema.methods = {
 	validPassword: function(password) {
