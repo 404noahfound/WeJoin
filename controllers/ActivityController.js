@@ -9,11 +9,15 @@ const User = mongoose.model('User');
 //const Request = mongoose.model('Request');
 
 exports.Search = function(request, response){
-	response.pageInfo.keyword = request.body.keyword;
-	response.pageInfo.resultActivities = Activity.Search(response.pageInfo.keyword);
-	if (!response.pageInfo.resultActivities) console.log("No Activity!")
-	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys"
-	response.render('activity/Search', response.pageInfo);
+	response.pageInfo.keyword = request.params.keyword;
+	console.log(response.pageInfo.keyword)
+	Activity.Search(response.pageInfo.keyword, function(res){
+		response.pageInfo.activities = res;
+		if (!response.pageInfo.activities) console.log("No Activity!")
+		console.log(response.pageInfo.activities);
+		response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys"
+		response.render('activity/View', response.pageInfo);
+	});
 };
 
 /*

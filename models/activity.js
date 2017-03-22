@@ -7,6 +7,7 @@ const LocationSchema = new Schema({
 });
 
 mongoose.model('Location', LocationSchema);
+const Location = mongoose.model('Location');
 
 const ActivitySchema = new Schema({
 	organizer: { type : String, required: 'Activity organizer cannot be empty.', trim : true }, // store the _id of the organizer
@@ -25,6 +26,7 @@ const ActivitySchema = new Schema({
 	participants: { type : [String], default : [] },
 	created_at: { type : Date, default : Date.now }
 });
+
 
 ActivitySchema.methods = {
 	/**
@@ -92,8 +94,16 @@ ActivitySchema.statics = {
 	 *   @return {[doc]} an array of activities
 	 *   search for activities that fit the requirements
 	 */
-	Search: function(attr) {
+	Search: function(attr, callback) {
 		console.log("Activity.Search");
+		var keyword = attr;
+		this.find({title: keyword}, function(err, docs){
+			if(err){
+				console.log("Error! Can't find the activity page!");
+				callback(new Array());
+			}
+			else callback(docs);
+		});
 	},
 
 	/**
