@@ -29,12 +29,12 @@ module.exports = function(app){
 	app.get('/activity/delete', ActivityController.Delete);
 	app.post('/activity/delete', ActivityController.UponDelete);
 	//Each activity
-	app.get('/activity/:id/delete', ActivityController.DeleteActivity);
-	app.post('/activity/:id/delete', ActivityController.UponDeleteActivity);
+	app.get('/activity/:id', ActivityController.DeleteActivity);
+	app.post('/activity/:id', ActivityController.UponDeleteActivity);
 
 
 	//show account
-	app.get('/account', AccountController.Show);
+	app.get('/account', AccountController.Reguser);
 	//guest
 	app.get('/account/guest', AccountController.Guest);
 	app.post('/account/guest', AccountController.UponGuest);
@@ -50,7 +50,7 @@ module.exports = function(app){
 	//Modify account
 	app.get('/account/modify', AccountController.Modify);
 	app.post('/account/modify', AccountController.UponModify);
-	//Sign out
+	///Sign out
 	app.get('/account/signout', AccountController.Signout);
 	app.post('/account/signout', AccountController.UponSignout);
 	//Each account

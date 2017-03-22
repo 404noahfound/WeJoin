@@ -2,14 +2,7 @@ const mongoose = require('mongoose');
 const only = require('only');
 const Account = mongoose.model('Account');
 
-exports.Show = function(request, response){
-	response.pageInfo = {};
-	response.pageInfo.functionality = "Account.Show. Generate the account"
-	Account.find({}, function(err, docs){
-		response.pageInfo.accounts = docs;
-		response.render('account/Show', response.pageInfo);
-	});
-};
+
 exports.Create = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Account.Create. Generate create account page."
@@ -95,7 +88,10 @@ exports.UponSignout = function(request, response){
 exports.Guest = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Account.Create. Generate create account page."
-	response.render('account/guest', response.pageInfo);
+	Account.find({}, function(err, docs){
+		response.pageInfo.accounts = docs;
+		response.render('account/Guest', response.pageInfo);
+	});
 };
 
 exports.UponGuest = function(request, response){
@@ -107,7 +103,10 @@ exports.UponGuest = function(request, response){
 exports.Reguser = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Account.Create. Generate create account page."
-	response.render('account/reguser', response.pageInfo);
+	Account.find({}, function(err, docs){
+		response.pageInfo.accounts = docs;
+		response.render('account/Show', response.pageInfo);
+	});
 };
 
 exports.UponReguser = function(request, response){

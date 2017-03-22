@@ -3,5 +3,4 @@ extends ../layout
 block content
 	p Below is the list of accounts
 		each account in accounts
-			p 
-				a(href="/account/#{account.id}") #{account.username} : #{account.password}
+			p #{account.username} : #{account.password}

@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+	h1= title
+	form(name="account", method="post")
+		div.input
+			span.label Note
+			br
+			input(type="text", name="note")
+		div.actions
+			input(type="submit", value="upload")

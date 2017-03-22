@@ -1,0 +1,15 @@
+1,Modify.jade
+input:{object accounts in database}
+return:nothing
+2,ModifyAccount.jade
+input:{object accounts._id in database}
+return:a new account.describtion
+3,Show.jade
+input:{object accounts in database}
+return:nothing
+4,Signin.jade
+input:nothing
+return:login.username login.password
+5,Signup.jade
+input:
+return:
