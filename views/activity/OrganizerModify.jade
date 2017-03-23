@@ -3,7 +3,13 @@ extends ../layout
 block content
 	h1= title
 	p Welcome to #{title}.
-	p Choose the activity you want to modify:
 		each activity in activities
-			p 
-				a(href="/activity/#{activity._id}") #{activity.title} : #{activity.description}
+			p Activity #{activity.title}
+			p #{activity.description}
+	form(name="activity", method="post")
+		div.input
+			span.label Description
+			br
+			input(type="text", name="description")
+		div.actions
+			input(type="submit", value="modify")

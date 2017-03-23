@@ -1,18 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const LocationSchema = new Schema({
-	place_id: { type : String, required: 'Location place_id cannot be empty.', trim : true},
-	name: { type : String, trim : true}
-});
-
-mongoose.model('Location', LocationSchema);
-const Location = mongoose.model('Location');
 
 const ActivitySchema = new Schema({
 	organizer: { type : String, required: 'Activity organizer cannot be empty.', trim : true }, // store the _id of the organizer
 	title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
-	location: { type : String, default : null, trim : true }, // store the _id of the location
+	location_id: { type : String, trim : true}, // store the google API place_id of the location
+	location_name: { type : String, trim : true},
 	time: { type : Date, default : null },
 	type: { type : String, default : null, trim : true },
 	description: { type : String, default : 'This Activity has no description', trim : true },
@@ -35,8 +29,14 @@ ActivitySchema.methods = {
 	 *   @return {doc} new activity
 	 *   create a new activity
 	 */
-	Create: function(attr) {
+	Create: function(attr, callback) {
 		console.log("activity.Create");
+		for(var key in attr) this[key] = attr[key];
+		console.log(attr);
+		console.log(this);
+		this.save(function(err){
+			callback(err);
+		});
 	},
 
 	/**
@@ -96,13 +96,8 @@ ActivitySchema.statics = {
 	 */
 	Search: function(attr, callback) {
 		console.log("Activity.Search");
-		var keyword = attr;
-		this.find({title: keyword}, function(err, docs){
-			if(err){
-				console.log("Error! Can't find the activity page!");
-				callback(new Array());
-			}
-			else callback(docs);
+		this.find(attr, function(err, docs){
+			callback(err, docs);
 		});
 	},
 

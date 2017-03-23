@@ -3,17 +3,20 @@ extends ../layout
 block content
 	h1= title
 	form(name="activity", method="post")
-		div.input
-			span.label Title
-			br
-			input(type="text", name="title")
-		div.input
-			span.label Description
-			br
-			input(type="text", name="description")
-		div.input
-			span.label Organizer
-			br
-			input(type="text", name="organizer")
-		div.actions
-			input(type="submit", value="add")
+		span.label Title
+		br
+		input(type="text", name="title")
+		br
+
+		span.label Description
+		br
+		input(type="text", name="description")
+		br
+
+		span.label Organizer
+		br
+
+		input(type="text", name="organizer")
+		br
+
+		input(type="submit", value="Create")

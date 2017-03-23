@@ -11,18 +11,18 @@ module.exports = function(app){
 	app.get('/other', HomeController.Other);
 
 	//Activity Routes
-	//Search
-	app.get('/activity/search/:keyword', ActivityController.Search);
-	//View
-	app.get('/activity/:id', ActivityController.View);
 	//Create
 	app.get('/activity/create', ActivityController.Create);
 	app.post('/activity/create', ActivityController.UponCreate);
+	//Search
+	app.get('/activity/search/:title', ActivityController.Search);
 	//CustomerModify
 	app.post('/activity/:id/customermodify', ActivityController.CustomerModify);
 	//OrganizerModify
 	app.get('/activity/:id/organizermodify', ActivityController.OrganizerModify);
 	app.post('/activity/:id/organizermodify', ActivityController.UponOrganizerModify);
+	//View
+	app.get('/activity/:id', ActivityController.View);
 
 	
 	//show account

@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+	each activity in activities
+		p #{activity.title} : #{activity.description}
+		a(href="/activity/#{activity._id}/organizermodify") OrganizerModify
+		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
+			div.input
+				span.label Join
+				br
+				input(type="text", id="Join", value="1")
+			div.actions
+				input(type="submit", value="Join")
+
+			div.input
+				span.label Quit
+				br
+				input(type="text", id="Quit", value="1")
+			div.actions
+				input(type="submit", value="Quit")
+
+			div.input
+				span.label Rate
+				br
+				input(type="text", id="Rate", value="0")
+			div.actions
+				input(type="submit", value="Rate")
