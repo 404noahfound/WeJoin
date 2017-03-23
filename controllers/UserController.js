@@ -52,6 +52,40 @@ exports.UponCreate = function(req, res){
 	// res.render('home/Functionality', res.pageInfo);
 };
 
+exports.Modify = function(req, res){
+	if (!req.user) {
+		res.redirect('/user/login');
+	} else {
+		res.pageInfo.title = "Modify User";
+		res.pageInfo.error = req.flash('error');
+		res.pageInfo.user = req.user;
+		res.render('user/Modify', res.pageInfo);
+	}
+};
+
+exports.UponModify = function(req, res){
+	console.log(req.body);
+	console.log(req.user);
+	User.update({_id: req.user._id}, {
+		
+	});
+};
+
+exports.View = function(req, res){
+	res.pageInfo.title = "User Info";
+	// console.log(req.params);
+	User.find({_id: req.params.id}).then(
+		function(docs){
+			res.pageInfo.docs = docs;
+			res.render('user/View', res.pageInfo);
+		},
+		function(err){
+
+		}
+	);
+	// res.render('user/View', res.pageInfo);
+};
+
 /**
  * @description List all users, this is only a page for debugging
  * @pageInfo user : [User]

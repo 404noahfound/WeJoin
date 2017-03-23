@@ -27,4 +27,7 @@ module.exports = function(app){
     app.get('/user/reg', UserController.Create);
     app.post('/user/reg', UserController.UponCreate);
     app.get('/user', UserController.Index);
+    app.get('/user/modify', UserController.Modify);
+    app.post('/user/modify', UserController.UponModify);
+    app.get('/user/:id', UserController.View);
 };
