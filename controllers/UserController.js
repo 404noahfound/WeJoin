@@ -5,6 +5,7 @@ const flash = require('express-flash');
 
 /**
  * The create form for user
+ * @request req.flash('error')
  * @author Su
  */
 exports.Create = function(req, res){
@@ -25,6 +26,9 @@ exports.LogIn = function(req, response){
 
 /**
  * @description Handle the create form from user
+ * @request req.body{username: String, password: String}
+ * @pageInfo {functionality: String}
+ * @flash error
  * @author Su
  */
 exports.UponCreate = function(req, res){
@@ -50,6 +54,7 @@ exports.UponCreate = function(req, res){
 
 /**
  * @description List all users, this is only a page for debugging
+ * @pageInfo user : [User]
  * @author Su
  */
 exports.Index = function(req, res){
