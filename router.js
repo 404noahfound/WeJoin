@@ -24,10 +24,12 @@ module.exports = function(app){
         )
     );
     app.get('/user/login', UserController.LogIn);
+    app.get('/user/logout', UserController.LogOut);
     app.get('/user/reg', UserController.Create);
     app.post('/user/reg', UserController.UponCreate);
     app.get('/user', UserController.Index);
     app.get('/user/modify', UserController.Modify);
     app.post('/user/modify', UserController.UponModify);
+    app.get('/user/delete_all', UserController.DeleteAll);
     app.get('/user/:id', UserController.View);
 };

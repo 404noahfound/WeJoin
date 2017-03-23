@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 const relationship = require("mongoose-relationship");
 
 const UserSchema = new Schema({
-	password: { type : String, trim : true},
-	username: { type : String, trim : true, unique: true/*the unique constraint is not working*/ },
+	password: { type : String},
+	username: { type : String, unique: true, index: true/*the unique constraint is not working*/ },
 	nickname: { type : String, trim : true},
 	gender: { type : String, enum : {values : ['Male', 'Female'], message : 'gender must be male or female'}},
 	birthday: { type : Date},
@@ -19,7 +19,6 @@ const UserSchema = new Schema({
 
 UserSchema.path('password').required(true, 'User name cannot be blank');
 UserSchema.path('username').required(true, 'User password cannot be blank');
-UserSchema.path('gender').required(true, 'Gender cannot be blank');
 UserSchema.plugin(relationship, { relationshipPathName:'follow_by' });
 
 UserSchema.methods = {
@@ -43,6 +42,21 @@ UserSchema.statics = {
 	 */
 	test: function() {
 		return 'this is a test string.'
+	},
+
+	/**
+	 * @description filter out all empty field
+	 * @param  {Object}
+	 * @return {Object}
+	 */
+	purifyForm: function(form) {
+		var purifiedForm = {};
+		for (field in form){
+			if (form[field].length > 0) {
+				purifiedForm[field] = form[field];
+			}
+		}
+		return purifiedForm;
 	}
 };
 

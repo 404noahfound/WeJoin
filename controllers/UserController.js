@@ -41,10 +41,12 @@ exports.UponCreate = function(req, res){
 		}, 
 		function(err) {
 			err_messages = [];
+			if (err.message) {
+				err_messages.push(err.message);
+			}
 			if (err.errors) {
 				for (er in err.errors) {
-					console.log(err.errors[er]);
-					err_messages.push(err.errors[er].message);
+					// err_messages.push(err.errors[er].message);
 				}}
 			req.flash('error', err_messages);
 			res.redirect('/user/reg');
@@ -64,11 +66,16 @@ exports.Modify = function(req, res){
 };
 
 exports.UponModify = function(req, res){
-	console.log(req.body);
-	console.log(req.user);
-	User.update({_id: req.user._id}, {
-		
-	});
+	var updateInfo = User.purifyForm(req.body);
+	res.json(updateInfo);
+	User.update({_id: req.user._id}, updateInfo).then(
+		function(docs) {
+			res.json({message:'success', docs: docs});
+		},
+		function(err) {
+			res.json(err);
+		}
+	);
 };
 
 exports.View = function(req, res){
@@ -105,3 +112,24 @@ exports.Index = function(req, res){
 
 		});
 };
+
+exports.LogOut = function(req,res){
+	req.logout();
+	res.redirect('/');
+};
+
+exports.DeleteAll = function(req, res){
+	User.remove({},function(err){
+		if (err) res.json(err);
+		else res.redirect('/user');
+	});
+};
+
+
+
+
+
+
+
+
+
