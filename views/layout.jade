@@ -30,27 +30,6 @@ html
 				li
 					a(href="/activity/delete") Delete Activity	
 			li
-				a(href ="/account") User
-			ul
-				li
-					a(href="/account/guest") Guest
-				ul
-					li 
-						a(href="/account/signup") Sign up
-					li
-						a(href="/account/signin") Sign in
-				li 
-					a(href="/account/reguser") RegUser
-				ul
-					li
-						a(href="/account/modify") Update Account
-					li
-						a(href="/account/signout") Sign out
-					li
-						a(href="/account/follow") Follow
-					li
-						a(href="/account/recommondation") Recommondation
-			li
 				a(href = "/Notification") Notification
 			ul
 				li
@@ -66,8 +45,21 @@ html
 					a(href="/note/modify") Modify Note
 				li
 					a(href="/note/delete") Delete Note
-			li
-				a(href="/other") Other
+			li 
+				a(href="/user") User
+			ul
+				li
+					a(href="/user/modify") Modify User
+				if (username)
+					li
+						a(href="/user/logout") Log Out
+				else 
+					li
+						a(href="/user/login") Log In
+				li
+					a(href="/user/delete_all") Delete All Users
+				li
+					a(href="/other") Other
 
 
 		#wrapper

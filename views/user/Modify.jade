@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+    h1= title
+    p #{user}
+    form(name="user", method="post")
+        div.input
+            span.label password
+            input(type="password", name="password")
+        div.input
+            span.label nickname
+            input(type="text", name="nickname")
+        div.input
+            span.label gender
+            select(name="gender")
+                option(value="Male") Male
+                option(value="Female") Female
+        div.input
+            span.label birthday
+            input(type="date", name="birthday")
+        div.input 
+            span.label City
+            intput(type="text", name="city")
+        div.input
+            span.label Description
+            textarea(name="description")
+        div.actions
+            input(type="submit", value="change")
