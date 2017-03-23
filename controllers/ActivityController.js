@@ -18,6 +18,7 @@ exports.View = function(request, response){
 exports.Create = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Create. Generate create account page."
+	console.log(Activity.test());
 	response.render('activity/Create', response.pageInfo);
 };
 
