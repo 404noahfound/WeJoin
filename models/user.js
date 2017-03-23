@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const relationship = require("mongoose-relationship");
 
 const UserSchema = new Schema({
 	password: { type : String, trim : true},
@@ -10,6 +11,8 @@ const UserSchema = new Schema({
 	city: {type : String},
 	description: {type : String},
 	marked_activities: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
+	follow_to: [{type : Schema.Types.ObjectId, ref: 'User'}],
+	follow_by: [{type : Schema.Types.ObjectId, ref: 'User', childPath: 'follow_to'}],
 	// marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
 	created_at  : { type : Date, default : Date.now }
 });
@@ -17,6 +20,7 @@ const UserSchema = new Schema({
 UserSchema.path('password').required(true, 'User name cannot be blank');
 UserSchema.path('username').required(true, 'User password cannot be blank');
 UserSchema.path('gender').required(true, 'Gender cannot be blank');
+UserSchema.plugin(relationship, { relationshipPathName:'follow_by' });
 
 UserSchema.methods = {
 	/**
