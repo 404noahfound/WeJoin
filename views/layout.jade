@@ -12,53 +12,13 @@ html
 				a(href="/activity") Activity
 			ul
 				li
-					a(href="/activity/search") Search Activity
-				li
-					a(href="/activity/create") Create Activity
-				li
-					a(href="/activity/organizermodify") Modify Activity
-				li
-					a(href="/activity/delete") Delete Activity	
+					a(href="/activity/search/:keyword") Search Activity 
 			li
-				a(href ="/account") User
-			ul
-				li
-					a(href="/account/guest") Guest
+				l Guest
 				ul
 					li 
-						a(href="/account/signup") Sign up
+						a(href="/user/sign_up") Sign up
 					li
-						a(href="/account/signin") Sign in
-				li 
-					a(href="/account/reguser") RegUser
-				ul
-					li
-						a(href="/account/modify") Update Account
-					li
-						a(href="/account/signout") Sign out
-					li
-						a(href="/account/follow") Follow
-					li
-						a(href="/account/recommondation") Recommondation
-			li
-				a(href = "/Notification") Notification
-			ul
-				li
-					a(href="/notification/create") Create Notification
-				li
-					a(href="/notification/delete") Delete Notification
-			li
-				a(href = "/note") Note
-			ul
-				li
-					a(href="/note/create") Create Note
-				li
-					a(href="/note/modify") Modify Note
-				li
-					a(href="/note/delete") Delete Note
-			li
-				a(href="/other") Other
-
-
+						a(href="/user/sign_in") Sign in
 		#wrapper
 			block content

@@ -29,12 +29,6 @@ exports.UponSearch = function(request, response){
 	response.render('home/Functionality', response.pageInfo);
 };
 
-exports.View = function(request, response){
-	response.pageInfo = {};
-	response.pageInfo.functionality = "Activity.View"
-	response.render('home/Functionality', response.pageInfo);
-};
-
 exports.Create = function(request, response){
 	response.pageInfo = {};
 	response.pageInfo.functionality = "Activity.Create. Generate create activity page."
@@ -49,30 +43,7 @@ exports.UponCreate = function(request, response){
 	response.render('home/Functionality', response.pageInfo);
 };
 
-exports.CustomerModify = function(request, response){
-	response.pageInfo = {};
-	response.pageInfo.functionality = "Activity.CustomerModify. Include Join/Quit/Rate"
-	response.render('home/Functionality', response.pageInfo);
-};
-
 exports.OrganizerModify = function(request, response){
-	response.pageInfo = {};
-	response.pageInfo.title="OrganizerModify"
-	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
-	Activity.find({}, function(err, docs){
-		response.pageInfo.activities = docs;
-		response.render('activity/OrganizerModify', response.pageInfo);
-	});
-};
-
-exports.UponOrganizerModify = function(request, response){
-	response.pageInfo = {};
-	response.pageInfo.title="OrganizerModify"
-	response.pageInfo.functionality = "Activity.Modify"
-	response.render('home/Functionality', response.pageInfo);
-};
-
-exports.OrganizerModifyActivity = function(request, response){
 	var id = request.params.id;
 	response.pageInfo = {};
 	response.pageInfo.title="OrganizerModifyActivity"
@@ -84,7 +55,7 @@ exports.OrganizerModifyActivity = function(request, response){
 	});
 };
 
-exports.UponOrganizerModifyActivity = function(request, response){
+exports.UponOrganizerModify = function(request, response){
 	var id = request.params.id;
 	var new_description=request.body.description
 	response.pageInfo = {};
@@ -99,44 +70,61 @@ exports.UponOrganizerModifyActivity = function(request, response){
 	response.render('home/Functionality', response.pageInfo);
 };
 
+exports.ShowActivityFile = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.title="OrganizerModify"
+	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer."
+	Activity.find({}, function(err, docs){
+		response.pageInfo.activities = docs;
+		response.render('activity/OrganizerModify', response.pageInfo);
+	});
+};
+
+exports.UponShowActivityFile = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.title="OrganizerModify"
+	response.pageInfo.functionality = "Activity.Modify"
+	response.render('home/Functionality', response.pageInfo);
+};
+
+exports.JoinActivity = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Activity.Create. Generate create activity page."
+	response.render('activity/Create', response.pageInfo);
+};
+
+exports.UponJoinActivity = function(request, response){
+	response.pageInfo = {};
+	response.pageInfo.functionality = "Activity.UponCreate"
+	const activity = new Activity(only(request.body, "title description"));
+	activity.save();
+	response.render('home/Functionality', response.pageInfo);
+};
+
 exports.Delete = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.title="OrganizerDelete"
-	response.pageInfo.functionality = "Activity.OrganizerDelete. Generate page for Deleting the activity by organizer."
-	Activity.find({}, function(err, docs){
-	response.pageInfo.activities = docs;
-		response.render('activity/Delete', response.pageInfo);
-	});
+	response.pageInfo.functionality = "Activity.Create. Generate create activity page."
+	response.render('activity/Create', response.pageInfo);
 };
 
 exports.UponDelete = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.title="OrganizerDelete"
-	response.pageInfo.functionality = "Activity.Delete"
+	response.pageInfo.functionality = "Activity.UponCreate"
+	const activity = new Activity(only(request.body, "title description"));
+	//activity.save();
 	response.render('home/Functionality', response.pageInfo);
 };
 
-exports.DeleteActivity = function(request, response){
-	var id = request.params.id;
+exports.RateActivity = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.title="OrganizerDeleteActivity"
-	response.pageInfo.id=id;
-	response.pageInfo.functionality = "Activity.OrganizerDelete. Generate page for Deleteing the activity by organizer."
-	Activity.find({'id1':id}, function(err, docs){
-		response.pageInfo.activities = docs;
-		response.render('activity/DeleteActivity', response.pageInfo);
-	});
+	response.pageInfo.functionality = "Activity.Create. Generate create activity page."
+	response.render('activity/Create', response.pageInfo);
 };
 
-exports.UponDeleteActivity = function(request, response){
-	var id = request.params.id;
-	var new_description=request.body.description
+exports.UponRateActivity = function(request, response){
 	response.pageInfo = {};
-	response.pageInfo.title="UponOrganizerDeleteActivity"
-	response.pageInfo.functionality = "Activity.Delete"
-	Activity.findOneAndUpdate({'id1':id}, {'description':new_description}, {upsert:true}, function(err, doc){
-		if(err) console.log('error!');
-		response.pageInfo.description=new_description;
-	});
+	response.pageInfo.functionality = "Activity.UponCreate"
+	const activity = new Activity(only(request.body, "title description"));
+	//activity.save();
 	response.render('home/Functionality', response.pageInfo);
 };

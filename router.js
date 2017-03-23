@@ -1,6 +1,8 @@
 var HomeController = require('./controllers/HomeController');
 var ActivityController = require('./controllers/ActivityController');
 var AccountController = require('./controllers/AccountController');
+var NoteController = require('./controllers/NoteController');
+var NotificationController = require('./controllers/NotificationController');
 
 
 module.exports = function(app){
@@ -9,81 +11,58 @@ module.exports = function(app){
 	app.get('/other', HomeController.Other);
 
 	app.get('/activity', ActivityController.Show);
-	app.post('/activity',ActivityController.UponShow);
 
-	//Activity Routes
-	//Search activity 
-	//return {activity title}
-	app.get('/activity/search', ActivityController.Search);
-	app.post('/activity/search', ActivityController.UponSearch);
+	app.get('/activity/search/:keyword', ActivityController.Search);
+	app.post('/activity/search/:keyword', ActivityController.UponSearch);
 	//Create activity
-	app.get('/activity/create', ActivityController.Create);
-	app.post('/activity/create', ActivityController.UponCreate);
+	app.get('/activity/new', ActivityController.Create);
+	app.post('/activity/new', ActivityController.UponCreate);
 	//OrganizerModify activity
-	app.get('/activity/organizermodify', ActivityController.OrganizerModify);
-	app.post('/activity/organizermodify', ActivityController.UponOrganizerModify);
+	app.get('/activity/:id/join', ActivityController.JoinActivity);
+	app.post('/activity/:id/join', ActivityController.UponJoinActivity);
+	//Join activity
+	app.get('/activity/:id/update', ActivityController.OrganizerModify);
+	app.post('/activity/:id/update', ActivityController.UponOrganizerModify);
+	//Rate activity
+	app.get('/activity/:id/rate', ActivityController.RateActivity);
+	app.post('/activity/:id/rate', ActivityController.UponRateActivity);
 	//Each activity
-	app.get('/activity/:id', ActivityController.OrganizerModifyActivity);
-	app.post('/activity/:id', ActivityController.UponOrganizerModifyActivity);
+	app.get('/activity/:id', ActivityController.ShowActivityFile);
+	app.post('/activity/:id', ActivityController.UponShowActivityFile);
 	//Delete activity
-	app.get('/activity/delete', ActivityController.Delete);
-	app.post('/activity/delete', ActivityController.UponDelete);
-	//Each activity
-	app.get('/activity/:id', ActivityController.DeleteActivity);
-	app.post('/activity/:id', ActivityController.UponDeleteActivity);
+	app.get('/activity/:id/delete', ActivityController.Delete);
+	app.post('/activity/:id/delete', ActivityController.UponDelete);
 
 
-	//show account
-	app.get('/account', AccountController.Reguser);
-	//guest
-	app.get('/account/guest', AccountController.Guest);
-	app.post('/account/guest', AccountController.UponGuest);
 	//reguser
-	app.get('/account/reguser', AccountController.Reguser);
-	app.post('/account/reguser', AccountController.UponReguser);
+	app.get('/user/reg', AccountController.Reguser);
+	app.post('/user/reg', AccountController.UponReguser);
 	//Create account
-	app.get('/account/signup', AccountController.Create);
-	app.post('/account/signup', AccountController.UponCreate);
+	app.get('/user/sign_up', AccountController.Create);
+	app.post('/user/sign_up', AccountController.UponCreate);
 	//Sign in an account
-	app.get('/account/signin', AccountController.Signin);
-	app.post('/account/signin', AccountController.UponSignin);
+	app.get('/user/sign_in', AccountController.Signin);
+	app.post('/user/sign_in', AccountController.UponSignin);
 	//Modify account
-	app.get('/account/modify', AccountController.Modify);
-	app.post('/account/modify', AccountController.UponModify);
+	app.get('/user/manage', AccountController.Modify);
+	app.post('/user/manage', AccountController.UponModify);
 	///Sign out
-	app.get('/account/signout', AccountController.Signout);
-	app.post('/account/signout', AccountController.UponSignout);
+	app.get('/user/sign_out', AccountController.Signout);
+	app.post('/user/sign_out', AccountController.UponSignout);
 	//Each account
-	app.get('/account/:id', AccountController.ModifyAccount);
-	app.post('/account/:id', AccountController.UponModifyAccount);
+	app.get('/user/:id', AccountController.ShowUserFile);
+	app.post('/user/:id', AccountController.UponShowUserFile);
 	//follow
-	app.get('/account/follow', AccountController.Follow);
-	app.post('/account/follow', AccountController.UponFollow);
-	//recommodation system
-	app.get('/account/recommondation', AccountController.Recommondation);
-	app.post('/account/recommondation', AccountController.UponRecommondation);
+	app.get('/user/:id/follow', AccountController.Follow);
+	app.post('/user/:id/follow', AccountController.UponFollow);
 
 
-	//notification
-	app.get('/notification', AccountController.Notification);
-	app.post('/notification', AccountController.UponNotification);
+
 	//create notification
-	app.get('/notification/create', AccountController.NotificationCreate);
-	app.post('/notification/create', AccountController.UponNotificationCreate);
-	//delete notification
-	app.get('/notification/delete', AccountController.NotificationDelete);
-	app.post('/notification/delete', AccountController.UponNotificationDelete);
+	app.get('/notification/:id/response', NotificationController.NotificationResponse);
+	app.post('/notification/:id/response', NotificationController.UponNotificationResponse);
 
-	//note
-	app.get('/note', AccountController.Note);
-	app.post('/note', AccountController.UponNote);
 	//note create
-	app.get('/note/create', AccountController.NoteCreate);
-	app.post('/note/create', AccountController.UponNoteCreate);
-	//note modify
-	app.get('/note/modify', AccountController.NoteModify);
-	app.post('/note/modify', AccountController.UponNoteModify);
-	//note delete
-	app.get('/note/delete', AccountController.NoteDelete);
-	app.post('/note/delete', AccountController.UponNoteDelete);
+	app.get('/note/new', NoteController.NoteCreate);
+	app.post('/note/new', NoteController.UponNoteCreate);
 };
