@@ -1,10 +1,31 @@
 extends ../layout
 
 block content
-    h1= title
-    form(name="activity", method="post")
-        div.input
-            span.label Title
-            input(type="text", name="title")
-        div.actions
-            input(type="submit", value="add")
+	h1= title
+	form(name="activity", method="post")
+		span.label Title
+		br
+		input(type="text", name="title")
+		br
+
+		span.label Description
+		br
+		input(type="text", name="description")
+		br
+
+		span.label Organizer
+		br
+
+		input(type="text", name="organizer")
+		br
+
+		input(type="submit", value="Create")
+    p 
+    link(href="https://cdn.quilljs.com/1.2.2/quill.snow.css", rel="stylesheet")
+    div#editor
+        p Hello World!
+    script(src="https://cdn.quilljs.com/1.2.2/quill.js")
+    script.
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });

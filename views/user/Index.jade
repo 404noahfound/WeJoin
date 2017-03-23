@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+	p Welcome to #{title}.
+	p Below is the list of users
+	each user in users
+		div 
+			a(href='user/' + user._id) #{user.username}
+			spam #{user}
