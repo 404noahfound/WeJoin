@@ -2,6 +2,7 @@ var HomeController = require('./controllers/HomeController');
 var ActivityController = require('./controllers/ActivityController');
 var AccountController = require('./controllers/AccountController');
 var UserController = require('./controllers/UserController');
+var NoteController = require('./controllers/NoteController');
 var passport = require('passport');
 
 
@@ -66,18 +67,19 @@ module.exports = function(app){
 	app.post('/notification/delete', AccountController.UponNotificationDelete);
 
 	//note
-	app.get('/note', AccountController.Note);
-	app.post('/note', AccountController.UponNote);
+	app.get('/note', NoteController.Note);
+	app.post('/note', NoteController.UponNote);
 	//note create
-	app.get('/note/create', AccountController.NoteCreate);
-	app.post('/note/create', AccountController.UponNoteCreate);
+	app.get('/note/create', NoteController.NoteCreate);
+	app.post('/note/create', NoteController.UponNoteCreate);
 	//note modify
-	app.get('/note/modify', AccountController.NoteModify);
-	app.post('/note/modify', AccountController.UponNoteModify);
+	app.get('/note/modify', NoteController.NoteModify);
+	app.get('/note/modify/:id', NoteController.NoteModifyEach);
+	app.post('/note/modify/:id', NoteController.UponNoteModifyEach);
 	//note delete
-	app.get('/note/delete', AccountController.NoteDelete);
-	app.post('/note/delete', AccountController.UponNoteDelete);
-	
+	app.get('/note/delete', NoteController.NoteDelete);
+	app.get('/note/delete/:id', NoteController.NoteDeleteEach);
+	app.post('/note/delete/:id', NoteController.UponNoteDeleteEach);
     // User Routes
     app.post('/user/login', 
         passport.authenticate('local', 

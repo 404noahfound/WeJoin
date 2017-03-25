@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+	h1= title
+	p Welcome to #{title}.
+	p Choose the note you want to delete:
+		each note in notes
+			p 
+				a(href="/note/delete/#{note._id}") #{note.title} : #{note.content}

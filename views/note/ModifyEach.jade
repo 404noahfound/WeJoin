@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+	h1= title
+	p Welcome to #{title}.
+		each note in notes
+			p Note #{note.title}
+			p #{note.content}
+	form(name="note", method="post")
+		div.input
+			span.label Content
+			br
+			input(type="text", name="content")
+		div.actions
+			input(type="submit", value="modify")
