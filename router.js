@@ -12,6 +12,8 @@ module.exports = function(app){
 	app.get('/other', HomeController.Other);
 
 	//Activity Routes
+	//DeleteAll
+	app.get('/activity/delete_all', ActivityController.DeleteAll);
 	//Create
 	app.get('/activity/create', ActivityController.Create);
 	app.post('/activity/create', ActivityController.UponCreate);
