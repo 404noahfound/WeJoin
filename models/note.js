@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const relationship = require("mongoose-relationship");
 
 const NoteSchema = new Schema({
 	title: {
@@ -7,21 +8,21 @@ const NoteSchema = new Schema({
 			required: [true, 'Please add a title.'], 
 			trim : true },
 	author:{
-			type: String,
-			default: '',
-			trim : true},
+			type: Schema.Types.ObjectId,
+			ref:'User',
+			childPath:"own_notes"},
 	content:{ //***********************************need to change******************
 			type : String, 
 			default : 'This Note has no content', 
 			trim : true},
-	assocalated_activity: {
-			type:  [String],
-			default: [], },
+	associated_activity: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
 
 	created_at  : { type : Date, default : Date.now },
 	modified_at : { type : Date, default : Date.now },
-	highlighted: { type : Boolean, deault : false }
+	highlighted: { type : Boolean, default : false }
 });
+
+NoteSchema.plugin(relationship, { relationshipPathName:'author' });
 
 NoteSchema.methods = {
 	/**
