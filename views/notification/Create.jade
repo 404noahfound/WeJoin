@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+    h1= title
+    form(name="notification", method="post")
+        div.input
+            span.label Receiver
+            input(type="text", name="username")
+        div.input
+            span.label Description
+            input(type="text", name="description")
+        div.actions
+            input(type="submit", value="send")
+    if error
+        p #{error}

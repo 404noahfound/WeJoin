@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+    p Below is the list of notifications
+        each notification in notifications
+            p 
+                if notification.status
+                    style
+                        {color: #464646}
+                    a(href="/notifications/#{notification_id}") #{notification.sender} : #{activity.description}
+                else
+                    a(href="/notifications/#{notification_id}") #{notification.sender} : #{activity.description}

@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+	each notification in notifications
+		notification.status=false
+		p Sender: #{notification.sender}  Receiver : #{notification.receiver}
+		div.action
+			input(type="submit", value="MarkAsUnread")
+		p #{notification.description}
+		

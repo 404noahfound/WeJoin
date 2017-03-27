@@ -56,14 +56,16 @@ module.exports = function(app){
 
 
 	//notification
-	app.get('/notification', AccountController.Notification);
-	app.post('/notification', AccountController.UponNotification);
+	app.get('/notification/:id', NotificationController.View);
+//	app.post('/notification', AccountController.UponNotification);
 	//create notification
-	app.get('/notification/create', AccountController.NotificationCreate);
-	app.post('/notification/create', AccountController.UponNotificationCreate);
+	app.get('/notification/create', NotificationController.Create);
+	app.post('/notification/create', NotificationController.UponCreate);
 	//delete notification
-	app.get('/notification/delete', AccountController.NotificationDelete);
-	app.post('/notification/delete', AccountController.UponNotificationDelete);
+	app.get('/notification/delete', NotificationController.Delete);
+//	app.post('/notification/delete', NotificationController.UponNotificationDelete);
+	app.get('/notification/markasunread', NotificationController.MarkAsUnread);
+	
 
 	//note
 	app.get('/note', AccountController.Note);
