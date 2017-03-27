@@ -4,8 +4,8 @@ block content
 	h1= title
 	p Welcome to #{title}.
 		each note in notes
-			p Note #{note.title}
-			p #{note.content}
+			p Title #{note.title}
+			p Content #{note.content}
 	form(name="note", method="post")
 		div.input
 			span.label Content

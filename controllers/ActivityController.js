@@ -11,6 +11,7 @@ const User = mongoose.model('User');
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.params;
+	attr.title = {$regex: attr.title};
 	console.log(attr);
 	Activity.Search(attr,
 		function(err, res){

@@ -80,6 +80,10 @@ module.exports = function(app){
 	app.get('/note/delete', NoteController.NoteDelete);
 	app.get('/note/delete/:id', NoteController.NoteDeleteEach);
 	app.post('/note/delete/:id', NoteController.UponNoteDeleteEach);
+	//note search
+	app.get('/note/search', NoteController.NoteSearch);
+	app.post('/note/search', NoteController.UponNoteSearch);
+	app.get('/note/view/:id', NoteController.NoteViewEach);
     // User Routes
     app.post('/user/login', 
         passport.authenticate('local', 
