@@ -5,5 +5,6 @@ block content
 	p Welcome to #{title}.
 		each note in notes
 			p Title: #{note.title}
-			p Content: #{note.content}
+			p Content: 
+			div!= note.content
 		a(href="/note") Return

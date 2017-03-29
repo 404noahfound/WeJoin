@@ -3,7 +3,7 @@ extends ../layout
 block content
 	h1= title
 	p Welcome to #{title}.
-	p Below is the list of notes:
+	p Choose the note:
 		each note in notes
-			p Note #{note.title}
-			p #{note.content}
+			p 
+				a(href="/note/view/#{note._id}") #{note.title}
