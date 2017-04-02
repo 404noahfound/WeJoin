@@ -11,7 +11,7 @@ const User = mongoose.model('User');
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.params;
-	// attr = Activity.SearchForm(attr);
+	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");
 	Activity.find(attr,
@@ -43,7 +43,7 @@ exports.View = function(request, response){
 			response.render('activity/ViewSingle',response.pageInfo);
 		},
 		function(err){
-			console.log("Find activity Error!");
+			console.log("Find (View) activity Error!");
 			response.render('home/Other',response.pageInfo);
 		});
 };
@@ -211,11 +211,17 @@ exports.AddParticipant = function(request, response){
 };
 */
 
-/*
-exports.GetByUser = function(request,response){
+// for test
+exports.GetByUser = function(request, response){
 	response.pageInfo.title = "User's activities";
-	response.pageInfo.activities=Activity.GetByUser(RegUser);
-	if(!response.pageInfo.activities) console.log("User get activities failed!");
-	response.render('activity/GetByUser',response.pageInfo);
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{
+		Activity.GetByUser(request.user,
+			function(docs){
+				response.json(docs);
+			});
+	}
 };
-*/
+
