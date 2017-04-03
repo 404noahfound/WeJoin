@@ -198,8 +198,8 @@ ActivitySchema.statics = {
 	 */
 	GetByUser: function(user, callback) {
 		console.log("Activity.GetByUser");
-		var res = { 'joined': [], 'wait_for_approval': [] };
-		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}] },
+		var res = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
+		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
 			function(err, docs){
 				if (err) {
 					console.log("Find (GetByUser) activity Error!");
@@ -214,6 +214,9 @@ ActivitySchema.statics = {
 						j = activity.wait_for_approval.indexOf(user._id);
 						if (j != -1) {
 							res.wait_for_approval.push(activity);
+						}
+						if (activity.organizer.equals(user._id)) {
+							res.organized.push(activity);
 						}
 					}
 				}
