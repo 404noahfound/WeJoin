@@ -1,0 +1,64 @@
+div(class="ui borderless main menu")
+  div(class="ui text container")
+    a(class="header item" href="/") WeJoin
+    //- a.item Home
+    div.ui.dropdown.item
+      a(href="/activity" style="color:inherit")
+        | Activities
+        i(class="dropdown icon")
+      div.menu
+        a.item(href="/activity/getbyuser") My Activities
+        a.item(href="/activity/create") Create(for test)
+        a.item(href="/activity/organizermodify") Modify(for test)
+        a.item(href="/activity/delete_all") Delete all(for test)
+    div.ui.dropdown.item
+      a(href="/notes" style="color:inherit")
+        | Notes
+        i(class="dropdown icon")
+      div.menu
+        a.item(href="/note/search") Search
+        a.item(href="/activity/create") Create(for test)
+        a.item(href="/note/modify") Modify(for test)
+        a.item(href="/note/delete") Delete
+    //- a.item Notes
+    div(class="ui search item")
+      div(class="ui transparent icon input")
+        i(class="search link icon")
+        input.prompt(type="text" placeholder="Search Anything...")
+    if (username)
+      div(class="ui right floated dropdown item")
+        | Welcome, #{username}
+        i(class="dropdown icon")
+        div.menu
+          a.item(href="/user/modify") My Profile
+          a.item Notifications
+          a.item(href="/user/logout") Log Out
+    else
+      div(class="ui right floated dropdown item")
+        a(href="/user/reg" style="color:inherit") Sign Up
+        div.menu
+          a.item(href="/user/login") Log In
+          a.item(href="/user") All Users
+
+  script.
+    $(document).ready(function(){
+      $('.main.menu').visibility({
+          type: 'fixed'
+        });
+      $('.main.menu  .ui.dropdown').dropdown({
+          on: 'hover'
+        });
+    });
+    //- $('div.item').click(function(){
+    //-   //- alert($(this).attr('href'));
+    //-   window.location.href = $(this).attr('href');
+    //- });
+
+//- li
+//-           a(href="/activity/create") Create Activity
+//-         li
+//-           a(href="/activity/organizermodify") Modify Activity
+//-         li
+//-           a(href="/activity/getbyuser") User's Activities
+//-         li
+//-           a(href="/activity/delete_all") Delete All Activities
