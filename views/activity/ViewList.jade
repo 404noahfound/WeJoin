@@ -1,0 +1,66 @@
+extends ../layout
+
+block content
+	//-!-- Include Required Prerequisites --
+	script(type="text/javascript", src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js")
+	link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css")
+
+	//- !-- Include Date Range Picker --
+	script(type="text/javascript", src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js")
+	link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css")
+
+	script.
+		$(document).ready(function() {
+			$('#search_more').click(function() {
+				$("#search_sidebar")
+					.sidebar('setting', 'transition', 'slide out')
+					.sidebar('toggle');
+			});
+		});
+
+	//-!-- div(class="ui container") --
+	div(class="ui sidebar left vertical", id="search_sidebar")
+		div(class="ui container")
+			div(class="ui center aligned header") Search Activities
+
+			form(class="ui form", id="search_form")
+				div(class="field")
+					label Title
+					input(type="text", id="title", name="title", placeholder="Activity Title")
+
+				div(class="field")
+					label Organizer
+					input(type="text", id="organizer", name="organizer", placeholder="Activity Organizer")
+
+				div(class="field")
+					label Location
+					input(type="text", id="location", name="location", placeholder="Activity Location")
+
+				button(class="ui button" type="submit") Submit
+
+	div(class="pusher")
+		div(class="ui container")
+			div(class="ui center aligned header") Activities
+
+			button(class="big ui labeled icon button", id="search_more")
+				i(class="add icon")
+				p Search More...
+
+			div(class="ui top attached block header") Dates
+			div(class="ui relaxed divided items")
+				div(class="item")
+					div(class="ui small image")
+						img(src="assets/images/wireframe/image.png")
+					div(class="content")
+						a(class="header") Content Header
+						div(class="meta")
+							a Date
+							a Category
+						div(class="description").
+							A description which may flow for several lines and give context to the content.
+						div(class="extra")
+							div(class="ui right floated primary button") Primary
+								i(class="right chevron icon")
+							div(class="ui label") Limited
+
+

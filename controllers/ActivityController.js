@@ -9,12 +9,8 @@ const User = mongoose.model('User');
 //const Request = mongoose.model('Request');
 
 exports.Search = function(request, response){
-	response.render('activity/Search');
-}
-
-exports.UponSearch = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
-	var attr = request.params;
+	var attr = request.body;
 	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");
@@ -25,7 +21,7 @@ exports.UponSearch = function(request, response){
 				response.pageInfo.activities = new Array();
 			}
 			else response.pageInfo.activities = docs;
-			response.render('activity/View', response.pageInfo);
+			response.render('activity/ViewList', response.pageInfo);
 		});
 };
 

@@ -20,8 +20,7 @@ module.exports = function(app){
 	app.get('/activity/create', ActivityController.Create);
 	app.post('/activity/create', ActivityController.UponCreate);
 	//Search
-	app.get('/activity/search', ActivityController.Search);
-	app.post('/activity/search', ActivityController.UponSearch);
+	app.post('/activity/search', ActivityController.Search);
 	//View
 	app.get('/activity/:id', ActivityController.View);
 	//CustomerModify
