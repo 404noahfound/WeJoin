@@ -1,0 +1,80 @@
+doctype html
+
+html
+	head
+		meta(charset="utf-8")
+		title !{title}
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js")
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css')
+		script(src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js")
+
+		//-!-- Include Required Prerequisites --
+		script(type="text/javascript", src="//cdn.jsdelivr.net/jquery/1/jquery.min.js")
+		script(type="text/javascript", src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js")
+		link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css")
+
+		//- !-- Include Date Range Picker --
+		script(type="text/javascript", src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js")
+		link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css")
+
+		script.
+			var displaySearchSidebar = function(){
+				$(document).ready(function(){
+					$("#demo1").hide();
+					$("#search_sidebar").sidebar('toggle');
+					$("#demo2").hide();
+				});
+			}
+	body
+		//-!-- div(class="ui container") --
+		div(class="ui left vertical sidebar", id="search_sidebar")
+			div(class="ui container")
+				div(class="ui center aligned header") Search Activities
+
+				form(class="ui form", id="search_form")
+					div(class="field")
+						label Title
+						input(type="text", id="title", name="title", placeholder="Activity Title")
+
+					div(class="field")
+						label Organizer
+						input(type="text", id="organizer", name="organizer", placeholder="Activity Organizer")
+
+					div(class="field")
+						label Location
+						input(type="text", id="location", name="location", placeholder="Activity Location")
+
+
+					button(class="ui button" type="submit") Submit
+
+		div(class="pusher")
+			div(class="ui container")
+				div(class="ui center aligned header") Activities
+
+				button(class="big ui labeled icon button", id="search_more", onclick="displaySearchSidebar()")
+					i(class="add icon")
+					p Search More...
+
+				p(id="demo1") 666
+				p(id="demo2") 777
+
+
+
+				div(class="ui top attached block header") Dates
+				div(class="ui relaxed divided items")
+					div(class="item")
+						div(class="ui small image")
+							img(src="assets/images/wireframe/image.png")
+						div(class="content")
+							a(class="header") Content Header
+							div(class="meta")
+								a Date
+								a Category
+							div(class="description").
+								A description which may flow for several lines and give context to the content.
+							div(class="extra")
+								div(class="ui right floated primary button") Primary
+									i(class="right chevron icon")
+								div(class="ui label") Limited
+
+

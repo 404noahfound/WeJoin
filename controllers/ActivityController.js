@@ -9,6 +9,10 @@ const User = mongoose.model('User');
 //const Request = mongoose.model('Request');
 
 exports.Search = function(request, response){
+	response.render('activity/Search');
+}
+
+exports.UponSearch = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.params;
 	attr = Activity.SearchForm(attr);
