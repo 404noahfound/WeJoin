@@ -1,13 +1,20 @@
 extends ../layout
+include ListActivitiesMixin
 
 block content
 	//-!-- Include Required Prerequisites --
 	script(type="text/javascript", src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js")
 	link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css")
+	//- link(rel="stylesheet", type="text/css", href="https://semantic-ui.com/dist/semantic.css")
 
 	//- !-- Include Date Range Picker --
 	script(type="text/javascript", src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js")
 	link(rel="stylesheet", type="text/css", href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css")
+
+	//- calendar
+	link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet", type="text/css")
+	link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
+	script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
 
 	script.
 		$(document).ready(function() {
@@ -21,46 +28,56 @@ block content
 	//-!-- div(class="ui container") --
 	div(class="ui sidebar left vertical", id="search_sidebar")
 		div(class="ui container")
-			div(class="ui center aligned header") Search Activities
+			div(class="ui center aligned header", style="color: rgb(255,255,255); margin-top: 10px") Search Activities
 
-			form(class="ui form", id="search_form")
+			form(class="ui large form", id="search_form", method="post", action="/activity/search")
 				div(class="field")
-					label Title
+					label(style="color: rgb(255,255,255)") Title
 					input(type="text", id="title", name="title", placeholder="Activity Title")
 
 				div(class="field")
-					label Organizer
-					input(type="text", id="organizer", name="organizer", placeholder="Activity Organizer")
+					label(style="color: rgb(255,255,255)") Location
+					input(type="text", id="location", name="location", placeholder="Activity Location")
 
 				div(class="field")
-					label Location
-					input(type="text", id="location", name="location", placeholder="Activity Location")
+					label(style="color: rgb(255,255,255)") Time (Search From)
+					div(class="ui calendar", id="time_search_from")
+						div(class="ui input left icon")
+							i(class="calendar icon")
+							input(type="text", name="time_search_from", placeholder="From")
+					script.
+						$('#time_search_from').calendar({
+							type: 'date'
+						});
+
+				div(class="field")
+					label(style="color: rgb(255,255,255)") Time (Search To)
+					div(class="ui calendar", id="time_search_to")
+						div(class="ui input left icon")
+							i(class="calendar icon")
+							input(type="text",name="time_search_to", placeholder="To")
+					script.
+						$('#time_search_to').calendar({
+							type: 'date'
+						});
 
 				button(class="ui button" type="submit") Submit
 
 	div(class="pusher")
 		div(class="ui container")
-			div(class="ui center aligned header") Activities
 
-			button(class="big ui labeled icon button", id="search_more")
+			div(class="ui center aligned header", style="margin-top: 10px") Search Results
+			button(class="ui big labeled icon button", id="search_more")
 				i(class="add icon")
 				p Search More...
+			+ListActivities(activities.search_results)
 
-			div(class="ui top attached block header") Dates
-			div(class="ui relaxed divided items")
-				div(class="item")
-					div(class="ui small image")
-						img(src="assets/images/wireframe/image.png")
-					div(class="content")
-						a(class="header") Content Header
-						div(class="meta")
-							a Date
-							a Category
-						div(class="description").
-							A description which may flow for several lines and give context to the content.
-						div(class="extra")
-							div(class="ui right floated primary button") Primary
-								i(class="right chevron icon")
-							div(class="ui label") Limited
+			div(class="ui center aligned header") Organized Activities
+			+ListActivities(activities.organized)
+
+			div(class="ui center aligned header") Joined Activities
+			+ListActivities(activities.joined)
+
+
 
 

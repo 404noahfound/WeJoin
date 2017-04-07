@@ -7,7 +7,7 @@ const ActivitySchema = new Schema({
 	title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
 	location_id: { type : String, trim : true }, // store the google API place_id of the location
 	location_name: { type : String, trim : true },
-	time: { type : Date, default : null },
+	time: { type : Date, default : Date.now },
 	type: { type : String, default : null, trim : true },
 	description: { type : String, default : 'This Activity has no description', trim : true },
 	expense: { type : Number, default : 0, min : 0 },
@@ -179,12 +179,22 @@ ActivitySchema.statics = {
 		var searchForm = {};
 		for (field in form){
 			if (form[field].length > 0) {
-				if (field == "title" || field == "description") {
-					searchForm[field] = { $regex: "^" + form[field] + ".*" }
+				if (field == "title" || field == "description" || field == "location") {
+					searchForm[field] = { $regex: "^" + form[field] + ".*" };
 				}
+				else if (field == "time_search_from" || field == "time_search_to");
 				else {
 					searchForm[field] = form[field];
 				}
+			}
+		}
+		if (form.time_search_from || form.time_search_to) {
+			searchForm.time = {};
+			if (form.time_search_from) {
+				searchForm.time.$gte = new Date(form.time_search_from);
+			}
+			if (form.time_search_to) {
+				searchForm.time.$lte = new Date(form.time_search_to);
 			}
 		}
 		return searchForm;
@@ -225,6 +235,42 @@ ActivitySchema.statics = {
 				callback(res);
 			});
 	},
+
+	/**
+	 * ToView function:
+	 *   @param {JSON} user
+	 *   @return {[doc]} an array of activities
+	 *   get the activities joined by the given user
+	 */
+	ToView: function(activities, callback) {
+		console.log("Activity.GetByUser");
+		var res = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
+		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
+			function(err, docs){
+				if (err) {
+					console.log("Find (GetByUser) activity Error!");
+				}
+				else {
+					for (var i = 0; i < docs.length; i++){
+						var activity = docs[i];
+						var j = activity.participants.indexOf(user._id);
+						if (j != -1) {
+							res.joined.push(activity);
+						}
+						j = activity.wait_for_approval.indexOf(user._id);
+						if (j != -1) {
+							res.wait_for_approval.push(activity);
+						}
+						if (activity.organizer.equals(user._id)) {
+							res.organized.push(activity);
+						}
+					}
+				}
+				console.log(docs);
+				console.log(user._id);
+				callback(res);
+			});
+	}
 };
 
 mongoose.model('Activity', ActivitySchema);

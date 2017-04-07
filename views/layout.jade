@@ -23,7 +23,7 @@ html
 				li
 					p Search Activity
 						form(id="SearchActivity", method="post", action="/activity/search")
-							input(type="text", id="title")
+							input(type="text", name="title")
 							input(type="submit", value="Search")
 						//- script.
 							var a = document.getElementById("SearchActivity");

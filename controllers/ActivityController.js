@@ -11,17 +11,37 @@ const User = mongoose.model('User');
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.body;
+	console.log(request.body);
 	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");
+	response.pageInfo.activities = {};
 	Activity.find(attr,
 		function(err, docs){
 			if(err){
 				console.log("Find (Search) activity Error!");
-				response.pageInfo.activities = new Array();
+				response.pageInfo.activities.search_results = new Array();
 			}
-			else response.pageInfo.activities = docs;
+			else response.pageInfo.activities.search_results = docs;
+			response.pageInfo.activities.search_results.sort(function(a, b){
+				if(b.time == null) return -1;
+				else if(a.time == null) return 1;
+				else return a.time - b.time;
+			});
+			console.log(response.pageInfo.activities.search_results);
+			response.pageInfo.activities.joined = new Array();
+			response.pageInfo.activities.organized = new Array();
 			response.render('activity/ViewList', response.pageInfo);
+			/*
+			Activity.ToView(response.pageInfo.search_results,
+				function(err){
+					if(err) {
+						console.log("Activity ToView Error!");
+					}
+					console.log(response.pageInfo.search_results);
+					response.render('activity/ViewList', response.pageInfo);
+				});
+			*/
 		});
 };
 
