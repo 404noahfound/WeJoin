@@ -13,15 +13,15 @@ mixin ListActivities(activities)
 					div(class="description").
 						#{activity.description}
 					div(class="extra")
-						div(class="ui big right floated primary button") View Detail
+						div(class="ui right floated primary button") View Detail
 							i(class="right chevron icon")
 						if activity.status == "future"
-							div(class="ui big purple label") #{activity.status}
+							div(class="ui purple label") #{activity.status}
 						else if activity.status == "going"
-							div(class="ui big green label") #{activity.status}
+							div(class="ui green label") #{activity.status}
 						else if activity.status == "finished"
-							div(class="ui big yellow label") #{activity.status}
+							div(class="ui yellow label") #{activity.status}
 						else if activity.status == "cancelled"
-							div(class="ui big label") #{activity.status}
-						div(class="ui big label") #{activity.participation_method}
-						div(class="ui big tag label", style="margin: 0px 15px") #{activity.expense}
+							div(class="ui label") #{activity.status}
+						div(class="ui label") #{activity.participation_method}
+						div(class="ui tag label", style="margin: 0px 15px") #{activity.expense}
