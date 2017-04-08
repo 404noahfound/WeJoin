@@ -1,29 +1,191 @@
 extends ../layout
 
 block content
-	each activity in activities
-		p #{activity.title} : #{activity.description}
-		a(href="/activity/#{activity._id}/organizermodify") OrganizerModify
-		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-			div.input
-				span.label Join
-				br
-				input(type="text", id="Join", name="join", value="1")
-			div.actions
-				input(type="submit", value="Join")
+	div(class="ui four column stackable grid container")
+		div(class="column")
+		div(class="three column", style="z-index: 0")
+			div(class="ui header") #{activity.title}
+			button(class="ui animated teal fade button", tabindex="0", id="join")
+				div(class="visible content") Join
+				div(class="hidden content")
+					i(class="add square icon")
+			script.
+				$(document).ready(function(){
+					if (user_status == "guest") {
+						$('#join').prop('disabled', true);
+					}
 
-		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-			div.input
-				span.label Quit
-				br
-				input(type="text", id="Quit", name="quit", value="1")
-			div.actions
-				input(type="submit", value="Quit")
+					$('#join').click(function(){
+						//alert("click join");
+						$.post({
+							"url": "/activity/#{activity._id}/customermodify",
+							"data": { "join": "1" },
+							"success": function(new_data){
+											//alert("repsonse");
+											if (new_data.err) {
+												alert(new_data.err);
+											}
+											else{
+												alert(new_data.join);
+											}
+										},
+							"dataType": "JSON"
+						});
+					});
+				});
 
-		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-			div.input
-				span.label Rate
-				br
-				input(type="text", id="Rate", name="rate", value="0")
-			div.actions
-				input(type="submit", value="Rate")
+
+			button(class="ui animated teal fade button", tabindex="0", id="quit")
+				div(class="visible content") Quit
+				div(class="hidden content")
+					i(class="minus square icon")
+			script.
+				$(document).ready(function(){
+					if (user_status == "guest") {
+						$('#quit').prop('disabled', true);
+					}
+
+					$('#quit').click(function(){
+						//alert("click quit");
+						$.post({
+							"url": "/activity/#{activity._id}/customermodify",
+							"data": { "quit": "1" },
+							"success": function(new_data){
+											//alert("repsonse");
+											if (new_data.err) {
+												alert(new_data.err);
+											}
+											else{
+												alert(new_data.quit);
+											}
+										},
+							"dataType": "JSON"
+						});
+					});
+				});
+
+	div(class="ui stackable grid container")
+		div(class="four wide column", id="notes_time_line")
+			div(class="ui raised segment")
+				p test
+
+		div(class="ten wide column", id="activity_info")
+			div(class="ui raised segment", style="z-index: 0")
+				div(class="row", style="margin: 10px")
+					p organizer card
+
+				div(class="row", style="margin: 10px")
+					div(class="ui teal label", id="time")
+						i(class="calendar outline icon")
+						| #{activity.time}
+
+				div(class="row", style="margin: 10px")
+					div(class="ui brown label", id="location")
+						i(class="location arrow icon")
+						| #{activity.location_name}
+
+				div(class="row", style="margin: 10px")
+					if activity.status == "future"
+						div(class="ui purple label") #{activity.status}
+					else if activity.status == "going"
+						div(class="ui green label") #{activity.status}
+					else if activity.status == "finished"
+						div(class="ui yellow label") #{activity.status}
+					else if activity.status == "cancelled"
+						div(class="ui label") #{activity.status}
+
+					div(class="ui label", style="margin: 0px 15px") #{activity.participation_method} (Join method)
+
+					if activity.expense == 0
+						div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
+					else	
+						div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+
+				div(class="row", style="margin: 10px")
+					div(class="ui star rating", id="rating")
+					button(class="ui mini button", id="rate", style="margin: 0px 10px") Rate
+					script(type='text/javascript').
+						var data = !{JSON.stringify(activity)};
+						var rating = data.rating ? parseInt(data.rating) : 0;
+						var user_status = !{JSON.stringify(user_status)};
+
+						$(document).ready(function() {
+							$('#rating').rating({
+								initialRating: rating,
+								maxRating: 5
+							});
+							
+							if (user_status != "participant") {
+								$('#rating').rating("disable");
+								$('#rate').prop('disabled', true);
+							}
+
+							$('#rate').click(function(){
+								//alert("click rate");
+								var value = $('#rating').rating("get rating");
+								$.post({
+									"url": "/activity/#{activity._id}/customermodify",
+									"data": { "rating": value },
+									"success": function(new_data) {
+													//alert("repsonse");
+													if (new_data.err) {
+														alert(new_data.err);
+														$('#rating').rating("set rating", rating);
+													}
+													else{
+														var new_rating = parseInt(new_data.rating);
+														alert("Rate success.");
+														$('#rating').rating("set rating", new_rating);
+													}
+												},
+									"dataType": "JSON"
+								});
+							});
+						});
+
+				div(class="row", style="margin: 10px")
+					if user_status == "organizer" || user_status == "participant"
+						div(class="ui icon message")
+							i(class="inbox icon")
+							div(class="content")
+								div(class="header").
+									Content for Participants
+								p #{activity.content_for_participants}
+
+				div(class="row", style="margin: 10px")
+					div(class="ui piled segment")
+						h4(class="header") Description
+						p #{activity.description}
+
+
+
+
+
+
+
+
+				p #{activity.title} : #{activity.description}
+				a(href="/activity/#{activity._id}/organizermodify") OrganizerModify
+				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
+					div.input
+						span.label Join
+						br
+						input(type="text", id="Join", name="join", value="1")
+					div.actions
+						input(type="submit", value="Join")
+
+				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
+					div.input
+						span.label Quit
+						br
+						input(type="text", id="Quit", name="quit", value="1")
+					div.actions
+						input(type="submit", value="Quit")
+
+				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
+					div.input
+						span.label Rating
+						br
+						input(type="text", id="Rating", name="rating", value="0")
+					div.actions
+						input(type="submit", value="Rating")

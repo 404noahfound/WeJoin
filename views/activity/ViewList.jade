@@ -47,8 +47,10 @@ html
 								i(class="calendar icon")
 								input(type="text", name="time_search_from", placeholder="From")
 						script.
-							$('#time_search_from').calendar({
-								type: 'date'
+							$(document).ready(function() {
+								$('#time_search_from').calendar({
+									type: 'date'
+								});
 							});
 
 					div(class="field")
@@ -58,9 +60,15 @@ html
 								i(class="calendar icon")
 								input(type="text",name="time_search_to", placeholder="To")
 						script.
-							$('#time_search_to').calendar({
-								type: 'date'
+							$(document).ready(function() {
+								$('#time_search_to').calendar({
+									type: 'date'
+								});
 							});
+
+					div(class="field")
+						label(style="color: rgb(255,255,255)") Status
+						input(type="text", id="location", name="status", placeholder="Activity Status")
 
 					button(class="ui tiny button" type="submit") Submit
 

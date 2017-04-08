@@ -59,7 +59,20 @@ exports.View = function(request, response){
 	Activity.find({ '_id': request.params.id }).then(
 		function(docs){
 			console.log(docs);
-			response.pageInfo.activities = docs;
+			response.pageInfo.activity = docs[0];
+			if (!request.user) {
+				response.pageInfo.user_status = "guest";
+			}
+			else if (response.pageInfo.activity.IsOrganizer(request.user)) {
+				response.pageInfo.user_status = "organizer";
+			}
+			else if (response.pageInfo.activity.IsParticipant(request.user)) {
+				response.pageInfo.user_status = "participant";
+			}
+			else {
+				response.pageInfo.user_status = "guest";
+			}
+			console.log(response.pageInfo.user_status);
 			response.render('activity/ViewSingle',response.pageInfo);
 		},
 		function(err){
@@ -130,14 +143,16 @@ exports.CustomerModify = function(request, response){
 				else{
 					activity = docs[0];
 					activity.Modify(request.user, request.body,
-						function(err){
+						function(err, res){
 							if(err){
 								console.log("CustomerModify activity Error!\n" + err);
-								response.render('home/Other',response.pageInfo);
+								res_json = {
+									"err": err
+								}
+								response.json(res_json);
 							}
 							else{
-								response.pageInfo.activities = new Array(activity);
-								response.redirect('/activity/' + activity._id);
+								response.json(res);
 							}
 						});
 				}
