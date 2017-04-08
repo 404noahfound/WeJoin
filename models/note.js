@@ -9,6 +9,7 @@ const NoteSchema = new Schema({
 			trim : true },
 	author:{
 			type: Schema.Types.ObjectId},
+
 	content:{ 
 			type : String, 
 			default : 'This Note has no content', 

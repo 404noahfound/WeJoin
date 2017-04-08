@@ -33,7 +33,7 @@ exports.NoteSearch = function(request, response){
 	if (!request.user) {
 		response.redirect('/user/login');
 	}
-	else{esponse.render('note/Search', response.pageInfo);}
+	else{response.render('note/Search', response.pageInfo);}
 };
 
 exports.UponNoteSearch = function(request, response){
@@ -61,8 +61,6 @@ exports.NoteViewEach = function(request, response){
 		var id = request.params.id;
 		response.pageInfo.id=id;
 		response.pageInfo.user=request.user;
-		console.log(request.user);
-		console.log(response.pageInfo.user);
 		Note.find({'_id':id}, function(err, docs){
 			response.pageInfo.notes = docs;
 			console.log(docs);
