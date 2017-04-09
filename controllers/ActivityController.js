@@ -70,7 +70,7 @@ exports.View = function(request, response){
 				response.pageInfo.user_status = "participant";
 			}
 			else {
-				response.pageInfo.user_status = "guest";
+				response.pageInfo.user_status = "login";
 			}
 			console.log(response.pageInfo.user_status);
 			response.render('activity/ViewSingle',response.pageInfo);
@@ -229,7 +229,7 @@ exports.UponOrganizerModify = function(request, response){
 								response.render('home/Other',response.pageInfo);
 							}
 							else{
-								response.pageInfo.activities = new Array(activity);
+								response.pageInfo.activity = activity;
 								response.redirect('/activity/' + activity._id);
 							}
 						});

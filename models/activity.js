@@ -7,7 +7,8 @@ const ActivitySchema = new Schema({
 	title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
 	location_id: { type : String, trim : true }, // store the google API place_id of the location
 	location_name: { type : String, trim : true },
-	time: { type : Date, default : Date.now },
+	start_time: { type : Date, default : Date.now },
+	end_time: { type : Date, default : Date.now },
 	type: { type : String, default : null, trim : true },
 	description: { type : String, default : 'This Activity has no description', trim : true },
 	expense: { type : Number, default : 0, min : 0 },
@@ -88,7 +89,7 @@ ActivitySchema.methods = {
 		// OrganizerModify: input attr contains the items that has to be modified (directly_modified_keys + 'new_participants' + 'removed_participants')
 		else {
 			console.log("activity.DirectlyModify");
-			const directly_modified_keys = ["title", "location_id", "location_name", "time", "type ", "description",
+			const directly_modified_keys = ["title", "location_id", "location_name", "start_time", "end_time", "type ", "description",
 								"expense", "status", "content_for_participants", "participation_method", "remind_time"];
 			//attr = this.PurifyForm(attr); // ?????? what the fuck? why it can stuck here???
 			console.log(attr);
@@ -209,12 +210,12 @@ ActivitySchema.statics = {
 			}
 		}
 		if (form.time_search_from || form.time_search_to) {
-			searchForm.time = {};
+			searchForm.start_time = {};
 			if (form.time_search_from) {
-				searchForm.time.$gte = new Date(form.time_search_from);
+				searchForm.start_time.$gte = new Date(form.time_search_from);
 			}
 			if (form.time_search_to) {
-				searchForm.time.$lte = new Date(form.time_search_to);
+				searchForm.start_time.$lte = new Date(form.time_search_to);
 			}
 		}
 		return searchForm;
