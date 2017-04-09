@@ -71,8 +71,18 @@ exports.Modify = function(req, res){
 exports.UponModify = function(req, res){
 	var updateInfo = User.purifyForm(req.body);
 	if(req.file){
+		var path = require('path');
+		var appDir = path.dirname(require.main.filename);
 		updateInfo.avatar = req.file.path;
-		console.log(req.file);
+		var avatar = path.join(appDir, updateInfo.avatar);
+		console.log(avatar);
+		var im = require('imagemagick');
+		im.resize(
+			{srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+			function(err, stdout, stderr){
+				if (err) throw err;
+				console.log('resized new avatar to fit within 200x200px');
+		})
 	}
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
@@ -91,7 +101,9 @@ exports.View = function(req, res){
 	// console.log(req.params);
 	User.find({_id: req.params.id}).then(
 		function(docs){
-			res.pageInfo.user = docs[0];
+			var user = docs[0];
+			user.avatar = user.getAvatarUrl();
+			res.pageInfo.user = user;
 			res.render('user/View', res.pageInfo);
 		},
 		function(err){

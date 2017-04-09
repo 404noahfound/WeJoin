@@ -27,8 +27,9 @@ block content
                     span.label Description
                     textarea.description(name="description")
                 if (user.avatar)
+                    span.label Current Avatar
                     div(class="ui fluid bordered rounded image")
-                        img(src=user.avatar.replace('static',''))
+                        img(src=user.avatar.replace('static',''), style="width:200px;height:200px")
                 div.field
                     span.label Upload Avatar
                     input(type = "file" name="avatar")

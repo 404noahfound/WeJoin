@@ -9,5 +9,6 @@
 ## Initilization
 * install npm
 * install nodejs
+* install imagemagick
 * run 'sudo apt install mongodb-server'
 * run 'npm install'

@@ -14,9 +14,12 @@ block content
     });
   div(class="ui grid container")
     div.row
-      div(class="three wide column")
-        div(class="ui fluid bordered rounded image")
-          img(src="/avatars/1204845.png")
+      div(class="four wide column")
+        div(class="ui bordered rounded image")
+          if (user.avatar && user.avatar.length > 0)
+            img(src=user.avatar, style="width:200px;height:200px")
+          else
+            img(src="/avatars/1204845.png", style="width:200px;height:200px")
       div(class="eight wide column" style="position:relative")
         div(style="position:absolute; bottom:0px;")
           h1.ui.header 

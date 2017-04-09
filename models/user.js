@@ -32,6 +32,10 @@ UserSchema.methods = {
 	 */		
 	validPassword: function(password) {
 		return this.password === password;
+	},
+	getAvatarUrl: function(){
+		if(this.avatar) return this.avatar.replace('static','');
+		return null;
 	}
 };
 
