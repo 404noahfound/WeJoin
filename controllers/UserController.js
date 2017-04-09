@@ -11,6 +11,7 @@ const flash = require('express-flash');
 exports.Create = function(req, res){
 	res.pageInfo.title = 'Register';
 	res.pageInfo.error = req.flash('error');
+	console.log(res.pageInfo.error);
 	res.render('user/Create', res.pageInfo);
 };
 
@@ -46,7 +47,7 @@ exports.UponCreate = function(req, res){
 			}
 			if (err.errors) {
 				for (er in err.errors) {
-					// err_messages.push(err.errors[er].message);
+					err_messages.push(err.errors[er].message);
 				}}
 			req.flash('error', err_messages);
 			res.redirect('/user/reg');
@@ -99,7 +100,7 @@ exports.View = function(req, res){
  * @author Su
  */
 exports.Index = function(req, res){
-	res.pageInfo = {title:"Users"};
+	res.pageInfo.title = "Users";
 	// User.find({}, function(err, docs){
 	// 	res.pageInfo.users = docs;
 	// 	res.render('user/Index', res.pageInfo);

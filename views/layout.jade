@@ -10,26 +10,26 @@ html
 	body
 		block header
 			include layouts/header
-		ul
-			ul
-				li
-					a Search Activity
-						form(id="SearchActivity", method="get", action="/activity/search/")
-							input(type="text", id="title")
-							input(type="submit", value="Search")
-						script.
-							var a = document.getElementById("SearchActivity");
-							a.addEventListener("submit",function(e) {
-								e.preventDefault();
-								var b = document.getElementById("title").value;
-								window.location.href = "/activity/search/" + b;
-							});
-			li
-				a(href = "/Notification") Notification
-			ul
-				li
-					a(href="/notification/create") Create Notification
-				li
-					a(href="/notification/delete") Delete Notification
+		//- ul
+		//- 	ul
+		//- 		li
+		//- 			a Search Activity
+		//- 				form(id="SearchActivity", method="get", action="/activity/search/")
+		//- 					input(type="text", id="title")
+		//- 					input(type="submit", value="Search")
+		//- 				script.
+		//- 					var a = document.getElementById("SearchActivity");
+		//- 					a.addEventListener("submit",function(e) {
+		//- 						e.preventDefault();
+		//- 						var b = document.getElementById("title").value;
+		//- 						window.location.href = "/activity/search/" + b;
+		//- 					});
+		//- 	li
+		//- 		a(href = "/Notification") Notification
+		//- 	ul
+		//- 		li
+		//- 			a(href="/notification/create") Create Notification
+		//- 		li
+		//- 			a(href="/notification/delete") Delete Notification
 		#wrapper
 			block content
