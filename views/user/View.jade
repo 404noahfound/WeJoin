@@ -9,6 +9,8 @@ mixin follow()
 block content
   script.
     $(document).ready(function(){
+      var user = !{JSON.stringify(user)};
+      console.log(user);
     });
   div(class="ui grid container")
     div.row
@@ -18,9 +20,9 @@ block content
       div(class="eight wide column" style="position:relative")
         div(style="position:absolute; bottom:0px;")
           h1.ui.header 
-            |Donald J. Trump  
+            |#{user.nickname}
             +follow()
-          h4(class="ui grey header") 45th President of the United States of America
+          h4(class="ui grey header") #{user.description}
     div.ui.divider
     div.row
       div.column

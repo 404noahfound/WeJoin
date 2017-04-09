@@ -36,9 +36,11 @@ exports.UponCreate = function(req, res){
 	res.pageInfo.title = "Reg success";
 	res.pageInfo.functionality = "Reg success";
 	const user = new User(only(req.body, "username password"));
+	user.nickname = user.username;
 	user.save().then(
 		function(doc) {
-			res.render('home/Functionality', res.pageInfo);
+			// res.render('home/Functionality', res.pageInfo);
+			res.redirect('/user/login');
 		}, 
 		function(err) {
 			err_messages = [];
@@ -59,7 +61,7 @@ exports.Modify = function(req, res){
 	if (!req.user) {
 		res.redirect('/user/login');
 	} else {
-		res.pageInfo.title = "Modify User";
+		res.pageInfo.title = "Modify My Profile";
 		res.pageInfo.error = req.flash('error');
 		res.pageInfo.user = req.user;
 		res.render('user/Modify', res.pageInfo);
@@ -68,13 +70,14 @@ exports.Modify = function(req, res){
 
 exports.UponModify = function(req, res){
 	var updateInfo = User.purifyForm(req.body);
-	res.json(updateInfo);
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
-			res.json({message:'success', docs: docs});
+			// res.json({message:'success', docs: docs});
+			res.redirect('/user/Modify');
 		},
 		function(err) {
-			res.json(err);
+			req.flash('error', err);
+			res.redirect('user/Modify');
 		}
 	);
 };
@@ -84,7 +87,7 @@ exports.View = function(req, res){
 	// console.log(req.params);
 	User.find({_id: req.params.id}).then(
 		function(docs){
-			res.pageInfo.docs = docs;
+			res.pageInfo.user = docs[0];
 			res.render('user/View', res.pageInfo);
 		},
 		function(err){

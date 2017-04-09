@@ -12,7 +12,7 @@ exports.Index = function(req, res){
 	if(req.user) {
 		User.find({_id: req.user._id}).then(
 			function(docs){
-				res.pageInfo.docs = docs;
+				res.pageInfo.user = docs[0];
 				res.render('user/View', res.pageInfo);
 			},
 			function(err){

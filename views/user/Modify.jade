@@ -5,7 +5,6 @@ block content
         div(class="centered ten wide column")
             h1.ui.header #{title}
             div.ui.divider
-            p #{user}
             form.ui.form(name="user", method="post")
                 //- div.field
                 //-     span.label password
@@ -29,6 +28,9 @@ block content
                     textarea.description(name="description")
                 div.actions
                     input(type="submit", value="change")
+            if (error && error.length > 0)
+                div(class="ui error message") #{error}
+
     script.
         $(document).ready(function(){
             $('textarea.description').val('#{user.description}');
