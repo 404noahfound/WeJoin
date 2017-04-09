@@ -88,7 +88,17 @@ exports.Create = function(request, response){
 		response.redirect('/user/login');
 	}
 	else{
-		response.render('activity/Create', response.pageInfo);
+		var activity = new Activity({'title': 'New Activity', 'organizer': request.user._id});
+		activity.save().then(
+			function(doc){
+				console.log(activity);
+				response.pageInfo.activity = activity;
+				response.redirect('/activity/' + activity._id + '/organizermodify');
+			},
+			function(err){
+				console.log("Create activity Error!\n" + err);
+				response.render('home/Other',response.pageInfo);
+			});
 	}
 };
 

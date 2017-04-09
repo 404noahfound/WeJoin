@@ -79,10 +79,14 @@ html
 				div(class="ui center aligned header", style="margin-top: 10px") Search Results
 				button(class="ui tiny labeled icon button", id="search_more")
 					i(class="add icon")
-					p Search More...
+					| Search More...
 				+ListActivities(activities.search_results)
 
 				div(class="ui center aligned header") Organized Activities
+				a(href="/activity/create")
+					button(class="ui tiny labeled icon button", id="create_more")
+						i(class="add icon")
+						| Create More...
 				+ListActivities(activities.organized)
 
 				div(class="ui center aligned header") Joined Activities
