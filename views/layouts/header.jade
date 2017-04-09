@@ -22,9 +22,11 @@ div(class="ui borderless main menu")
         a.item(href="/note/delete") Delete
     //- a.item Notes
     div(class="ui search item")
-      div(class="ui transparent icon input")
-        i(class="search link icon")
-        input.prompt(type="text" placeholder="Search Anything...")
+      form(id="search_activities_by_keyword", method="post", action="/activity/search")
+        div(class="field")
+          div(class="ui transparent icon input")
+            i(class="search link icon", onclick="$('#search_activities_by_keyword').submit()")
+            input.prompt(type="text", name="title", placeholder="Search Anything...")
     if (username)
       div(class="ui right floated dropdown item")
         | Welcome, #{username}
@@ -33,6 +35,7 @@ div(class="ui borderless main menu")
           a.item(href="/user/modify") My Profile
           a.item Notifications
           a.item(href="/user/logout") Log Out
+          a.item(href="/user") All Users
     else
       div(class="ui right floated dropdown item")
         a(href="/user/reg" style="color:inherit") Sign Up

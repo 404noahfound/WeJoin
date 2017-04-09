@@ -22,8 +22,10 @@ block content
           +text_field("username","user", "Username")
           +text_field("password","lock", "Password")
           input(class="ui fluid large teal submit button" type="submit" value="Submit")
-      if (error_flash)
-        div(class="ui error message") #{error_flash}
+      if (error && error.length > 0)
+        div(class="ui error message") #{error}
+        script.
+          console.log("#{error}")
 
 //- block content
 //-     h1= title

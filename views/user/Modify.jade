@@ -1,28 +1,37 @@
 extends ../layout
 
 block content
-    h1= title
-    p #{user}
-    form(name="user", method="post")
-        div.input
-            span.label password
-            input(type="password", name="password")
-        div.input
-            span.label nickname
-            input(type="text", name="nickname")
-        div.input
-            span.label gender
-            select(name="gender")
-                option(value="Male") Male
-                option(value="Female") Female
-        div.input
-            span.label birthday
-            input(type="date", name="birthday")
-        div.input 
-            span.label City
-            intput(type="text", name="city")
-        div.input
-            span.label Description
-            textarea(name="description")
-        div.actions
-            input(type="submit", value="change")
+    div.ui.grid.container
+        div(class="centered ten wide column")
+            h1.ui.header #{title}
+            div.ui.divider
+            form.ui.form(name="user", method="post")
+                //- div.field
+                //-     span.label password
+                //-     input(type="password", name="password")
+                div.field
+                    span.label nickname
+                    input(type="text" name="nickname" value=user.nickname)
+                div.field
+                    span.label gender
+                    select.ui.dropdown(name="gender")
+                        option(value="Male") Male
+                        option(value="Female") Female
+                div.field
+                    span.label birthday
+                    input(type="date", name="birthday" value=user.birthday)
+                div.field
+                    span.label City
+                    input(type="text", name="city", value=user.city)
+                div.field
+                    span.label Description
+                    textarea.description(name="description")
+                div.actions
+                    input(type="submit", value="change")
+            if (error && error.length > 0)
+                div(class="ui error message") #{error}
+
+    script.
+        $(document).ready(function(){
+            $('textarea.description').val('#{user.description}');
+        });

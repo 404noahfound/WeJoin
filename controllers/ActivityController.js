@@ -10,18 +10,38 @@ const User = mongoose.model('User');
 
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
-	var attr = request.params;
+	var attr = request.body;
+	console.log(request.body);
 	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");
+	response.pageInfo.activities = {};
 	Activity.find(attr,
 		function(err, docs){
 			if(err){
 				console.log("Find (Search) activity Error!");
-				response.pageInfo.activities = new Array();
+				response.pageInfo.activities.search_results = new Array();
 			}
-			else response.pageInfo.activities = docs;
-			response.render('activity/View', response.pageInfo);
+			else response.pageInfo.activities.search_results = docs;
+			response.pageInfo.activities.search_results.sort(function(a, b){
+				if(b.time == null) return -1;
+				else if(a.time == null) return 1;
+				else return a.time - b.time;
+			});
+			console.log(response.pageInfo.activities.search_results);
+			response.pageInfo.activities.joined = new Array();
+			response.pageInfo.activities.organized = new Array();
+			response.render('activity/ViewList', response.pageInfo);
+			/*
+			Activity.ToView(response.pageInfo.search_results,
+				function(err){
+					if(err) {
+						console.log("Activity ToView Error!");
+					}
+					console.log(response.pageInfo.search_results);
+					response.render('activity/ViewList', response.pageInfo);
+				});
+			*/
 		});
 };
 
@@ -39,7 +59,20 @@ exports.View = function(request, response){
 	Activity.find({ '_id': request.params.id }).then(
 		function(docs){
 			console.log(docs);
-			response.pageInfo.activities = docs;
+			response.pageInfo.activity = docs[0];
+			if (!request.user) {
+				response.pageInfo.user_status = "guest";
+			}
+			else if (response.pageInfo.activity.IsOrganizer(request.user)) {
+				response.pageInfo.user_status = "organizer";
+			}
+			else if (response.pageInfo.activity.IsParticipant(request.user)) {
+				response.pageInfo.user_status = "participant";
+			}
+			else {
+				response.pageInfo.user_status = "guest";
+			}
+			console.log(response.pageInfo.user_status);
 			response.render('activity/ViewSingle',response.pageInfo);
 		},
 		function(err){
@@ -55,7 +88,17 @@ exports.Create = function(request, response){
 		response.redirect('/user/login');
 	}
 	else{
-		response.render('activity/Create', response.pageInfo);
+		var activity = new Activity({'title': 'New Activity', 'organizer': request.user._id});
+		activity.save().then(
+			function(doc){
+				console.log(activity);
+				response.pageInfo.activity = activity;
+				response.redirect('/activity/' + activity._id + '/organizermodify');
+			},
+			function(err){
+				console.log("Create activity Error!\n" + err);
+				response.render('home/Other',response.pageInfo);
+			});
 	}
 };
 
@@ -110,14 +153,16 @@ exports.CustomerModify = function(request, response){
 				else{
 					activity = docs[0];
 					activity.Modify(request.user, request.body,
-						function(err){
+						function(err, res){
 							if(err){
 								console.log("CustomerModify activity Error!\n" + err);
-								response.render('home/Other',response.pageInfo);
+								res_json = {
+									"err": err
+								}
+								response.json(res_json);
 							}
 							else{
-								response.pageInfo.activities = new Array(activity);
-								response.redirect('/activity/' + activity._id);
+								response.json(res);
 							}
 						});
 				}
