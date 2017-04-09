@@ -1,9 +1,14 @@
 extends ../layout
 
 block content
-	h1= title
-	p Welcome to #{title}.
-	p Choose the note:
+
 		each note in notes
-			p 
-				a(href="/note/view/#{note._id}") #{note.title}
+			div(class='ui main text container')
+				h1(class='ui header') 
+					a(href="/note/view/#{note._id}") #{note.title}
+				h5(class='ui grey header') by 
+					em #{note.authorname} on 
+					em #{note.modified_at}	
+			br
+			div(class='ui justified text container')!= note.content
+				div(class='ui divider')

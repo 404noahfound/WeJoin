@@ -12,19 +12,21 @@ div(class="ui borderless main menu")
         a.item(href="/activity/organizermodify") Modify(for test)
         a.item(href="/activity/delete_all") Delete all(for test)
     div.ui.dropdown.item
-      a(href="/notes" style="color:inherit")
+      a(href="/note" style="color:inherit")
         | Notes
         i(class="dropdown icon")
       div.menu
         a.item(href="/note/search") Search
-        a.item(href="/activity/create") Create(for test)
-        a.item(href="/note/modify") Modify(for test)
+        a.item(href="/note/create") Create
+        a.item(href="/note/modify") Modify
         a.item(href="/note/delete") Delete
     //- a.item Notes
     div(class="ui search item")
-      div(class="ui transparent icon input")
-        i(class="search link icon")
-        input.prompt(type="text" placeholder="Search Anything...")
+      form(id="search_activities_by_keyword", method="post", action="/activity/search")
+        div(class="field")
+          div(class="ui transparent icon input")
+            i(class="search link icon", onclick="$('#search_activities_by_keyword').submit()")
+            input.prompt(type="text", name="title", placeholder="Search Anything...")
     if (username)
       div(class="ui right floated dropdown item")
         | Welcome, #{username}

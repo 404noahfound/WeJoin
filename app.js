@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 
 // Flash Setting
 app.use(cookieParser('keyboard cat'));
-app.use(session({secret: 'anything', cookie: { maxAge: 3600000 }}));
+app.use(session({secret: 'anything', cookie: { maxAge: 36000000 }}));
 app.use(flash());
 
 //database setting

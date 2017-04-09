@@ -7,7 +7,7 @@ const ActivitySchema = new Schema({
 	title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
 	location_id: { type : String, trim : true }, // store the google API place_id of the location
 	location_name: { type : String, trim : true },
-	time: { type : Date, default : null },
+	time: { type : Date, default : Date.now },
 	type: { type : String, default : null, trim : true },
 	description: { type : String, default : 'This Activity has no description', trim : true },
 	expense: { type : Number, default : 0, min : 0 },
@@ -37,21 +37,21 @@ ActivitySchema.methods = {
 		if (attr.join) {
 			console.log("activity.Join");
 			var i = this.participants.indexOf(user._id);
-			if (i != -1) { err = "Already joined!"; callback(err); }
+			if (i != -1) { err = "Already joined!"; callback(err, null); }
 			else{
 				if (this.participation_method == 'public') {
 					this.participants.push(user._id);
-					this.save().then(callback(err));
+					this.save().then(callback(err, { "join": "Join success."}));
 				}
 				else if (this.participation_method == 'approval') {
 					var j = this.wait_for_approval.indexOf(user._id);
-					if (j != -1) { err = "Waiting for approval!"; callback(err); }
+					if (j != -1) { err = "Waiting for approval!"; callback(err, null); }
 					else {
 						this.wait_for_approval.push(user._id);
-						this.save().then(callback(err));
+						this.save().then(callback(err, { "join": "Join waiting list (wait for approval)." }));
 					}
 				}
-				else { err = "Can only join by invitation!"; callback(err); }
+				else { err = "Can only join by invitation!"; callback(err, null); }
 			}
 		}
 		// Quit activity: input needs to have attr.quit
@@ -60,29 +60,29 @@ ActivitySchema.methods = {
 			var i = this.participants.indexOf(user._id);
 			if (i != -1) {
 				this.participants.splice(i, 1);
-				this.save().then(callback(err));
+				this.save().then(callback(err, { "quit": "Quit success." }));
 			}
 			else{
 				var j = this.wait_for_approval.indexOf(user._id);
 				if (j != -1) {
 					this.wait_for_approval.splice(j, 1);
-					this.save().then(callback(err));
+					this.save().then(callback(err, { "quit": "Leave waiting list." }));
 				}
-				else { err = "Haven't joined!"; callback(err); }
+				else { err = "Haven't joined!"; callback(err, null); }
 			}
 		}
-		// Rate activity: input needs to have attr.rate
-		else if (attr.rate) {
-			console.log("activity.Rate");
-			attr.rate = parseInt(attr.rate);
-			if (this.rated_participants.indexOf(user._id) != -1) { err = "Have rated!"; callback(err); }
+		// Rate activity: input needs to have attr.rating
+		else if (attr.rating) {
+			console.log("activity.Rating");
+			attr.rating = parseInt(attr.rating);
+			if (this.rated_participants.indexOf(user._id) != -1) { err = "Have rated!"; callback(err, null); }
 			else {
-				if (this.rated_participants.length == 0) { this.rating = attr.rate; }
+				if (this.rated_participants.length == 0) { this.rating = attr.rating; }
 				else {
-					this.rating = (this.rating * this.rated_participants.length + attr.rate) / (this.rated_participants.length + 1)
+					this.rating = (this.rating * this.rated_participants.length + attr.rating) / (this.rated_participants.length + 1)
 				}
 				this.rated_participants.push(user._id);
-				this.save().then(callback(err));
+				this.save().then(callback(err, { "rating": this.rating }));
 			}
 		}
 		// OrganizerModify: input attr contains the items that has to be modified (directly_modified_keys + 'new_participants' + 'removed_participants')
@@ -108,7 +108,27 @@ ActivitySchema.methods = {
 					}
 				}
 			}
-			this.save().then(callback(err));
+			this.save().then(callback(err, "OrganizerModify success."));
+		}
+	},
+
+	IsParticipant: function(user) {
+		var i = this.participants.indexOf(user._id);
+		if (i != -1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	},
+
+
+	IsOrganizer: function(user) {
+		if (this.organizer.equals(user._id))  {
+			return true;
+		}
+		else {
+			return false;
 		}
 	},
 
@@ -179,12 +199,22 @@ ActivitySchema.statics = {
 		var searchForm = {};
 		for (field in form){
 			if (form[field].length > 0) {
-				if (field == "title" || field == "description") {
-					searchForm[field] = { $regex: "^" + form[field] + ".*" }
+				if (field == "title" || field == "description" || field == "location") {
+					searchForm[field] = { $regex: "^" + form[field] + ".*" };
 				}
+				else if (field == "time_search_from" || field == "time_search_to");
 				else {
 					searchForm[field] = form[field];
 				}
+			}
+		}
+		if (form.time_search_from || form.time_search_to) {
+			searchForm.time = {};
+			if (form.time_search_from) {
+				searchForm.time.$gte = new Date(form.time_search_from);
+			}
+			if (form.time_search_to) {
+				searchForm.time.$lte = new Date(form.time_search_to);
 			}
 		}
 		return searchForm;
@@ -225,6 +255,42 @@ ActivitySchema.statics = {
 				callback(res);
 			});
 	},
+
+	/**
+	 * ToView function:
+	 *   @param {JSON} user
+	 *   @return {[doc]} an array of activities
+	 *   get the activities joined by the given user
+	 */
+	ToView: function(activities, callback) {
+		console.log("Activity.GetByUser");
+		var res = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
+		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
+			function(err, docs){
+				if (err) {
+					console.log("Find (GetByUser) activity Error!");
+				}
+				else {
+					for (var i = 0; i < docs.length; i++){
+						var activity = docs[i];
+						var j = activity.participants.indexOf(user._id);
+						if (j != -1) {
+							res.joined.push(activity);
+						}
+						j = activity.wait_for_approval.indexOf(user._id);
+						if (j != -1) {
+							res.wait_for_approval.push(activity);
+						}
+						if (activity.organizer.equals(user._id)) {
+							res.organized.push(activity);
+						}
+					}
+				}
+				console.log(docs);
+				console.log(user._id);
+				callback(res);
+			});
+	}
 };
 
 mongoose.model('Activity', ActivitySchema);

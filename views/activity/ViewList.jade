@@ -1,0 +1,96 @@
+include ListActivitiesMixin
+doctype html
+
+html
+	head
+		meta(charset="utf-8")
+		title !{title}
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js")
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css')
+		script(src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js")
+		//-!-- Include Required Prerequisites --
+		script(type="text/javascript", src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js")
+
+		//- calendar
+		link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", rel="stylesheet", type="text/css")
+		link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
+		script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
+
+		script.
+			$(document).ready(function() {
+				$('#search_more').click(function() {
+					$("#search_sidebar")
+						.sidebar('setting', 'transition', 'slide out')
+						.sidebar('toggle');
+				});
+			});
+
+	body
+		//-!-- div(class="ui container") --
+		div(class="ui sidebar left vertical", id="search_sidebar")
+			div(class="ui container")
+				div(class="ui center aligned header", style="color: rgb(255,255,255); margin-top: 10px") Search Activities
+
+				form(class="ui form", id="search_form", method="post", action="/activity/search", style="margin: 0px 10px")
+					div(class="field")
+						label(style="color: rgb(255,255,255)") Title
+						input(type="text", id="title", name="title", placeholder="Activity Title")
+
+					div(class="field")
+						label(style="color: rgb(255,255,255)") Location
+						input(type="text", id="location", name="location", placeholder="Activity Location")
+
+					div(class="field")
+						label(style="color: rgb(255,255,255)") Time (Search From)
+						div(class="ui calendar", id="time_search_from")
+							div(class="ui input left icon")
+								i(class="calendar icon")
+								input(type="text", name="time_search_from", placeholder="From")
+						script.
+							$(document).ready(function() {
+								$('#time_search_from').calendar({
+									type: 'date'
+								});
+							});
+
+					div(class="field")
+						label(style="color: rgb(255,255,255)") Time (Search To)
+						div(class="ui calendar", id="time_search_to")
+							div(class="ui input left icon")
+								i(class="calendar icon")
+								input(type="text",name="time_search_to", placeholder="To")
+						script.
+							$(document).ready(function() {
+								$('#time_search_to').calendar({
+									type: 'date'
+								});
+							});
+
+					div(class="field")
+						label(style="color: rgb(255,255,255)") Status
+						input(type="text", id="location", name="status", placeholder="Activity Status")
+
+					button(class="ui tiny button" type="submit") Submit
+
+		div(class="pusher")
+			include ../layouts/header
+			div(class="ui container")
+
+				div(class="ui center aligned header", style="margin-top: 10px") Search Results
+				button(class="ui tiny labeled icon button", id="search_more")
+					i(class="add icon")
+					| Search More...
+				+ListActivities(activities.search_results)
+
+				div(class="ui center aligned header") Organized Activities
+				a(href="/activity/create")
+					button(class="ui tiny labeled icon button", id="create_more")
+						i(class="add icon")
+						| Create More...
+				+ListActivities(activities.organized)
+
+				div(class="ui center aligned header") Joined Activities
+				+ListActivities(activities.joined)
+
+
+
