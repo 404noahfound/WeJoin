@@ -15,6 +15,11 @@ block content
 				h5(class="ui horizontal divider header")
 					i(class="edit icon")
 					| Content
+				select(class="ui fluid dropdown", name="note_type")
+					option(value="activity") Choose a type
+					option(value="activity") Activity Diary
+					option(value="share") Experience Sharing
+					option(value="life") Personal Life
 				textarea(type="text", name="content")
 			div(class="ui divider")
 			button(class="ui primary button" type="submit") Save

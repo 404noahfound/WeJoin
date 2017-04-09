@@ -12,6 +12,10 @@ const NoteSchema = new Schema({
 	authorname:{
 			type: String
 	},
+	note_type:{
+			type: String,
+			default: "activity"
+	},
 	content:{ 
 			type : String, 
 			default : 'This Note has no content', 

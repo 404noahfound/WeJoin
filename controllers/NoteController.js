@@ -61,8 +61,12 @@ exports.NoteViewEach = function(request, response){
 		var id = request.params.id;
 		response.pageInfo.id=id;
 		response.pageInfo.user=request.user;
-		Note.find({'_id':id}, function(err, docs){
-			response.pageInfo.notes = docs;
+		Note.findOne({'_id':id}, function(err, docs){
+			response.pageInfo.note = docs;
+
+			if(String(docs.author)==String(request.user._id)) 
+				response.pageInfo.auth = 1;
+			else response.pageInfo.auth = 0;
 			response.render('note/ViewEach', response.pageInfo);
 		});
 	}
