@@ -1,5 +1,37 @@
 extends ../layout
 
+mixin follow()
+  div.ui.blue.label
+    i.plus.icon
+    |follow
+
+
 block content
-    h1= title
-    p #{docs}
+  script.
+    $(document).ready(function(){
+      var user = !{JSON.stringify(user)};
+      console.log(user);
+    });
+  div(class="ui grid container")
+    div.row
+      div(class="three wide column")
+        div(class="ui fluid bordered rounded image")
+          img(src="/avatars/1204845.png")
+      div(class="eight wide column" style="position:relative")
+        div(style="position:absolute; bottom:0px;")
+          h1.ui.header 
+            |#{user.nickname}
+            +follow()
+          h4(class="ui grey header") #{user.description}
+    div.ui.divider
+    div.row
+      div.column
+        div(class="ui pointing menu")
+          a.active.item Activities
+          a.item Notes
+          a.item Friends
+        div.ui.segments
+          div.ui.segment
+          div.ui.segment
+
+

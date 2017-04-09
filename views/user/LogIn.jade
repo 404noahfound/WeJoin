@@ -1,9 +1,9 @@
 extends ../layout
-mixin text_field(name, icon, placeholder)
+mixin text_field(name, icon, placeholder, type)
   div.field
     div(class="ui left icon input")
       i(class= icon + " icon")
-      input(type = "text", name = name, placeholder=placeholder)
+      input(type = type, name = name, placeholder=placeholder)
 
 block content
   style.
@@ -19,8 +19,8 @@ block content
         div.content Log-in to your account
       form.ui.large.form(method="post")
         div.ui.stacked.segment
-          +text_field("username","user", "Username")
-          +text_field("password","lock", "Password")
+          +text_field("username","user", "Username", "text")
+          +text_field("password","lock", "Password", "password")
           input(class="ui fluid large teal submit button" type="submit" value="Log In")
-      if (error_flash)
-      div(class="ui error message") #{error_flash}
+      if (error_flash && error_flash.length > 0)
+        div(class="ui error message") #{error_flash}
