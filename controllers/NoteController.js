@@ -120,6 +120,7 @@ exports.NoteModifyEach = function(request, response){
 	}
 	else{
 		var id = request.params.id;
+		response.pageInfo.user=request.user;
 		response.pageInfo.title="Note Modify Each";
 		response.pageInfo.functionality = "Generate pages for each notes";
 		response.pageInfo.id=id;
