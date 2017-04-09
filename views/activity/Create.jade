@@ -13,19 +13,13 @@ block content
 		input(type="text", name="description")
 		br
 
-		span.label Organizer
-		br
-
-		input(type="text", name="organizer")
-		br
-
 		input(type="submit", value="Create")
-    p 
-    link(href="https://cdn.quilljs.com/1.2.2/quill.snow.css", rel="stylesheet")
-    div#editor
-        p Hello World!
-    script(src="https://cdn.quilljs.com/1.2.2/quill.js")
-    script.
-        var quill = new Quill('#editor', {
-            theme: 'snow'
-        });
+	p
+	link(href="https://cdn.quilljs.com/1.2.2/quill.snow.css", rel="stylesheet")
+	div#editor
+		p Hello World!
+	script(src="https://cdn.quilljs.com/1.2.2/quill.js")
+	script.
+		var quill = new Quill('#editor', {
+			theme: 'snow'
+		});

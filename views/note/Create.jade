@@ -1,0 +1,20 @@
+extends ../layout
+
+meta(charset="utf-8")
+block content
+	h1= title
+	form(name="note", method="post")
+		div.input
+			span.label Title
+			input(type="text", name="title")
+		div.input
+			span.label Content
+			textarea(type="text", name="content")
+		div.actions
+			input(type="submit", value="add")
+
+	script(src="https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js")
+	script.
+		CKEDITOR.replace('content',{
+									uiColor: '#FFFFFF'
+									});

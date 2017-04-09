@@ -1,15 +1,40 @@
 extends ../layout
+mixin text_field(name, icon, placeholder)
+  div.field
+    div(class="ui left icon input")
+      i(class= icon + " icon")
+      input(type = "text", name = name, placeholder=placeholder)
 
 block content
-    h1= title
-    form(name="user", method="post")
-        div.input
-            span.label Username
-            input(type="text", name="username")
-        div.input
-            span.label password
-            input(type="password", name="password")
-        div.actions
-            input(type="submit", value="add")
-    if error
-        p #{error}
+  style.
+    .column {
+        max-width: 450px;
+      }
+    body > .grid {
+        height: 100%;
+      }
+  div(class="ui middle aligned center aligned grid")
+    div.column
+      h2(class="ui teal image")
+        div.content Sign Up a new account
+      form.ui.large.form(method="post" name="user")
+        div.ui.stacked.segment
+          +text_field("username","user", "Username")
+          +text_field("password","lock", "Password")
+          input(class="ui fluid large teal submit button" type="submit" value="Submit")
+      if (error_flash)
+        div(class="ui error message") #{error_flash}
+
+//- block content
+//-     h1= title
+//-     form(name="user", method="post")
+//-         div.input
+//-             span.label Username
+//-             input(type="text", name="username")
+//-         div.input
+//-             span.label password
+//-             input(type="password", name="password")
+//-         div.actions
+//-             input(type="submit", value="add")
+//-     if error
+//-         p #{error}

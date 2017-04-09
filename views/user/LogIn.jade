@@ -1,26 +1,26 @@
-//- <form action="/login" method="post">
-//-     <div>
-//-         <label>Username:</label>
-//-         <input type="text" name="username"/>
-//-     </div>
-//-     <div>
-//-         <label>Password:</label>
-//-         <input type="password" name="password"/>
-//-     </div>
-//-     <div>
-//-         <input type="submit" value="Log In"/>
-//-     </div>
-//- </form>
-
 extends ../layout
+mixin text_field(name, icon, placeholder)
+  div.field
+    div(class="ui left icon input")
+      i(class= icon + " icon")
+      input(type = "text", name = name, placeholder=placeholder)
+
 block content
-    form(method = "post")
-        div
-            label Username:
-            input(type = "text", name = "username")
-        div
-            label Password:
-            input(type = "password", name = "password")
-        div
-            input(type = "submit" value = "Log In")
-        div #{error_flash}
+  style.
+    .column {
+        max-width: 450px;
+      }
+    body > .grid {
+        height: 100%;
+      }
+  div(class="ui middle aligned center aligned grid")
+    div.column
+      h2(class="ui teal image")
+        div.content Log-in to your account
+      form.ui.large.form(method="post")
+        div.ui.stacked.segment
+          +text_field("username","user", "Username")
+          +text_field("password","lock", "Password")
+          input(class="ui fluid large teal submit button" type="submit" value="Log In")
+      if (error_flash)
+      div(class="ui error message") #{error_flash}

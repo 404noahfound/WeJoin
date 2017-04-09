@@ -13,7 +13,8 @@ const UserSchema = new Schema({
 	marked_activities: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
 	follow_to: [{type : Schema.Types.ObjectId, ref: 'User'}],
 	follow_by: [{type : Schema.Types.ObjectId, ref: 'User', childPath: 'follow_to'}],
-	// marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
+	marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
+	own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
 	created_at  : { type : Date, default : Date.now }
 });
 

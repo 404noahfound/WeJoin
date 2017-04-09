@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+	h1= title
+	p Welcome to #{title}.
+		each note in notes
+			p Title: #{note.title}
+			p Content: 
+			div!= note.content
+		a(href="/note") Return

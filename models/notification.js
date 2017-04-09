@@ -3,10 +3,11 @@ const Schema = mongoose.Schema;
 const User = mongoose.model('User');
 
 const Notification = new Schema({
-	sender: { type : String, required: 'Notification sender cannot be empty.', trim : true }, //store the _id of the sender
-	receiver: { type : String, required: 'Notification receiver cannot be empty.', trim : true }, //store the _id of the receiver
+	sender: { type : Schema.Types.ObjectId, ref: 'User', required: 'Notification sender cannot be empty.', trim : true }, //store the _id of the sender
+	receiver: { type : Schema.Types.ObjectId, ref: 'User', required: 'Notification receiver cannot be empty.', trim : true }, //store the _id of the receiver
 	description: { type : String, default : 'This Notification has no description', trim : true }, 
-	status: {type : Boolean, trim : true } //if status is true, it is unread. Otherwise, it is read
+	status: {type : Boolean, trim : true }, //if status is true, it is unread. Otherwise, it is read
+    created_at: {type: Date, default: Date.now}
 });
 	
 
@@ -27,7 +28,7 @@ Notification.methods={
 		this.sender=sender_id;
 		this.receiver=receiver_id;
 		this.description=description;
-		this.save(function(err){
+		this.save(function(err){	
 			if(err) console.log(err);
 		});
 	},
