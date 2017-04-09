@@ -10,6 +10,15 @@ var session = require('express-session');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 var flash = require('express-flash');
+var cloudinary = require('cloudinary');
+
+//cloudinary setting 
+cloudinary.config({ 
+  cloud_name: 'sample', 
+  api_key: '874837483274837', 
+  api_secret: 'a676b67565c6767a6767d6767f676fe1' 
+});
+
 
 //bodyparse setting
 app.use(bodyParser.urlencoded({ extended: false }));

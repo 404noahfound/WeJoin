@@ -15,7 +15,8 @@ const UserSchema = new Schema({
 	follow_by: [{type : Schema.Types.ObjectId, ref: 'User', childPath: 'follow_to'}],
 	marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
 	own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
-	created_at  : { type : Date, default : Date.now }
+	created_at  : { type : Date, default : Date.now },
+	avatar : {type : String}
 });
 
 UserSchema.path('password').required(true, 'User name cannot be blank');

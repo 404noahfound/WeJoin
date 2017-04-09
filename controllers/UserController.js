@@ -70,6 +70,10 @@ exports.Modify = function(req, res){
 
 exports.UponModify = function(req, res){
 	var updateInfo = User.purifyForm(req.body);
+	if(req.file){
+		updateInfo.avatar = req.file.path;
+		console.log(req.file);
+	}
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
 			// res.json({message:'success', docs: docs});

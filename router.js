@@ -4,6 +4,11 @@ var AccountController = require('./controllers/AccountController');
 var UserController = require('./controllers/UserController');
 var NoteController = require('./controllers/NoteController');
 var passport = require('passport');
+var multer = require('multer');
+
+var uploading = multer({
+  dest: 'static/public/uploads/',
+});
 
 
 module.exports = function(app){
@@ -28,37 +33,6 @@ module.exports = function(app){
 	//OrganizerModify
 	app.get('/activity/:id/organizermodify', ActivityController.OrganizerModify);
 	app.post('/activity/:id/organizermodify', ActivityController.UponOrganizerModify);
-		
-	//show account
-	// app.get('/account', AccountController.Show);
-	// //guest
-	// app.get('/account/guest', AccountController.Guest);
-	// app.post('/account/guest', AccountController.UponGuest);
-	// //reguser
-	// app.get('/account/reguser', AccountController.Reguser);
-	// app.post('/account/reguser', AccountController.UponReguser);
-	// //Create account
-	// app.get('/account/signup', AccountController.Create);
-	// app.post('/account/signup', AccountController.UponCreate);
-	// //Sign in an account
-	// app.get('/account/signin', AccountController.Signin);
-	// app.post('/account/signin', AccountController.UponSignin);
-	// //Modify account
-	// app.get('/account/modify', AccountController.Modify);
-	// app.post('/account/modify', AccountController.UponModify);
-	// //Sign out
-	// app.get('/account/signout', AccountController.Signout);
-	// app.post('/account/signout', AccountController.UponSignout);
-	// //Each account
-	// app.get('/account/:id', AccountController.ModifyAccount);
-	// app.post('/account/:id', AccountController.UponModifyAccount);
-	// //follow
-	// app.get('/account/follow', AccountController.Follow);
-	// app.post('/account/follow', AccountController.UponFollow);
-	// //recommodation system
-	// app.get('/account/recommondation', AccountController.Recommondation);
-	// app.post('/account/recommondation', AccountController.UponRecommondation);
-
 
 	//notification
 	app.get('/notification', AccountController.Notification);
@@ -100,7 +74,8 @@ module.exports = function(app){
     app.post('/user/reg', UserController.UponCreate);
     app.get('/user', UserController.Index);
     app.get('/user/modify', UserController.Modify);
-    app.post('/user/modify', UserController.UponModify);
+    app.post('/user/modify', uploading.single('avatar'), UserController.UponModify);
     app.get('/user/delete_all', UserController.DeleteAll);
     app.get('/user/:id', UserController.View);
+
 };
