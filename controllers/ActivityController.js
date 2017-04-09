@@ -187,7 +187,7 @@ exports.OrganizerModify = function(request, response){
 					console.log("Error! Can't find activity organized by current user!");
 				}
 				else {
-					response.pageInfo.activities = docs;
+					response.pageInfo.activity = docs[0];
 					response.render('activity/OrganizerModify', response.pageInfo);
 				}
 			});

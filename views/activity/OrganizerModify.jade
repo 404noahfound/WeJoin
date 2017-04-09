@@ -1,7 +1,96 @@
 extends ../layout
 
 block content
-	h1= title
+	link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
+	script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
+	
+	div(class="ui text container")
+		div(class="ui header", style="margin-left: 10px") #{activity.title}
+
+		form(class="ui form", id="modify", method="post", style="margin: 0px 10px")
+			div(class="field")
+				label Title
+				input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)")
+
+			div(class="two fields")
+				div(class="field")
+					label Start Time
+					div(class="ui calendar", id="start_time")
+						div(class="ui input left icon")
+							i(class="calendar icon")
+							input(type="text", name="start_time", placeholder="From")
+					script.
+						$(document).ready(function() {
+							$('#start_time').calendar({
+								type: 'datetime'
+							});
+						});
+
+				div(class="field")
+					label End Time
+					div(class="ui calendar", id="end_time")
+						div(class="ui input left icon")
+							i(class="calendar icon")
+							input(type="text",name="end_time", placeholder="To")
+					script.
+						$(document).ready(function() {
+							$('#end_time').calendar({
+								type: 'datetime'
+							});
+						});
+
+			div(class="field")
+				label Location
+				input(type="text", id="location", name="location_name", placeholder="Activity Location")
+
+			div(class="three fields")
+				div(class="field")
+					label Status
+					div(class="ui selection dropdown", id="status")
+						input(type="hidden" name="status")
+						i(class="dropdown icon")
+						div(class="default text") Status
+						div(class="menu")
+							div(class="item" data-value="future") Future
+							div(class="item" data-value="going") Going
+							div(class="item" data-value="finished") Finished
+							div(class="item" data-value="cancelled") Cancelled
+					script.
+						$('#status').dropdown();
+
+				div(class="field")
+					label Participation Method
+					div(class="ui selection dropdown", id="participation_method")
+						input(type="hidden" name="participation_method")
+						i(class="dropdown icon")
+						div(class="default text") Participation Method
+						div(class="menu")
+							div(class="item" data-value="public") Public
+							div(class="item" data-value="approval") Approval
+							div(class="item" data-value="only_invite") Only Invite
+					script.
+						$('#participation_method').dropdown();
+
+				div(class="field")
+					label Expense
+					input(type="text", id="expense", name="expense", placeholder="Activity Expense")
+
+				//- div(class="field") public', 'approval', 'only_invite
+					label Participation Method
+					select(class="ui fluid dropdown", id="participation_method")
+						option(value="future") Future
+						option(value="going") Going
+						option(value="finished") Finished
+						option(value="cancelled") Cancelled
+					script.
+						$('#status').dropdown();
+
+				button(class="ui tiny button" type="submit") Submit
+
+
+
+
+	h1 #{activity.title}
 	form(name="activity", method="post")
 		span.label Title
 		br

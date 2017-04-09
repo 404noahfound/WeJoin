@@ -94,6 +94,7 @@ ActivitySchema.methods = {
 			//attr = this.PurifyForm(attr); // ?????? what the fuck? why it can stuck here???
 			console.log(attr);
 			for (key in attr) {
+				if (!attr[key]) continue;
 				if (directly_modified_keys.indexOf(key) != -1) { this[key] = attr[key]; }
 				else if (key == 'new_participants') {
 					for (each in attr.new_participants) {
