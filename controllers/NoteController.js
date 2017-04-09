@@ -63,7 +63,6 @@ exports.NoteViewEach = function(request, response){
 		response.pageInfo.user=request.user;
 		Note.find({'_id':id}, function(err, docs){
 			response.pageInfo.notes = docs;
-			console.log(docs);
 			response.render('note/ViewEach', response.pageInfo);
 		});
 	}
@@ -88,7 +87,8 @@ exports.UponNoteCreate = function(request, response){
 	}
 	else {
 		request.body.author = request.user._id;
-		const note = new Note(only(request.body, "title author content"));
+		request.body.authorname = request.user.username;
+		const note = new Note(only(request.body, "title author content authorname"));
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}
