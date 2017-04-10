@@ -1,26 +1,22 @@
 extends ../layout
 
 block content
-	each note in notes
-		div(class='ui main text container')
-			h1(class='ui header') #{note.title}
-			div(class='ui divider')
-		div(class='ui main text container')
-			form(name="note", method="post", class="ui form", autocomplete="off")
-				div(class="input")
-					h5(class="ui horizontal divider header")
-						i(class="pin icon")
-						| New Title
-					input(type="text", name="title", rows=1, value= note.title)
-				div.input
-					div(class="divider")
-					h5(class="ui horizontal divider header")
-						i(class="edit icon")
-						| Content
-					textarea(type="text", name="content")!= note.content
-				div(class="ui divider")
-				button(class="ui primary button" type="submit") Save
-				button(class="ui button" type="reset") Reset
+	div(class='ui main text container')
+		h1(class='ui header') #{note.title}
+		div(class='ui divider')
+	div(class='ui main text container')
+		form(name="note", method="post", class="ui form", autocomplete="off")
+			div(class="input")
+				input(type="text", name="title", rows=1, value= note.title)
+			div.input
+				div(class="divider")
+				h5(class="ui horizontal divider header")
+					i(class="edit icon")
+					| Content
+				textarea(type="text", name="content")!= note.content
+			div(class="ui divider")
+			button(class="ui primary button" type="submit") Save
+			button(class="ui button" type="reset") Reset
 
 	script(src="https://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js")
 	script.

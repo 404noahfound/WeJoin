@@ -1,14 +1,28 @@
 extends ../layout
 
 block content
-
-		each note in notes
-			div(class='ui main text container')
-				h1(class='ui header') 
-					a(href="/note/view/#{note._id}") #{note.title}
-				h5(class='ui grey header') by 
-					em #{note.authorname} on 
-					em #{note.modified_at}	
-			br
-			div(class='ui justified text container')!= note.content
-				div(class='ui divider')
+	script.
+		$(document).ready(function() {
+			$('.ui.float.segment').hover(function(){
+				$(this).css("background-color","#F0F0F0");
+			}, function(){
+				$(this).css("background-color","white");
+			});
+		});
+	each note in notes
+		div(class='ui main text container', style="color:inherit")
+			a(href="/note/view/#{note._id}")
+				div(class="ui float segment")
+					div(class="ui grid")
+						div(class="four wide column")
+							img(class="ui small image" src="/images/#{note.note_type}.png")
+						div(class="twelve wide column")
+							h1(class='ui header') #{note.title}
+							h5(class='ui grey header') 
+								div
+									i(class="user icon")
+									|#{note.authorname}
+								div
+									i(class="calendar icon") 
+									|#{note.modified_at}
+			div(class='ui divider')

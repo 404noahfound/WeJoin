@@ -46,7 +46,7 @@ module.exports = function(app){
 
 	//note
 	app.get('/note', NoteController.Note);
-	app.post('/note', NoteController.UponNote);
+	app.get('/note/user/:id', NoteController.NoteUser);
 	//note create
 	app.get('/note/create', NoteController.NoteCreate);
 	app.post('/note/create', NoteController.UponNoteCreate);

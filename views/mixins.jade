@@ -36,6 +36,33 @@ mixin ListActivities(activities)
               div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
             else  
               div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+
+mixin ListNotes(notes)
+    script.
+        $(document).ready(function() {
+            $('.ui.float.segment').hover(function(){
+                $(this).css("background-color","#F0F0F0");
+            }, function(){
+                $(this).css("background-color","white");
+            });
+        });
+    each note in notes
+        div(class='ui main text container', style="color:inherit")
+            a(href="/note/view/#{note._id}")
+                div(class="ui float segment")
+                    div(class="ui grid")
+                        div(class="four wide column")
+                            img(class="ui small rounded image" src="/images/snowball.jpg")
+                        div(class="twelve wide column")
+                            h1(class='ui header') #{note.title}
+                            h5(class='ui grey header') 
+                                div
+                                    i(class="user icon")
+                                    |#{note.authorname}
+                                div
+                                    i(class="calendar icon") 
+                                    |#{note.modified_at}
+            div(class='ui divider')
 //- user{avatar: String, nickname: String}
 mixin user_label(user)
   div.ui.image.label

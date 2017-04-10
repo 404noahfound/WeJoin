@@ -3,7 +3,7 @@ const only = require('only');
 const Note = mongoose.model('Note');
 exports.Note = function(request, response){
 	response.pageInfo.title = "Note";
-	response.pageInfo.functionality = "Note. Generate page for options";
+	response.pageInfo.functionality = "Note. Generate page to view my notes";
 	if (!request.user) {
 		response.redirect('/user/login');
 	}
@@ -21,11 +21,26 @@ exports.Note = function(request, response){
 	}
 };
 
-exports.UponNote = function(request, response){
-	response.pageInfo.title = "Upon Note";
-	response.pageInfo.functionality = "Note.View";
-	response.render('home/Functionality', response.pageInfo);
+exports.NoteUser = function(request, response){
+	response.pageInfo.title = "Note User";
+	response.pageInfo.functionality = "Note User. Generate page to view user's notes";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		Note.find({'author': request.params.id },
+			function(err, docs){
+			if (err) {
+				console.log("Error! Can't find notes of the user!");
+			}
+			else {
+				response.pageInfo.notes = docs;
+				response.render('note/Note', response.pageInfo);
+			}
+		});
+	}
 };
+
 
 exports.NoteSearch = function(request, response){
 	response.pageInfo.title = "Note Search";
@@ -92,7 +107,7 @@ exports.UponNoteCreate = function(request, response){
 	else {
 		request.body.author = request.user._id;
 		request.body.authorname = request.user.username;
-		const note = new Note(only(request.body, "title author content authorname"));
+		const note = new Note(only(request.body, "title author content authorname note_type"));
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}
@@ -128,8 +143,8 @@ exports.NoteModifyEach = function(request, response){
 		response.pageInfo.title="Note Modify Each";
 		response.pageInfo.functionality = "Generate pages for each notes";
 		response.pageInfo.id=id;
-		Note.find({'_id':id}, function(err, docs){
-			response.pageInfo.notes = docs;
+		Note.findOne({'_id':id}, function(err, docs){
+			response.pageInfo.note = docs;
 			response.render('note/ModifyEach', response.pageInfo);
 		});
 	}
@@ -177,8 +192,8 @@ exports.NoteDeleteEach = function(request, response){
 		response.pageInfo.title="Note Delete Each";
 		response.pageInfo.functionality = "Generate pages for each notes";
 		response.pageInfo.id=id;
-		Note.find({'_id':id}, function(err, docs){
-			response.pageInfo.notes = docs;
+		Note.findOne({'_id':id}, function(err, docs){
+			response.pageInfo.note = docs;
 			response.render('note/DeleteEach', response.pageInfo);
 		});
 	}

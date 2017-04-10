@@ -20,7 +20,7 @@ const NoteSchema = new Schema({
 			type : String, 
 			default : 'This Note has no content', 
 			trim : true},
-	associated_activity: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
+	associated_activity: {type : Schema.Types.ObjectId, ref: 'Activity'},
 
 	created_at  : { type : Date, default : Date.now },
 	modified_at : { type : Date, default : Date.now },
