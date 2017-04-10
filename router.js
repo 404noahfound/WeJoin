@@ -3,6 +3,7 @@ var ActivityController = require('./controllers/ActivityController');
 var AccountController = require('./controllers/AccountController');
 var UserController = require('./controllers/UserController');
 var NoteController = require('./controllers/NoteController');
+var NotificationController=require('./controllers/NotificationController');
 var passport = require('passport');
 
 
@@ -61,7 +62,7 @@ module.exports = function(app){
 
 
 	//notification
-	app.get('/notification/:id', NotificationController.View);
+
 //	app.post('/notification', AccountController.UponNotification);
 	//create notification
 	app.get('/notification/create', NotificationController.Create);
@@ -70,6 +71,8 @@ module.exports = function(app){
 	app.get('/notification/delete', NotificationController.Delete);
 //	app.post('/notification/delete', NotificationController.UponNotificationDelete);
 	app.get('/notification/markasunread', NotificationController.MarkAsUnread);
+    // view notification
+	app.get('/notification/:id', NotificationController.View);
 	
 
 	//note

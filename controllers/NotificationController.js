@@ -13,10 +13,19 @@ const Notification = mongoose.model('Notification');
  * @param      {<type>}  response  The response
  * author     Tim
  */
-export.Create = function(request,response){
-	response.pageInfo.title = "Write Notification";
+exports.Create = function(request,response){
+	response.pageInfo.title = "Create Notification";
+	console.log("Create notification");
 	response.pageInfo.error = request.flash('error');
-	response.render('notification/Create',response.pageInfo);
+	console.log(request.body);
+	if(!request.user)
+	{
+		response.redirect('/user/login');
+	}
+	else{
+		response.render('notification/Create',response.pageInfo);
+	}
+	
 };
 
 /**
@@ -28,14 +37,32 @@ export.Create = function(request,response){
  * @param      {<type>}  response The response
  * author     Tim
  */
-export.UponCreate = function(request,response){
+exports.UponCreate = function(request,response){
 	response.pageInfo.title='Send Success';
 	response.pageInfo.functionality="Notification.UponCreate";
 	console.log(request.body);
-	const notification=new Notification();
-	notification.Create(only(request.body, "receiver, description"));
-	response.render('notification/View',response.pageInfo);
-}
+	if(!request.user){
+		response.redirect('/user/login');
+	}
+	else{
+		request.body.sender = request.user._id;
+		var notification=new Notification(only(request.body, "sender" +
+			                                                "receiver"+
+			                                                "description"+
+			                                                "status"+
+			                                                "created_at"));
+		notification.save().then(
+			function(doc){
+				console.log(notificaiton);
+				response.pageInfo.notifications = new Array(notification);
+				response.redirect('/activity'+activity.id);
+			},
+			function(err){
+				console.log("Create notification error!"+err);
+				response.render('home/Other',response.pageInfo);
+			});
+	}
+};
 
 
 /**
@@ -48,12 +75,18 @@ export.UponCreate = function(request,response){
  * @param      {<type>}  response  The response
  * @author     Tim
  */
-export.Delete = function(request,response){
+exports.Delete = function(request,response){
 	response.pageInfo.functionality='Notification.Delete';
 	Notification.Delete();
 	response.render('notification/View',response.pageInfo);
-} 
+}; 
 
+exports.DeleteAll = function(request,response){
+	Notification.remove({},function(err){
+		if (err) response.json(err);
+		else response.redirect('/');
+	});
+};
 
 /**
  * MarkAsUnread
@@ -64,16 +97,18 @@ export.Delete = function(request,response){
  * @param      {<type>}  response  The response
  * @author      Tim
  */
-export.MarkAsUnread = function(request,response){
+exports.MarkAsUnread = function(request,response){
 	response.pageInfo.functionality='Notification.MarkAsUnread';
 	Notification.MarkAsUnread();
 	response.render('notification/View',response.pageInfo);
-}
+};
 
-export.View = function(request,response){
+exports.View = function(request,response){
 	response.pageInfo.title="Notifications Info";
+	console.log("In View function");
 	Notification.find({ '_id': request.params.id }).then(
 		function(docs){
+			consele.log(docs);
 			response.pageInfo.notifications = docs;
 			response.render('notification/ViewSingle',response.pageInfo);
 		},
@@ -82,4 +117,4 @@ export.View = function(request,response){
 			response.render('home/Other',response.pageInfo);
 		});
 
-}
+};
