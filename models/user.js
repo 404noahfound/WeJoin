@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const relationship = require("mongoose-relationship");
 const Activity = mongoose.model('Activity');
 const only = require('only');
+const faker = require('faker');
 
 const UserSchema = new Schema({
 	password: { type : String},
@@ -106,7 +107,42 @@ UserSchema.statics = {
 			}
 		}
 		return purifiedForm;
+	},
+
+	fake: function(num){
+		var user_info = [];
+		for(var i = 0; i < num; i++){
+			user_info.push({
+				password: '123456',
+				username: faker.internet.userName(),
+				nickname: faker.name.findName(),
+				gender: 'Male',
+				// birthday: faker.date.past(),
+				city: faker.address.city(),
+				description: faker.lorem.sentences(),
+				avatar: faker.image.avatar()
+			});
+		}
+		this.create(user_info, function(err, users){
+			if(err) console.log(err);
+		});
+		return user_info;
 	}
+	// const UserSchema = new Schema({
+	// password: { type : String},
+	// username: { type : String, unique: true, index: true/*the unique constraint is not working*/ },
+	// nickname: { type : String, trim : true},
+	// gender: { type : String, enum : {values : ['Male', 'Female'], message : 'gender must be male or female'}},
+	// birthday: { type : Date},
+	// city: {type : String},
+	// description: {type : String},
+	// marked_activities: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
+	// follow_to: [{type : Schema.Types.ObjectId, ref: 'User'}],
+	// marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
+	// own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
+	// created_at  : { type : Date, default : Date.now },
+	// avatar : {type : String}
+
 };
 
 mongoose.model('User', UserSchema);
