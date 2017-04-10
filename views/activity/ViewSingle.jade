@@ -5,6 +5,7 @@ block content
 		div(class="column")
 		div(class="three column", style="z-index: 0")
 			div(class="ui header") #{activity.title}
+			
 			button(class="ui animated teal fade button", tabindex="0", id="join")
 				div(class="visible content") Join
 				div(class="hidden content")
@@ -27,6 +28,7 @@ block content
 											}
 											else{
 												alert(new_data.join);
+												window.location.reload(true);
 											}
 										},
 							"dataType": "JSON"
@@ -57,6 +59,7 @@ block content
 											}
 											else{
 												alert(new_data.quit);
+												window.location.reload(true);
 											}
 										},
 							"dataType": "JSON"
@@ -90,31 +93,35 @@ block content
 					p organizer card
 
 				div(class="row", style="margin: 10px")
-					div(class="ui teal label", id="time")
+					h4(class="ui grey header", id="time")
 						i(class="calendar outline icon")
-						| #{activity.time}
+						| From: &nbsp#{activity.start_time}
+				div(class="row", style="margin: 10px")
+					h4(class="ui grey header", id="time")
+						i(class="calendar outline icon")
+						| To: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#{activity.end_time}
 
 				div(class="row", style="margin: 10px")
-					div(class="ui brown label", id="location")
+					h4(class="ui grey header", id="location")
 						i(class="location arrow icon")
 						| #{activity.location_name}
 
 				div(class="row", style="margin: 10px")
 					if activity.status == "future"
-						div(class="ui purple label") #{activity.status}
+						div(class="ui large purple label") #{activity.status}
 					else if activity.status == "going"
-						div(class="ui green label") #{activity.status}
+						div(class="ui large green label") #{activity.status}
 					else if activity.status == "finished"
-						div(class="ui yellow label") #{activity.status}
+						div(class="ui large yellow label") #{activity.status}
 					else if activity.status == "cancelled"
-						div(class="ui label") #{activity.status}
+						div(class="ui large label") #{activity.status}
 
-					div(class="ui label", style="margin: 0px 15px") #{activity.participation_method} (Join method)
+					div(class="ui large label", style="margin: 0px 15px") #{activity.participation_method} (Join method)
 
 					if activity.expense == 0
-						div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
+						div(class="ui large green tag label", style="margin: 0px 15px") #{activity.expense}
 					else	
-						div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+						div(class="ui large red tag label", style="margin: 0px 15px") #{activity.expense}
 
 				div(class="row", style="margin: 10px")
 					div(class="ui star rating", id="rating")
@@ -150,7 +157,8 @@ block content
 													else{
 														var new_rating = parseInt(new_data.rating);
 														alert("Rate success.");
-														$('#rating').rating("set rating", new_rating);
+														//$('#rating').rating("set rating", new_rating);
+														window.location.reload(true);
 													}
 												},
 									"dataType": "JSON"
@@ -171,36 +179,3 @@ block content
 					div(class="ui piled segment")
 						h4(class="header") Description
 						p #{activity.description}
-
-
-
-
-
-
-
-
-				p #{activity.title} : #{activity.description}
-				a(href="/activity/#{activity._id}/organizermodify") OrganizerModify
-				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-					div.input
-						span.label Join
-						br
-						input(type="text", id="Join", name="join", value="1")
-					div.actions
-						input(type="submit", value="Join")
-
-				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-					div.input
-						span.label Quit
-						br
-						input(type="text", id="Quit", name="quit", value="1")
-					div.actions
-						input(type="submit", value="Quit")
-
-				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-					div.input
-						span.label Rating
-						br
-						input(type="text", id="Rating", name="rating", value="0")
-					div.actions
-						input(type="submit", value="Rating")
