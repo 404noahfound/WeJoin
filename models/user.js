@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const relationship = require("mongoose-relationship");
 const Activity = mongoose.model('Activity');
+const only = require('only');
 
 const UserSchema = new Schema({
 	password: { type : String},
@@ -37,7 +38,7 @@ UserSchema.methods = {
 		return null;
 	},
 	getFollowsInfo: function(callback){
-		console.log('arrive here');
+		// console.log('arrive here');
 		this.model('User').find({_id: {$in: this.follow_to}}, callback);
 	},
 	getInfoForView: function(callback){
@@ -47,9 +48,13 @@ UserSchema.methods = {
 		Activity.GetByUser(this_user, function(activities){
 			info.activities = activities;
 			this_user.getFollowsInfo(function(err, follows){
-				console.log('also arrive here');
+				// console.log('also arrive here');
+				// console.log(follows);
+				for(var i = 0; i < follows.length; i++){
+					follows[i].avatar = follows[i].getAvatarUrl();
+					follows[i] = only(follows[i], "_id avatar nickname username");
+				}
 				info.follows = follows;
-				info.test = 'true';
 				callback(info);
 			});
 		});

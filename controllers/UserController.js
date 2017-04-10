@@ -101,6 +101,7 @@ exports.View = function(req, res){
 	User.findById(req.params.id)
 	.exec(function(err, user){
 		user.getInfoForView(function(info){
+			// console.log(info);
 			Object.assign(res.pageInfo, info);
 			res.pageInfo.pp = 'His';
 			res.render('user/View', res.pageInfo);

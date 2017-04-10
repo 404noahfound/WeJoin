@@ -82,9 +82,9 @@ block content
           +ListActivities(activities.wait_for_approval)
         div(class=cl + segment_ids[4])
           div.ui.grid
-            - for (i = 0; i < 16; i++)
+            - for (i = 0; i < follows.length; i++)
               div.four.wide.column
-                +user_card(user)
+                +user_card(follows[i])
 
           
 
