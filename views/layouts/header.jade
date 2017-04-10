@@ -2,24 +2,24 @@ div(class="ui borderless main menu")
   div(class="ui text container")
     a(class="header item" href="/") WeJoin
     //- a.item Home
-    div.ui.dropdown.item
-      a(href="/activity" style="color:inherit")
-        | Activities
-        i(class="dropdown icon")
-      div.menu
-        a.item(href="/activity/getbyuser") My Activities
-        a.item(href="/activity/create") Create(for test)
-        a.item(href="/activity/organizermodify") Modify(for test)
-        a.item(href="/activity/delete_all") Delete all(for test)
-    div.ui.dropdown.item
-      a(href="/note" style="color:inherit")
-        | Notes
-        i(class="dropdown icon")
-      div.menu
-        a.item(href="/note/search") Search
-        a.item(href="/note/create") Create
-        a.item(href="/note/modify") Modify
-        a.item(href="/note/delete") Delete
+    //- div.ui.dropdown.item
+    //-   a(href="/activity" style="color:inherit")
+    //-     | Activities
+    //-     i(class="dropdown icon")
+    //-   div.menu
+    //-     a.item(href="/activity/getbyuser") My Activities
+    //-     a.item(href="/activity/create") Create(for test)
+    //-     a.item(href="/activity/organizermodify") Modify(for test)
+    //-     a.item(href="/activity/delete_all") Delete all(for test)
+    //- div.ui.dropdown.item
+    //-   a(href="/note" style="color:inherit")
+    //-     | Notes
+    //-     i(class="dropdown icon")
+    //-   div.menu
+    //-     a.item(href="/note/search") Search
+    //-     a.item(href="/note/create") Create
+    //-     a.item(href="/note/modify") Modify
+    //-     a.item(href="/note/delete") Delete
     //- a.item Notes
     div.ui.dropdown.item._search
       div.menu
@@ -58,16 +58,3 @@ div(class="ui borderless main menu")
         });
       $('._search.dropdown').dropdown();
     });
-    //- $('div.item').click(function(){
-    //-   //- alert($(this).attr('href'));
-    //-   window.location.href = $(this).attr('href');
-    //- });
-
-//- li
-//-           a(href="/activity/create") Create Activity
-//-         li
-//-           a(href="/activity/organizermodify") Modify Activity
-//-         li
-//-           a(href="/activity/getbyuser") User's Activities
-//-         li
-//-           a(href="/activity/delete_all") Delete All Activities
