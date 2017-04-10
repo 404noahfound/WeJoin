@@ -8,8 +8,11 @@ mixin ListActivities(activities)
 					a(class="header") #{activity.title}
 					div(class="meta")
 						a(style="margin-right: 50px") Time: #{activity.time}
+						br
 						a(style="margin-right: 50px") Location: #{activity.location_name}
+						br
 						a(style="margin-right: 50px") Organizer: #{activity.organizer}
+						br
 					div(class="description").
 						#{activity.description}
 					div(class="extra")
