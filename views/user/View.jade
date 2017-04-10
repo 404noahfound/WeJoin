@@ -32,6 +32,7 @@ block content
       $('.section').hide();
       $('.section.' + segment_ids[0]).show();
     });
+
   div(class="ui grid container")
     div.row
       div(class="four wide column")
@@ -44,7 +45,6 @@ block content
         div(style="position:absolute; bottom:0px;")
           h1.ui.header 
             |#{user.nickname}
-            //- +follow()
           h4(class="ui grey header") #{user.description}
     div.ui.divider
     div.row
@@ -64,6 +64,11 @@ block content
               a.item #{pp} notes
               if (pp == 'My')
                 a.item(href="/note/create") Create New Note
+          if (pp == "My")
+            div.item
+              div.header Settings
+              div.menu
+                a.item(href="/user/modify") My Profile
 
       div.twelve.wide.column
         - var cl = "ui segment section "

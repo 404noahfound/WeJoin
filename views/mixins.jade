@@ -29,3 +29,8 @@ mixin ListActivities(activities)
 							div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
 						else	
 							div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+//- user{avatar: String, nickname: String}
+mixin user_label(user)
+	div.ui.image.label
+		img(src=user.avatar)
+		|#{user.nickname}

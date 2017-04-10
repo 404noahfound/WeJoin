@@ -78,8 +78,9 @@ exports.UponModify = function(req, res){
 		var avatar = path.join(appDir, updateInfo.avatar);
 		console.log(avatar);
 		var im = require('imagemagick');
-		im.resize(
-			{srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+		im.convert(
+			// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+			[avatar, '-resize', "256x256!", avatar],
 			function(err, stdout, stderr){
 				if (err) throw err;
 				console.log('resized new avatar to fit within 200x200px');
