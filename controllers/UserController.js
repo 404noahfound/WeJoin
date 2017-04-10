@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Activity = mongoose.model('Activity');
 const only = require('only');
 const flash = require('express-flash');
 
@@ -98,19 +99,15 @@ exports.UponModify = function(req, res){
 
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
-	// console.log(req.params);
-	User.find({_id: req.params.id}).then(
-		function(docs){
-			var user = docs[0];
-			user.avatar = user.getAvatarUrl();
-			res.pageInfo.user = user;
-			res.render('user/View', res.pageInfo);
-		},
-		function(err){
-
-		}
-	);
-	// res.render('user/View', res.pageInfo);
+	User.findById(req.params.id)
+		.exec(function(err, user){
+			user.getInfoForView(function(info){
+				Object.assign(res.pageInfo, info);
+				res.pageInfo.pp = 'His';
+				console.log(info);
+				res.render('user/View', res.pageInfo);
+			});
+		});
 };
 
 /**

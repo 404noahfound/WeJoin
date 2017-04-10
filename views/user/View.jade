@@ -1,16 +1,36 @@
 extends ../layout
+include ../mixins
 
 mixin follow()
   div.ui.blue.label
     i.plus.icon
     |follow
-
+mixin section(id, content)
+  div.ui.segment(id=id)
+    content
 
 block content
+  - var segment_ids = ['organized_activities', 'joined_activities', 'wait_for_activities', 'user_notes']
   script.
+    active_section = function(section_name){
+      $('.section').hide();
+      $('.menu .item').removeClass('active');
+      $('.section.' + section_name).show();
+      $('.menu .item.' + section_name).addClass('active');
+    }
     $(document).ready(function(){
       var user = !{JSON.stringify(user)};
       console.log(user);
+      var activities = !{JSON.stringify(activities)};
+      console.log(activities);
+      segment_ids = !{JSON.stringify(segment_ids)};
+      $.each(segment_ids, function(i, sid){
+        $('.menu .item.' + sid).click(function(){
+          active_section(sid);
+        });
+      });
+      $('.section').hide();
+      $('.section.' + segment_ids[0]).show();
     });
   div(class="ui grid container")
     div.row
@@ -24,17 +44,36 @@ block content
         div(style="position:absolute; bottom:0px;")
           h1.ui.header 
             |#{user.nickname}
-            +follow()
+            //- +follow()
           h4(class="ui grey header") #{user.description}
     div.ui.divider
     div.row
-      div.column
-        div(class="ui pointing menu")
-          a.active.item Activities
-          a.item Notes
-          a.item Friends
-        div.ui.segments
-          div.ui.segment
-          div.ui.segment
+      div.four.wide.column
+        div.ui.vertical.menu
+          div.item
+            div.header Activities
+            div.menu
+              a(class="active item " + segment_ids[0]) Organized Activities
+              a(class="item " + segment_ids[1]) Joined Activities
+              if (pp == 'My')
+                a.item(class="item " + segment_ids[2]) Wait For Activities
+                a.item Create Activity
+          div.item
+            div.header Notes
+            div.menu
+              a.item #{pp} notes
+              if (pp == 'My')
+                a.item(href="/note/create") Create New Note
 
+      div.twelve.wide.column
+        - var cl = "ui segment section "
+        div(class=cl + segment_ids[0])
+          +ListActivities(activities.organized)
+        div(class=cl + segment_ids[1])
+          +ListActivities(activities.joined)
+        div(class=cl + segment_ids[2])
+          +ListActivities(activities.wait_for_approval)
+
+
+          
 

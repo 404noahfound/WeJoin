@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const relationship = require("mongoose-relationship");
+const Activity = mongoose.model('Activity');
 
 const UserSchema = new Schema({
 	password: { type : String},
@@ -36,6 +37,14 @@ UserSchema.methods = {
 	getAvatarUrl: function(){
 		if(this.avatar) return this.avatar.replace('static','');
 		return null;
+	},
+	getInfoForView: function(callback){
+		var info = {user: this};
+		info.user.avatar = this.getAvatarUrl();
+		Activity.GetByUser(this, function(activities){
+			info.activities = activities;
+			callback(info);
+		});
 	}
 };
 

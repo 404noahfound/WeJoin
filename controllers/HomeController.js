@@ -10,16 +10,14 @@ exports.Index = function(req, res){
 	// 	res.render('home/Index', res.pageInfo);
 	// });
 	if(req.user) {
-		User.find({_id: req.user._id}).then(
-			function(docs){
-				var user = docs[0];
-				user.avatar = user.getAvatarUrl();
-				res.pageInfo.user = user;
-				res.render('user/View', res.pageInfo);
-			},
-			function(err){
-			}
-		);
+		User.findById(req.user._id)
+			.exec(function(err, user){
+				user.getInfoForView(function(info){
+					Object.assign(res.pageInfo, info);
+					res.pageInfo.pp = 'My';
+					res.render('user/View', res.pageInfo);
+				});
+			});
 	} else {
 		res.redirect('/user/login');
 	}
