@@ -110,7 +110,13 @@ ActivitySchema.methods = {
 					}
 				}
 			}
-			this.save().then(callback(err, "OrganizerModify success."));
+			this.save().then(
+				function(doc){
+					callback(err, "OrganizerModify success.");
+				},
+				function(error){
+					callback(error, null);
+				});
 		}
 	},
 

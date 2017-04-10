@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const only = require('only');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
+const flash = require('express-flash');
 //const RegUser = mongoose.model('RegUser');
 //const Guest = mongoose.model('Guest');
 //const Note = mongoose.model('Note');
@@ -212,7 +213,8 @@ exports.UponOrganizerModify = function(request, response){
 					activity.Modify(request.user, only(request.body, "title " +
 																	"location_id " +
 																	"location_name " +
-																	"time " +
+																	"start_time " +
+																	"end_time " +
 																	"type " +
 																	"description " +
 																	"expense " +
@@ -223,10 +225,12 @@ exports.UponOrganizerModify = function(request, response){
 																	"new_participants " +
 																	"removed_participants"
 																	),
-						function(err){
+						function(err, res){
 							if(err){
 								console.log("OrganizerModify activity Error!\n" + err);
-								response.render('home/Other',response.pageInfo);
+								response.pageInfo.activity = activity;
+								response.pageInfo.error = err;
+								response.render('activity/OrganizerModify', response.pageInfo);
 							}
 							else{
 								response.pageInfo.activity = activity;

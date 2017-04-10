@@ -4,8 +4,11 @@ block content
 	link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
 	script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
 	
-	div(class="ui text container")
+	div(class="ui text container segment")
 		div(class="ui header", style="margin-left: 10px") #{activity.title}
+		
+		if (error)
+			div(class="ui error message") #{error}
 
 		form(class="ui form", id="modify", method="post", style="margin: 0px 10px")
 			div(class="field")
@@ -75,17 +78,18 @@ block content
 					label Expense
 					input(type="text", id="expense", name="expense", placeholder="Activity Expense")
 
-				//- div(class="field") public', 'approval', 'only_invite
-					label Participation Method
-					select(class="ui fluid dropdown", id="participation_method")
-						option(value="future") Future
-						option(value="going") Going
-						option(value="finished") Finished
-						option(value="cancelled") Cancelled
-					script.
-						$('#status').dropdown();
+			div(class="field")
+				label Content for Participants
+				textarea(name="content_for_participants", id="content_for_participants", rows="3")
 
-				button(class="ui tiny button" type="submit") Submit
+
+			div(class="field")
+				label Description
+				textarea(name="description", id="description")
+
+			button(class="ui tiny button" type="submit") Submit
+
+
 
 
 

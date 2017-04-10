@@ -108,20 +108,20 @@ block content
 
 				div(class="row", style="margin: 10px")
 					if activity.status == "future"
-						div(class="ui purple label") #{activity.status}
+						div(class="ui large purple label") #{activity.status}
 					else if activity.status == "going"
-						div(class="ui green label") #{activity.status}
+						div(class="ui large green label") #{activity.status}
 					else if activity.status == "finished"
-						div(class="ui yellow label") #{activity.status}
+						div(class="ui large yellow label") #{activity.status}
 					else if activity.status == "cancelled"
-						div(class="ui label") #{activity.status}
+						div(class="ui large label") #{activity.status}
 
-					div(class="ui label", style="margin: 0px 15px") #{activity.participation_method} (Join method)
+					div(class="ui large label", style="margin: 0px 15px") #{activity.participation_method} (Join method)
 
 					if activity.expense == 0
-						div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
+						div(class="ui large green tag label", style="margin: 0px 15px") #{activity.expense}
 					else	
-						div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+						div(class="ui large red tag label", style="margin: 0px 15px") #{activity.expense}
 
 				div(class="row", style="margin: 10px")
 					div(class="ui star rating", id="rating")
@@ -179,36 +179,3 @@ block content
 					div(class="ui piled segment")
 						h4(class="header") Description
 						p #{activity.description}
-
-
-
-
-
-
-
-
-				p #{activity.title} : #{activity.description}
-				a(href="/activity/#{activity._id}/organizermodify") OrganizerModify
-				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-					div.input
-						span.label Join
-						br
-						input(type="text", id="Join", name="join", value="1")
-					div.actions
-						input(type="submit", value="Join")
-
-				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-					div.input
-						span.label Quit
-						br
-						input(type="text", id="Quit", name="quit", value="1")
-					div.actions
-						input(type="submit", value="Quit")
-
-				form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-					div.input
-						span.label Rating
-						br
-						input(type="text", id="Rating", name="rating", value="0")
-					div.actions
-						input(type="submit", value="Rating")
