@@ -4,9 +4,11 @@ html
 	head
 		meta(charset="utf-8")
 		title !{title}
-		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js")
+		block scripts
+			script(src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js")
+			script(src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js")
+			script(src="/javascripts/mixins.js")
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css')
-		script(src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js")
 		style.
 			body{
 				background-image: url('/images/Sports.png')

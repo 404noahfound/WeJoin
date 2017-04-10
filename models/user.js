@@ -13,7 +13,6 @@ const UserSchema = new Schema({
 	description: {type : String},
 	marked_activities: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
 	follow_to: [{type : Schema.Types.ObjectId, ref: 'User'}],
-	follow_by: [{type : Schema.Types.ObjectId, ref: 'User', childPath: 'follow_to'}],
 	marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
 	own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
 	created_at  : { type : Date, default : Date.now },
@@ -22,7 +21,6 @@ const UserSchema = new Schema({
 
 UserSchema.path('password').required(true, 'User name cannot be blank');
 UserSchema.path('username').required(true, 'User password cannot be blank');
-UserSchema.plugin(relationship, { relationshipPathName:'follow_by' });
 
 UserSchema.methods = {
 	/**
@@ -45,6 +43,27 @@ UserSchema.methods = {
 			info.activities = activities;
 			callback(info);
 		});
+	},
+	follow: function(followee, callback){
+		var i = this.follow_to.indexOf(followee._id);
+		var err = null;
+		if (i == -1){
+			this.follow_to.push(followee);
+		}
+		this.save().then(callback(err, { "follow": "Follow success."}));
+	},
+	unfollow: function(followee, callback){
+		var i = this.follow_to.indexOf(followee._id);
+		var err = null;
+		if (i != -1){
+			this.follow_to.splice(followee);
+		}
+		this.save().then(callback(err, { "unfollow": "Unfollow success."}));
+	},
+	hasFollow: function(followee){
+		var i = this.follow_to.indexOf(followee._id);
+		if(i == -1) return 0;
+		return 1;
 	}
 };
 

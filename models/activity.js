@@ -227,7 +227,7 @@ ActivitySchema.statics = {
 	 *   get the activities joined by the given user
 	 */
 	GetByUser: function(user, callback) {
-		console.log("Activity.GetByUser");
+		// console.log("Activity.GetByUser");
 		var res = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
 		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
 			function(err, docs){
@@ -250,8 +250,8 @@ ActivitySchema.statics = {
 						}
 					}
 				}
-				console.log(docs);
-				console.log(user._id);
+				// console.log(docs);
+				// console.log(user._id);
 				callback(res);
 			});
 	},

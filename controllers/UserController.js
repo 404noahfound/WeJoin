@@ -12,7 +12,6 @@ const flash = require('express-flash');
 exports.Create = function(req, res){
 	res.pageInfo.title = 'Register';
 	res.pageInfo.error = req.flash('error');
-	console.log(res.pageInfo.error);
 	res.render('user/Create', res.pageInfo);
 };
 
@@ -76,7 +75,6 @@ exports.UponModify = function(req, res){
 		var appDir = path.dirname(require.main.filename);
 		updateInfo.avatar = req.file.path;
 		var avatar = path.join(appDir, updateInfo.avatar);
-		console.log(avatar);
 		var im = require('imagemagick');
 		im.convert(
 			// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
@@ -105,7 +103,6 @@ exports.View = function(req, res){
 			user.getInfoForView(function(info){
 				Object.assign(res.pageInfo, info);
 				res.pageInfo.pp = 'His';
-				console.log(info);
 				res.render('user/View', res.pageInfo);
 			});
 		});
@@ -143,6 +140,42 @@ exports.DeleteAll = function(req, res){
 	});
 };
 
+/**
+ * all actions related to follow are sent to this action
+ * @param {[type]} req [description]
+ * @param {[type]} res [description]
+ * @req req.body{followee_id: String, [follow: int], [unfollow: int]}
+ * @res json{followee_id: String, exist: int, hasFollow: int}
+ */
+exports.FollowActions = function(req, res){
+	User.findById(req.user._id).exec(function(err, user) {
+		if(req.body.followee_id){
+			var res_json = {followee_id: followee_id, exist: 0, hasFollow: 0};
+			var followee_id = req.body.followee_id;
+			User.findById(followee_id).exec(function(err, followee){
+				if (err) {
+					res.json(res_json);
+				} else {
+					res_json.exist = 1;
+					if(req.body.follow == 1){
+						user.follow(followee, function(err, result){
+							res_json.hasFollow = 1;
+							res.json(res_json);
+						});
+					} else if(req.body.unfollow == 1){
+						user.unfollow(followee, function(err, result){
+							res_json.hasFollow = 0;
+							res.json(res_json);
+						});
+					} else {
+						res_json.hasFollow = user.hasFollow(followee);
+						res.json(res_json);
+					}
+				}
+			});
+		}
+	});
+}
 
 
 
