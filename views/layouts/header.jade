@@ -21,6 +21,11 @@ div(class="ui borderless main menu")
         a.item(href="/note/modify") Modify
         a.item(href="/note/delete") Delete
     //- a.item Notes
+    div.ui.dropdown.item._search
+      div.menu
+        div.item Activities
+        div.item Notes
+        div.item Users
     div(class="ui search item")
       form(id="search_activities_by_keyword", method="post", action="/activity/search")
         div(class="field")
@@ -51,6 +56,7 @@ div(class="ui borderless main menu")
       $('.main.menu  .ui.dropdown').dropdown({
           on: 'hover'
         });
+      $('._search.dropdown').dropdown();
     });
     //- $('div.item').click(function(){
     //-   //- alert($(this).attr('href'));
