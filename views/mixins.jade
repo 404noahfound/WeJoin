@@ -39,6 +39,13 @@ mixin user_label(user)
     img(src=user.avatar)
     |#{user.nickname}
 
+mixin user_card(user)
+  div.ui.card
+    div.image
+     img(src=user.avatar)
+    div.content
+      div.header #{user.nickname}
+
 //- followee{_id: String}
 mixin follow(followee)
   div(class="ui tiny follow button", followee = followee._id)

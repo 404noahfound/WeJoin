@@ -77,5 +77,6 @@ module.exports = function(app){
     app.post('/user/modify', uploading.single('avatar'), UserController.UponModify);
     app.get('/user/delete_all', UserController.DeleteAll);
     app.post('/user/follow_actions', UserController.FollowActions);
+    app.post('/user/get_users_api', UserController.GetUsersAPI);
     app.get('/user/:id', UserController.View);
 };

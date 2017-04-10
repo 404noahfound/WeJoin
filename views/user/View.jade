@@ -6,7 +6,7 @@ mixin section(id, content)
     content
 
 block content
-  - var segment_ids = ['organized_activities', 'joined_activities', 'wait_for_activities', 'user_notes']
+  - var segment_ids = ['organized_activities', 'joined_activities', 'wait_for_activities', 'user_notes', 'follows']
   script.
     active_section = function(section_name){
       $('.section').hide();
@@ -59,11 +59,13 @@ block content
           div.item
             div.header Notes
             div.menu
-              a.item #{pp} notes
+              a.item #{pp} Notes
               if (pp == 'My')
                 a.item(href="/note/create") Create New Note
           div.item
-            div.header #{pp} Follow
+            div.header Users
+            div.menu
+              a(class="item " + segment_ids[4]) #{pp} Follows
           if (pp == "My")
             div.item
               div.header Settings
@@ -78,7 +80,11 @@ block content
           +ListActivities(activities.joined)
         div(class=cl + segment_ids[2])
           +ListActivities(activities.wait_for_approval)
-
+        div(class=cl + segment_ids[4])
+          div.ui.grid
+            - for (i = 0; i < 16; i++)
+              div.four.wide.column
+                +user_card(user)
 
           
 

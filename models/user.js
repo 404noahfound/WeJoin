@@ -36,12 +36,22 @@ UserSchema.methods = {
 		if(this.avatar) return this.avatar.replace('static','');
 		return null;
 	},
+	getFollowsInfo: function(callback){
+		console.log('arrive here');
+		this.model('User').find({_id: {$in: this.follow_to}}, callback);
+	},
 	getInfoForView: function(callback){
 		var info = {user: this};
-		info.user.avatar = this.getAvatarUrl();
-		Activity.GetByUser(this, function(activities){
+		var this_user = this;
+		info.user.avatar = this_user.getAvatarUrl();
+		Activity.GetByUser(this_user, function(activities){
 			info.activities = activities;
-			callback(info);
+			this_user.getFollowsInfo(function(err, follows){
+				console.log('also arrive here');
+				info.follows = follows;
+				info.test = 'true';
+				callback(info);
+			});
 		});
 	},
 	follow: function(followee, callback){
@@ -64,7 +74,7 @@ UserSchema.methods = {
 		var i = this.follow_to.indexOf(followee._id);
 		if(i == -1) return 0;
 		return 1;
-	}
+	},	
 };
 
 UserSchema.statics = {

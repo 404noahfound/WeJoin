@@ -99,13 +99,13 @@ exports.UponModify = function(req, res){
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
 	User.findById(req.params.id)
-		.exec(function(err, user){
-			user.getInfoForView(function(info){
-				Object.assign(res.pageInfo, info);
-				res.pageInfo.pp = 'His';
-				res.render('user/View', res.pageInfo);
-			});
+	.exec(function(err, user){
+		user.getInfoForView(function(info){
+			Object.assign(res.pageInfo, info);
+			res.pageInfo.pp = 'His';
+			res.render('user/View', res.pageInfo);
 		});
+	});
 };
 
 /**
@@ -175,6 +175,21 @@ exports.FollowActions = function(req, res){
 			});
 		}
 	});
+}
+
+exports.GetUsersAPI = function(req, res){
+	if (!req.body || !req.body.ids){
+		res.json('error!');
+	}
+	else {
+		User.find({_id: {$in: req.body.ids}}).then(function(err, users){
+			if (err) {
+				res.json('error!');
+			} else{
+				res.json(users);
+			}
+		});
+	}
 }
 
 
