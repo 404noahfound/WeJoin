@@ -262,6 +262,29 @@ ActivitySchema.statics = {
 						}
 					}
 
+					var cmp = function(a, b){
+						if(b.start_time == null) return -1;
+						else if(a.start_time == null) return 1;
+						else {
+							if(a.start_time <= Date.now() && b.start_time > Date.now()) {
+								return 1;
+							}
+							else if(b.start_time <= Date.now() && a.start_time > Date.now()) {
+								return -1;
+							}
+							else if(a.start_time <= Date.now() && b.start_time <= Date.now()) {
+								return b.start_time.getTime() - a.start_time.getTime();
+							}
+							else if(b.start_time > Date.now() && a.start_time > Date.now()){
+								return a.start_time.getTime() - b.start_time.getTime();
+							}
+						}
+					};
+					activities.joined.sort(cmp);
+					activities.wait_for_approval.sort(cmp);
+					activities.organized.sort(cmp);
+					console.log(activities.organized);
+
 					var user_id_list = new Array();
 					for (var i = 0; i < activities.joined.length; i++) {
 						user_id_list.push(activities.joined[i].organizer);
