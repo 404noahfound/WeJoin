@@ -82,13 +82,21 @@ exports.NoteViewEach = function(request, response){
 			Activity.findOne({'_id': docs.associated_activity}, function(err, docss){
 				response.pageInfo.user=request.user;
 				response.pageInfo.activity = docss;
-				User.findOne({'_id': docss.organizer}, function(err, docsss){
-					response.pageInfo.activity.organizer_info=docsss;
-					if(String(docs.author)==String(request.user._id)) 
-						response.pageInfo.auth = 1;
-					else response.pageInfo.auth = 0;
-					response.render('note/ViewEach', response.pageInfo);
-				});
+				if(docss){
+					User.findOne({'_id': docss.organizer}, function(err, docsss){
+						response.pageInfo.activity.organizer_info=docsss;
+						if(String(docs.author)==String(request.user._id)) 
+							response.pageInfo.auth = 1;
+						else response.pageInfo.auth = 0;
+						response.render('note/ViewEach', response.pageInfo);
+					});
+				}
+				else{
+						if(String(docs.author)==String(request.user._id)) 
+							response.pageInfo.auth = 1;
+						else response.pageInfo.auth = 0;
+						response.render('note/ViewEach', response.pageInfo);
+				}
 			});
 		});
 	}
