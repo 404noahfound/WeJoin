@@ -1,3 +1,14 @@
+extends ../layout
+
 block content
-	p Success!
-	a(href="/note") Return
+	script.
+		setTimeout("javascript:location.href='/note'", 1000); 
+	div(class="ui main text container") 
+		br
+		div
+			i(class="massive checkmark icon") Success
+		br
+		a(href="/note")
+			button(class="huge ui blue button") 
+				i(class="reply icon") 
+				| Return

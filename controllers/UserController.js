@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Activity = mongoose.model('Activity');
 const only = require('only');
 const flash = require('express-flash');
 
@@ -35,9 +36,11 @@ exports.UponCreate = function(req, res){
 	res.pageInfo.title = "Reg success";
 	res.pageInfo.functionality = "Reg success";
 	const user = new User(only(req.body, "username password"));
+	user.nickname = user.username;
 	user.save().then(
 		function(doc) {
-			res.render('home/Functionality', res.pageInfo);
+			// res.render('home/Functionality', res.pageInfo);
+			res.redirect('/user/login');
 		}, 
 		function(err) {
 			err_messages = [];
@@ -46,7 +49,7 @@ exports.UponCreate = function(req, res){
 			}
 			if (err.errors) {
 				for (er in err.errors) {
-					// err_messages.push(err.errors[er].message);
+					err_messages.push(err.errors[er].message);
 				}}
 			req.flash('error', err_messages);
 			res.redirect('/user/reg');
@@ -58,7 +61,7 @@ exports.Modify = function(req, res){
 	if (!req.user) {
 		res.redirect('/user/login');
 	} else {
-		res.pageInfo.title = "Modify User";
+		res.pageInfo.title = "Modify My Profile";
 		res.pageInfo.error = req.flash('error');
 		res.pageInfo.user = req.user;
 		res.render('user/Modify', res.pageInfo);
@@ -67,30 +70,45 @@ exports.Modify = function(req, res){
 
 exports.UponModify = function(req, res){
 	var updateInfo = User.purifyForm(req.body);
-	res.json(updateInfo);
+	if(req.file){
+		var path = require('path');
+		var appDir = path.dirname(require.main.filename);
+		console.log(appDir);
+		updateInfo.avatar = req.file.path;
+		var avatar = path.join(appDir, updateInfo.avatar);
+		console.log(avatar);
+		var im = require('imagemagick');
+		im.convert(
+			// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+			[avatar, '-resize', "256x256!", avatar],
+			function(err, stdout, stderr){
+				if (err) throw err;
+				console.log('resized new avatar to fit within 200x200px');
+		})
+	}
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
-			res.json({message:'success', docs: docs});
+			req.flash('error', 'success');
+			res.redirect('/user/Modify');
 		},
 		function(err) {
-			res.json(err);
+			req.flash('error', err);
+			res.redirect('user/Modify');
 		}
 	);
 };
 
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
-	// console.log(req.params);
-	User.find({_id: req.params.id}).then(
-		function(docs){
-			res.pageInfo.docs = docs;
+	User.findById(req.params.id)
+	.exec(function(err, user){
+		user.getInfoForView(function(info){
+			// console.log(info);
+			Object.assign(res.pageInfo, info);
+			res.pageInfo.pp = 'His';
 			res.render('user/View', res.pageInfo);
-		},
-		function(err){
-
-		}
-	);
-	// res.render('user/View', res.pageInfo);
+		});
+	});
 };
 
 /**
@@ -99,7 +117,7 @@ exports.View = function(req, res){
  * @author Su
  */
 exports.Index = function(req, res){
-	res.pageInfo = {title:"Users"};
+	res.pageInfo.title = "Users";
 	// User.find({}, function(err, docs){
 	// 	res.pageInfo.users = docs;
 	// 	res.render('user/Index', res.pageInfo);
@@ -125,6 +143,57 @@ exports.DeleteAll = function(req, res){
 	});
 };
 
+/**
+ * all actions related to follow are sent to this action
+ * @param {[type]} req [description]
+ * @param {[type]} res [description]
+ * @req req.body{followee_id: String, [follow: int], [unfollow: int]}
+ * @res json{followee_id: String, exist: int, hasFollow: int}
+ */
+exports.FollowActions = function(req, res){
+	User.findById(req.user._id).exec(function(err, user) {
+		if(req.body.followee_id){
+			var res_json = {followee_id: followee_id, exist: 0, hasFollow: 0};
+			var followee_id = req.body.followee_id;
+			User.findById(followee_id).exec(function(err, followee){
+				if (err) {
+					res.json(res_json);
+				} else {
+					res_json.exist = 1;
+					if(req.body.follow == 1){
+						user.follow(followee, function(err, result){
+							res_json.hasFollow = 1;
+							res.json(res_json);
+						});
+					} else if(req.body.unfollow == 1){
+						user.unfollow(followee, function(err, result){
+							res_json.hasFollow = 0;
+							res.json(res_json);
+						});
+					} else {
+						res_json.hasFollow = user.hasFollow(followee);
+						res.json(res_json);
+					}
+				}
+			});
+		}
+	});
+}
+
+exports.GetUsersAPI = function(req, res){
+	if (!req.body || !req.body.ids){
+		res.json('error!');
+	}
+	else {
+		User.find({_id: {$in: req.body.ids}}).then(function(err, users){
+			if (err) {
+				res.json('error!');
+			} else{
+				res.json(users);
+			}
+		});
+	}
+}
 
 
 

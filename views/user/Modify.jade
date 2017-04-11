@@ -1,28 +1,66 @@
 extends ../layout
+block append scripts
+    link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
+    script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
 
 block content
-    h1= title
-    p #{user}
-    form(name="user", method="post")
-        div.input
-            span.label password
-            input(type="password", name="password")
-        div.input
-            span.label nickname
-            input(type="text", name="nickname")
-        div.input
-            span.label gender
-            select(name="gender")
-                option(value="Male") Male
-                option(value="Female") Female
-        div.input
-            span.label birthday
-            input(type="date", name="birthday")
-        div.input 
-            span.label City
-            intput(type="text", name="city")
-        div.input
-            span.label Description
-            textarea(name="description")
-        div.actions
-            input(type="submit", value="change")
+    div.ui.grid.container
+        div(class="centered ten wide column")
+            if (error.indexOf('success') != -1)
+                div.ui.success.message
+                    i.close.icon
+                    |Your change has been saved.
+            div.ui.segment
+                h1.ui.header #{title}
+                div.ui.divider
+                form.ui.form(name="user", method="post" enctype="multipart/form-data")
+                    div.field
+                        span.label nickname
+                        input(type="text" name="nickname" value=user.nickname)
+                    div.field
+                        span.label gender
+                        select.ui.dropdown(name="gender")
+                            option(value="Male") Male
+                            option(value="Female") Female
+                    div.field
+                        span.label birthday
+                        //- input(type="date", name="birthday" value=user.birthday)
+                        div.ui.calendar
+                            div(class="ui input left icon")
+                                i(class="calendar icon")
+                                input(type="text", name="birthday" value = user.birthday)
+                    div.field
+                        span.label City
+                        input(type="text", name="city", value=user.city, accept = "image/*")
+                    div.field
+                        span.label Description
+                        textarea.description(name="description")
+                    if (user.avatar)
+                        span.label Current Avatar
+                        div(class="ui fluid bordered rounded image")
+                            img(src=user.avatar.replace('static',''), style="width:200px;height:200px")
+                    div.field
+                        span.label Upload Avatar
+                        input(type = "file" name="avatar")
+                    div.actions
+                        input.ui.primary.button(type="submit", value="change")
+                if (error.length > 0 && error.indexOf('success') == -1)
+                    div(class="ui error message") #{error}
+
+    script.
+        $(document).ready(function(){
+            $('textarea.description').val('#{user.description}');
+            $('.ui.dropdown').dropdown();
+
+            $('.ui.calendar').calendar({
+                type: 'date'
+            });
+            $('.message .close')
+              .on('click', function() {
+                $(this)
+                  .closest('.message')
+                  .transition('fade')
+                ;
+              })
+            ;
+        });

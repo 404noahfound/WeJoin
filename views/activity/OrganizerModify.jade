@@ -1,15 +1,127 @@
 extends ../layout
+include ../mixins
 
 block content
-	h1= title
-	p Welcome to #{title}.
-		each activity in activities
-			p Activity #{activity.title}
-			p #{activity.description}
-	form(name="activity", method="post")
-		div.input
-			span.label Description
-			br
-			input(type="text", name="description")
-		div.actions
-			input(type="submit", value="modify")
+	link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
+	script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
+	
+	div(class="ui text container segment")
+		div(class="ui header", style="margin-left: 10px") #{activity.title}
+		
+		if (error)
+			div(class="ui error message") #{error}
+
+		form(class="ui form", id="modify", method="post", style="margin: 0px 10px", enctype="multipart/form-data")
+			div(class="field")
+				label Title
+				input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)")
+
+			div(class="two fields")
+				div(class="field")
+					label Start Time
+					div(class="ui calendar", id="start_time")
+						div(class="ui input left icon")
+							i(class="calendar icon")
+							input(type="text", name="start_time", placeholder="From")
+					script.
+						$(document).ready(function() {
+							$('#start_time').calendar({
+								type: 'datetime'
+							});
+						});
+
+				div(class="field")
+					label End Time
+					div(class="ui calendar", id="end_time")
+						div(class="ui input left icon")
+							i(class="calendar icon")
+							input(type="text",name="end_time", placeholder="To")
+					script.
+						$(document).ready(function() {
+							$('#end_time').calendar({
+								type: 'datetime'
+							});
+						});
+
+			div(class="field")
+				label Location
+				input(type="text", id="location", name="location_name", placeholder="Activity Location")
+
+			div(class="three fields")
+				div(class="field")
+					label Status
+					div(class="ui selection dropdown", id="status")
+						input(type="hidden" name="status")
+						i(class="dropdown icon")
+						div(class="default text") Status
+						div(class="menu")
+							div(class="item" data-value="future") Future
+							div(class="item" data-value="going") Going
+							div(class="item" data-value="finished") Finished
+							div(class="item" data-value="cancelled") Cancelled
+					script.
+						$('#status').dropdown();
+
+				div(class="field")
+					label Participation Method
+					div(class="ui selection dropdown", id="participation_method")
+						input(type="hidden" name="participation_method")
+						i(class="dropdown icon")
+						div(class="default text") Participation Method
+						div(class="menu")
+							div(class="item" data-value="public") Public
+							div(class="item" data-value="approval") Approval
+							div(class="item" data-value="only_invite") Only Invite
+					script.
+						$('#participation_method').dropdown();
+
+				div(class="field")
+					label Expense
+					input(type="text", id="expense", name="expense", placeholder="Activity Expense")
+
+			div(class="two fields")
+				div(class="field")
+					label Approve Waiting Users
+					div(class="ui fluid multiple selection dropdown", id="new_participants")
+						input(type="hidden" name="new_participants")
+						i(class="dropdown icon")
+						div(class="default text") Approval
+						div(class="menu")
+							each user in activity.wait_for_approval_info
+								div(class="item", data-value="#{user._id}")
+									+user_label(user)
+					script.
+						$('#new_participants').dropdown();
+
+				div(class="field")
+					label Remove Participants
+					div(class="ui fluid multiple selection dropdown", id="removed_participants")
+						input(type="hidden" name="removed_participants")
+						i(class="dropdown icon")
+						div(class="default text") Remove Participants
+						div(class="menu")
+							each user in activity.participants_info
+								div(class="item", data-value="#{user._id}")
+									+user_label(user)
+					script.
+						$('#removed_participants').dropdown();
+
+
+			div(class="field")
+				label Content for Participants
+				textarea(name="content_for_participants", id="content_for_participants", rows="3")
+
+
+			div(class="field")
+				label Description
+				textarea(name="description", id="description")
+
+			label Current Picture
+			div(class="ui fluid bordered rounded image")
+				img(src=activity.picture.replace('static',''), style="width:200px;height:200px")
+			div(class="field")
+				label Upload Picture
+				input(type="file" name="picture")
+
+			div(class="actions")
+				input(class="ui tiny button" type="submit" value="Submit")

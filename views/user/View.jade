@@ -1,5 +1,90 @@
 extends ../layout
+include ../mixins
+
+mixin section(id, content)
+  div.ui.segment(id=id)
+    content
 
 block content
-    h1= title
-    p #{docs}
+  - var segment_ids = ['organized_activities', 'joined_activities', 'wait_for_activities', 'user_notes', 'follows']
+  script.
+    active_section = function(section_name){
+      $('.section').hide();
+      $('.menu .item').removeClass('active');
+      $('.section.' + section_name).show();
+      $('.menu .item.' + section_name).addClass('active');
+    }
+    $(document).ready(function(){
+      var user = !{JSON.stringify(user)};
+      console.log(user);
+      var activities = !{JSON.stringify(activities)};
+      console.log(activities);
+      segment_ids = !{JSON.stringify(segment_ids)};
+      $.each(segment_ids, function(i, sid){
+        $('.menu .item.' + sid).click(function(){
+          active_section(sid);
+        });
+      });
+      $('.section').hide();
+      $('.section.' + segment_ids[0]).show();
+    });
+
+  div(class="ui grid container")
+    div.row
+      div(class="four wide column")
+        div(class="ui bordered rounded image")
+          if (user.avatar && user.avatar.length > 0)
+            img(src=user.avatar, style="width:200px;height:200px")
+          else
+            img(src="/avatars/1204845.png", style="width:200px;height:200px")
+      div(class="eight wide column" style="position:relative")
+        div(style="position:absolute; bottom:0px;")
+          h1.ui.header 
+            |#{user.nickname}
+            if (username && pp != 'My')
+              +follow(user)
+          h4(class="ui grey header") #{user.description}
+    div.ui.divider
+    div.row
+      div.four.wide.column
+        div.ui.vertical.menu
+          div.item
+            div.header Activities
+            div.menu
+              a(class="active item " + segment_ids[0]) Organized Activities
+              a(class="item " + segment_ids[1]) Joined Activities
+              if (pp == 'My')
+                a.item(class="item " + segment_ids[2]) Wait For Activities
+                a(class="item", href="/activity/create") Create Activity
+          div.item
+            div.header Notes
+            div.menu
+              a.item(href="/note") #{pp} Notes
+              if (pp == 'My')
+                a.item(href="/note/create") Create New Note
+          div.item
+            div.header Users
+            div.menu
+              a(class="item " + segment_ids[4]) #{pp} Follows
+          if (pp == "My")
+            div.item
+              div.header Settings
+              div.menu
+                a.item(href="/user/modify") My Profile
+
+      div.twelve.wide.column
+        - var cl = "ui segment section "
+        div(class=cl + segment_ids[0])
+          +ListActivities(activities.organized)
+        div(class=cl + segment_ids[1])
+          +ListActivities(activities.joined)
+        div(class=cl + segment_ids[2])
+          +ListActivities(activities.wait_for_approval)
+        div(class=cl + segment_ids[4])
+          div.ui.grid
+            - for (i = 0; i < follows.length; i++)
+              div.four.wide.column
+                +user_card(follows[i])
+
+          
+

@@ -1,29 +1,202 @@
 extends ../layout
+include ../mixins
 
 block content
-	each activity in activities
-		p #{activity.title} : #{activity.description}
-		a(href="/activity/#{activity._id}/organizermodify") OrganizerModify
-		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-			div.input
-				span.label Join
-				br
-				input(type="text", id="Join", name="join", value="1")
-			div.actions
-				input(type="submit", value="Join")
+	div(class="ui four column stackable grid container")
+		div(class="column")
+		div(class="three column", style="z-index: 0")
+			div(class="ui header") #{activity.title}
+			
+			button(class="ui animated teal fade button", tabindex="0", id="join")
+				div(class="visible content") Join
+				div(class="hidden content")
+					i(class="add square icon")
+			script.
+				$(document).ready(function(){
+					if (user_status == "guest") {
+						$('#join').prop('disabled', true);
+					}
 
-		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-			div.input
-				span.label Quit
-				br
-				input(type="text", id="Quit", name="quit", value="1")
-			div.actions
-				input(type="submit", value="Quit")
+					$('#join').click(function(){
+						//alert("click join");
+						$.post({
+							"url": "/activity/#{activity._id}/customermodify",
+							"data": { "join": "1" },
+							"success": function(new_data){
+											//alert("repsonse");
+											if (new_data.err) {
+												alert(new_data.err);
+											}
+											else{
+												alert(new_data.join);
+												window.location.reload(true);
+											}
+										},
+							"dataType": "JSON"
+						});
+					});
+				});
 
-		form(name="activity", method="post", action="/activity/#{activity._id}/customermodify")
-			div.input
-				span.label Rate
-				br
-				input(type="text", id="Rate", name="rate", value="0")
-			div.actions
-				input(type="submit", value="Rate")
+
+			button(class="ui animated teal fade button", tabindex="0", id="quit")
+				div(class="visible content") Quit
+				div(class="hidden content")
+					i(class="minus square icon")
+			script.
+				$(document).ready(function(){
+					if (user_status == "guest") {
+						$('#quit').prop('disabled', true);
+					}
+
+					$('#quit').click(function(){
+						//alert("click quit");
+						$.post({
+							"url": "/activity/#{activity._id}/customermodify",
+							"data": { "quit": "1" },
+							"success": function(new_data){
+											//alert("repsonse");
+											if (new_data.err) {
+												alert(new_data.err);
+											}
+											else{
+												alert(new_data.quit);
+												window.location.reload(true);
+											}
+										},
+							"dataType": "JSON"
+						});
+					});
+				});
+
+			a(id="modify_link")
+				button(class="ui animated teal fade button", tabindex="0", id="modify")
+					div(class="visible content") Modify
+					div(class="hidden content")
+						i(class="write icon")
+			script.
+				$(document).ready(function(){
+					if (user_status != "organizer") {
+						$('#modify').prop('disabled', true);
+					}
+					else {
+						$('#modify_link').prop('href', "/activity/#{activity._id}/organizermodify");
+					}
+				});
+
+	div(class="ui stackable grid container")
+		div(class="four wide column", id="notes_time_line")
+			div(class="ui raised segment")
+				a(href="/note/create/#{activity._id}")
+					button(class="ui tiny labeled icon button", id="search_more")
+						i(class="add icon")
+						| Create More Notes...
+				each note in activity.notes
+					div(class='ui main text container')
+						h1(class='ui header') 
+							a(href="/note/view/#{note._id}") #{note.title}
+						h5(class='ui grey header') by 
+							em #{note.authorname} on 
+							em #{note.modified_at}	
+					br
+					div(class='ui justified text container')!= note.content
+						div(class='ui divider')
+
+		div(class="ten wide column", id="activity_info")
+			div(class="ui raised segment", style="z-index: 0")
+				div(class="row", style="margin: 10px")
+					+user_label(activity.organizer_info)
+					a(href="/user/#{activity.organizer_info._id}")
+						div(class="ui tiny icon button" data-content="View his/her personal page", id="user_label", style="margin-left: 10px")
+							i(class="newspaper icon")
+						script.
+							$(document).ready(function(){
+								$("#user_label").popup();
+							});
+
+				div(class="row", style="margin: 10px")
+					h4(class="ui grey header", id="time")
+						i(class="calendar outline icon")
+						| From: &nbsp#{activity.start_time}
+				div(class="row", style="margin: 10px")
+					h4(class="ui grey header", id="time")
+						i(class="calendar outline icon")
+						| To: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#{activity.end_time}
+
+				div(class="row", style="margin: 10px")
+					h4(class="ui grey header", id="location")
+						i(class="location arrow icon")
+						| #{activity.location_name}
+
+				div(class="row", style="margin: 10px")
+					if activity.status == "future"
+						div(class="ui large purple label") #{activity.status}
+					else if activity.status == "going"
+						div(class="ui large green label") #{activity.status}
+					else if activity.status == "finished"
+						div(class="ui large yellow label") #{activity.status}
+					else if activity.status == "cancelled"
+						div(class="ui large label") #{activity.status}
+
+					div(class="ui large label", style="margin: 0px 15px") #{activity.participation_method} (Join method)
+
+					if activity.expense == 0
+						div(class="ui large green tag label", style="margin: 0px 15px") #{activity.expense}
+					else	
+						div(class="ui large red tag label", style="margin: 0px 15px") #{activity.expense}
+
+				div(class="row", style="margin: 10px")
+					div(class="ui star rating", id="rating")
+					button(class="ui mini button", id="rate", style="margin: 0px 10px") Rate
+					script(type='text/javascript').
+						var data = !{JSON.stringify(activity)};
+						var rating = data.rating ? parseInt(data.rating) : 0;
+						var user_status = !{JSON.stringify(user_status)};
+
+						$(document).ready(function() {
+							$('#rating').rating({
+								initialRating: rating,
+								maxRating: 5
+							});
+							
+							if (user_status != "participant") {
+								$('#rating').rating("disable");
+								$('#rate').prop('disabled', true);
+							}
+
+							$('#rate').click(function(){
+								//alert("click rate");
+								var value = $('#rating').rating("get rating");
+								$.post({
+									"url": "/activity/#{activity._id}/customermodify",
+									"data": { "rating": value },
+									"success": function(new_data) {
+													//alert("repsonse");
+													if (new_data.err) {
+														alert(new_data.err);
+														$('#rating').rating("set rating", rating);
+													}
+													else{
+														var new_rating = parseInt(new_data.rating);
+														alert("Rate success.");
+														//$('#rating').rating("set rating", new_rating);
+														window.location.reload(true);
+													}
+												},
+									"dataType": "JSON"
+								});
+							});
+						});
+
+				div(class="row", style="margin: 10px")
+					if user_status == "organizer" || user_status == "participant"
+						div(class="ui icon message")
+							i(class="inbox icon")
+							div(class="content")
+								div(class="header").
+									Content for Participants
+								p #{activity.content_for_participants}
+
+				div(class="row", style="margin: 10px")
+					div(class="ui piled segment")
+						h4(class="header") Description
+						p #{activity.description}

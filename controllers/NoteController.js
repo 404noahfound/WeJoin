@@ -1,25 +1,58 @@
 const mongoose = require('mongoose');
 const only = require('only');
 const Note = mongoose.model('Note');
+const Activity = mongoose.model('Activity');
+const User = mongoose.model('User');
 exports.Note = function(request, response){
 	response.pageInfo.title = "Note";
-	response.pageInfo.functionality = "Note. Generate page for options";
-	Note.find({}, function(err, docs){
-		response.pageInfo.notes = docs;
-		response.render('note/Note', response.pageInfo);
-	});
+	response.pageInfo.functionality = "Note. Generate page to view my notes";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		Note.find({'author': request.user._id },
+			function(err, docs){
+			if (err) {
+				console.log("Error! Can't find notes of current user!");
+			}
+			else {
+				response.pageInfo.notes = docs;
+				response.render('note/Note', response.pageInfo);
+			}
+		});
+	}
 };
 
-exports.UponNote = function(request, response){
-	response.pageInfo.title = "Upon Note";
-	response.pageInfo.functionality = "Note.View";
-	response.render('home/Functionality', response.pageInfo);
+exports.NoteUser = function(request, response){
+	response.pageInfo.title = "Note User";
+	response.pageInfo.functionality = "Note User. Generate page to view user's notes";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		Note.find({'author': request.params.id },
+			function(err, docs){
+			if (err) {
+				console.log("Error! Can't find notes of the user!");
+			}
+			else {
+				response.pageInfo.notes = docs;
+				response.render('note/Note', response.pageInfo);
+			}
+		});
+	}
 };
+
+
 exports.NoteSearch = function(request, response){
 	response.pageInfo.title = "Note Search";
 	response.pageInfo.functionality = "Note.Search. Generate search page.";
-	response.render('note/Search', response.pageInfo);
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{response.render('note/Search', response.pageInfo);}
 };
+
 exports.UponNoteSearch = function(request, response){
 	response.pageInfo.functionality = "UponNote.Search. Generate page for relevant notes";
 	var attr = request.body;
@@ -38,46 +71,125 @@ exports.UponNoteSearch = function(request, response){
 exports.NoteViewEach = function(request, response){
 	response.pageInfo.title = "Note View";
 	response.pageInfo.functionality = "Note.View";
-	var id = request.params.id;
-	response.pageInfo.id=id;
-	Note.find({'_id':id}, function(err, docs){
-		response.pageInfo.notes = docs;
-		response.render('note/ViewEach', response.pageInfo);
-	});
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{
+		var id = request.params.id;
+		response.pageInfo.id=id;
+		Note.findOne({'_id':id}, function(err, docs){
+			response.pageInfo.note = docs;
+			Activity.findOne({'_id': docs.associated_activity}, function(err, docss){
+				response.pageInfo.user=request.user;
+				response.pageInfo.activity = docss;
+				if(docss){
+					User.findOne({'_id': docss.organizer}, function(err, docsss){
+						response.pageInfo.activity.organizer_info=docsss;
+						if(String(docs.author)==String(request.user._id)) 
+							response.pageInfo.auth = 1;
+						else response.pageInfo.auth = 0;
+						response.render('note/ViewEach', response.pageInfo);
+					});
+				}
+				else{
+						if(String(docs.author)==String(request.user._id)) 
+							response.pageInfo.auth = 1;
+						else response.pageInfo.auth = 0;
+						response.render('note/ViewEach', response.pageInfo);
+				}
+			});
+		});
+	}
 };
 
 exports.NoteCreate = function(request, response){
 	response.pageInfo.title = "Note Create";
 	response.pageInfo.functionality = "Note.Create. Generate create Note editor page.";
-	response.render('note/Create', response.pageInfo);
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		response.render('note/Create', response.pageInfo);
+	}
 };
 
 exports.UponNoteCreate = function(request, response){
 	response.pageInfo.title = "Note Upon Create";
 	response.pageInfo.functionality = "Note.UponCreate";
-	const note = new Note(only(request.body, "title content"));
-	note.save();
-	response.render('note/Return', response.pageInfo);
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		request.body.author = request.user._id;
+		request.body.authorname = request.user.username;
+		const note = new Note(only(request.body, "title author content authorname note_type"));
+		note.save();
+		response.render('note/Return', response.pageInfo);
+	}
+};
+
+exports.NoteRelatedCreate = function(request, response){
+	response.pageInfo.title = "Note Create";
+	response.pageInfo.functionality = "Note.Create. Generate create Note editor page.";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		response.render('note/Create', response.pageInfo);
+	}
+};
+
+exports.UponNoteRelatedCreate = function(request, response){
+	response.pageInfo.title = "Note Upon Create";
+	response.pageInfo.functionality = "Note.UponCreate";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		request.body.associated_activity = request.params.activityid;
+		request.body.author = request.user._id;
+		request.body.authorname = request.user.username;
+		const note = new Note(only(request.body, "title author content authorname note_type associated_activity"));
+		note.save();
+		response.render('note/Return', response.pageInfo);
+	}
 };
 
 exports.NoteModify = function(request, response){
 	response.pageInfo.title = "Note Modify";
 	response.pageInfo.functionality = "Note.Modify. Modify the content of the note.";
-	Note.find({}, function(err, docs){
-		response.pageInfo.notes = docs;
-		response.render('note/Modify', response.pageInfo);
-	});
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{
+		Note.find({'author': request.user._id },
+			function(err, docs){
+				if (err) {
+					console.log("Error! Can't find notes of current user!");
+				}
+				else {
+					response.pageInfo.notes = docs;
+					response.render('note/Modify', response.pageInfo);
+				}
+			});
+	}
 };
 
 exports.NoteModifyEach = function(request, response){
-	var id = request.params.id;
-	response.pageInfo.title="Note Modify Each";
-	response.pageInfo.functionality = "Generate pages for each notes";
-	response.pageInfo.id=id;
-	Note.find({'_id':id}, function(err, docs){
-		response.pageInfo.notes = docs;
-		response.render('note/ModifyEach', response.pageInfo);
-	});
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{
+		var id = request.params.id;
+		response.pageInfo.user=request.user;
+		response.pageInfo.title="Note Modify Each";
+		response.pageInfo.functionality = "Generate pages for each notes";
+		response.pageInfo.id=id;
+		Note.findOne({'_id':id}, function(err, docs){
+			response.pageInfo.note = docs;
+			response.render('note/ModifyEach', response.pageInfo);
+		});
+	}
 };
 
 exports.UponNoteModifyEach = function(request, response){
@@ -85,7 +197,8 @@ exports.UponNoteModifyEach = function(request, response){
 	var new_content=request.body.content;
 	response.pageInfo.title="Upon Modify Each";
 	response.pageInfo.functionality = "Upon.Note.Modify";
-	Note.findOneAndUpdate({'_id':id}, {'content':new_content}, {upsert:true}, function(err, doc){
+	Note.findOneAndUpdate({'_id':id}, { $set :{'content': new_content} , $currentDate:{'modified_at': 'date'}},
+	 function(err, doc){
 		if(err) console.log('error!');
 		response.pageInfo.description=new_content;
 	});
@@ -95,21 +208,37 @@ exports.UponNoteModifyEach = function(request, response){
 exports.NoteDelete = function(request, response){
 	response.pageInfo.title = "Note Delete";
 	response.pageInfo.functionality = "Note.Modify. Delete the note.";
-	Note.find({}, function(err, docs){
-		response.pageInfo.notes = docs;
-		response.render('note/Delete', response.pageInfo);
-	});
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{
+		Note.find({'author': request.user._id },
+			function(err, docs){
+				if (err) {
+					console.log("Error! Can't find notes of current user!");
+				}
+				else {
+					response.pageInfo.notes = docs;
+					response.render('note/Delete', response.pageInfo);
+				}
+			});
+	}
 };
 
 exports.NoteDeleteEach = function(request, response){
-	var id = request.params.id;
-	response.pageInfo.title="Note Delete Each";
-	response.pageInfo.functionality = "Generate pages for each notes";
-	response.pageInfo.id=id;
-	Note.find({'_id':id}, function(err, docs){
-		response.pageInfo.notes = docs;
-		response.render('note/DeleteEach', response.pageInfo);
-	});
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else{
+		var id = request.params.id;
+		response.pageInfo.title="Note Delete Each";
+		response.pageInfo.functionality = "Generate pages for each notes";
+		response.pageInfo.id=id;
+		Note.findOne({'_id':id}, function(err, docs){
+			response.pageInfo.note = docs;
+			response.render('note/DeleteEach', response.pageInfo);
+		});
+	}
 };
 
 exports.UponNoteDeleteEach = function(request, response){

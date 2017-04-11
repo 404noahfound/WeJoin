@@ -1,0 +1,123 @@
+extends layout
+block append scripts
+  script(src="/javascripts/mixin.js")
+
+mixin ListActivities(activities)
+  div(class="ui relaxed divided items")
+    each activity, i in activities
+      div(class="item")
+        div(class="ui small image")
+          img(src=activity.picture.replace('static', ''))
+        div(class="content")
+          a(class="header") #{activity.title}
+          div(class="meta")
+            +user_label(activity.organizer_info)
+            br
+            br
+            a(style="margin-right: 50px") Time: #{activity.start_time}
+            br
+            a(style="margin-right: 50px") Location: #{activity.location_name}
+            br
+          div(class="description").
+            #{activity.description}
+          div(class="extra")
+            if activity.status == "future"
+              div(class="ui purple label") #{activity.status}
+            else if activity.status == "going"
+              div(class="ui green label") #{activity.status}
+            else if activity.status == "finished"
+              div(class="ui yellow label") #{activity.status}
+            else if activity.status == "cancelled"
+              div(class="ui label") #{activity.status}
+            div(class="ui label", style="margin: 0px 15px") #{activity.participation_method}
+            if activity.expense == 0
+              div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
+            else  
+              div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+            a(href="/activity/#{activity._id}")
+              div(class="ui right floated primary button") View Detail
+                i(class="right chevron icon")
+                  
+mixin ListActivity(activity)
+  div(class="ui relaxed divided items")
+    div(class="item")
+      div(class="ui small image")
+        img(src=activity.picture.replace('static', ''))
+      div(class="content")
+        a(class="header") #{activity.title}
+        div(class="meta")
+          +user_label(activity.organizer_info)
+          br
+          br
+          a(style="margin-right: 50px") Time: #{activity.start_time}
+          br
+          a(style="margin-right: 50px") Location: #{activity.location_name}
+          br
+        div(class="description").
+          #{activity.description}
+        div(class="extra")
+          if activity.status == "future"
+            div(class="ui purple label") #{activity.status}
+          else if activity.status == "going"
+            div(class="ui green label") #{activity.status}
+          else if activity.status == "finished"
+            div(class="ui yellow label") #{activity.status}
+          else if activity.status == "cancelled"
+            div(class="ui label") #{activity.status}
+          div(class="ui label", style="margin: 0px 15px") #{activity.participation_method}
+          if activity.expense == 0
+            div(class="ui green tag label", style="margin: 0px 15px") #{activity.expense}
+          else  
+            div(class="ui red tag label", style="margin: 0px 15px") #{activity.expense}
+          a(href="/activity/#{activity._id}")
+            div(class="ui right floated primary button") View Detail
+              i(class="right chevron icon")
+
+mixin ListNotes(notes)
+    script.
+        $(document).ready(function() {
+            $('.ui.float.segment').hover(function(){
+                $(this).css("background-color","#F0F0F0");
+            }, function(){
+                $(this).css("background-color","white");
+            });
+        });
+    each note in notes
+        div(class='ui main text container', style="color:inherit")
+            a(href="/note/view/#{note._id}")
+                div(class="ui float segment")
+                    div(class="ui grid")
+                        div(class="four wide column")
+                            img(class="ui small rounded image" src="/images/#{note.note_type}.png")
+                        div(class="twelve wide column")
+                            h1(class='ui header') #{note.title}
+                            h5(class='ui grey header') 
+                                div
+                                    i(class="user icon")
+                                    |#{note.authorname}
+                                div
+                                    i(class="calendar icon") 
+                                    |#{note.modified_at}
+            div(class='ui divider')
+
+//- user{avatar: String, nickname: String}
+mixin user_label(user)
+  div.ui.image.label
+    img(src=user.avatar.replace('static', ''))
+    | &nbsp&nbsp&nbsp#{user.nickname}
+
+mixin user_card(user)
+  a(class="ui raised link card", href= "/user/" + user._id)
+    div.image
+     img(src=user.avatar)
+    div.content
+      div.header #{user.nickname}
+
+//- followee{_id: String}
+mixin follow(followee)
+  div(class="ui tiny follow button", followee = followee._id)
+    div.unfollowed
+      i.plus.icon
+      |follow
+    div.followed
+      |Followed

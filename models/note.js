@@ -8,21 +8,27 @@ const NoteSchema = new Schema({
 			required: [true, 'Please add a title.'], 
 			trim : true },
 	author:{
-			type: Schema.Types.ObjectId,
-			ref:'User',
-			childPath:"own_notes"},
-	content:{ //***********************************need to change******************
+			type: Schema.Types.ObjectId},
+	authorname:{
+			type: String
+	},
+	note_type:{
+			type: String,
+			default: "activity"
+	},
+	content:{ 
 			type : String, 
 			default : 'This Note has no content', 
 			trim : true},
-	associated_activity: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
+	associated_activity: {
+			type : Schema.Types.ObjectId,
+			default: null},
 
 	created_at  : { type : Date, default : Date.now },
 	modified_at : { type : Date, default : Date.now },
 	highlighted: { type : Boolean, default : false }
 });
 
-NoteSchema.plugin(relationship, { relationshipPathName:'author' });
 
 NoteSchema.methods = {
 	/**

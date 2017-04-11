@@ -5,61 +5,35 @@ var UserController = require('./controllers/UserController');
 var NoteController = require('./controllers/NoteController');
 var NotificationController=require('./controllers/NotificationController');
 var passport = require('passport');
+var multer = require('multer');
+
+var uploading = multer({
+  dest: 'static/public/uploads/',
+});
 
 
 module.exports = function(app){
 	// Main Routes
 	app.get('/', HomeController.Index);
 	app.get('/other', HomeController.Other);
+	app.get('/fake/:type/:num', HomeController.Fake);
 
 	//Activity Routes
 	//GetByUser for test
-	app.get('/activity/getbyuser', ActivityController.GetByUser);
+	//app.get('/activity/getbyuser', ActivityController.GetByUser);
 	//DeleteAll
 	app.get('/activity/delete_all', ActivityController.DeleteAll);
 	//Create
 	app.get('/activity/create', ActivityController.Create);
-	app.post('/activity/create', ActivityController.UponCreate);
 	//Search
-	app.get('/activity/search/:title', ActivityController.Search);
+	app.post('/activity/search', ActivityController.Search);
 	//View
 	app.get('/activity/:id', ActivityController.View);
 	//CustomerModify
 	app.post('/activity/:id/customermodify', ActivityController.CustomerModify);
 	//OrganizerModify
 	app.get('/activity/:id/organizermodify', ActivityController.OrganizerModify);
-	app.post('/activity/:id/organizermodify', ActivityController.UponOrganizerModify);
-		
-	//show account
-	// app.get('/account', AccountController.Show);
-	// //guest
-	// app.get('/account/guest', AccountController.Guest);
-	// app.post('/account/guest', AccountController.UponGuest);
-	// //reguser
-	// app.get('/account/reguser', AccountController.Reguser);
-	// app.post('/account/reguser', AccountController.UponReguser);
-	// //Create account
-	// app.get('/account/signup', AccountController.Create);
-	// app.post('/account/signup', AccountController.UponCreate);
-	// //Sign in an account
-	// app.get('/account/signin', AccountController.Signin);
-	// app.post('/account/signin', AccountController.UponSignin);
-	// //Modify account
-	// app.get('/account/modify', AccountController.Modify);
-	// app.post('/account/modify', AccountController.UponModify);
-	// //Sign out
-	// app.get('/account/signout', AccountController.Signout);
-	// app.post('/account/signout', AccountController.UponSignout);
-	// //Each account
-	// app.get('/account/:id', AccountController.ModifyAccount);
-	// app.post('/account/:id', AccountController.UponModifyAccount);
-	// //follow
-	// app.get('/account/follow', AccountController.Follow);
-	// app.post('/account/follow', AccountController.UponFollow);
-	// //recommodation system
-	// app.get('/account/recommondation', AccountController.Recommondation);
-	// app.post('/account/recommondation', AccountController.UponRecommondation);
-
+	app.post('/activity/:id/organizermodify', uploading.single('picture'), ActivityController.UponOrganizerModify);
 
 	//notification
 
@@ -77,8 +51,10 @@ module.exports = function(app){
 
 	//note
 	app.get('/note', NoteController.Note);
-	app.post('/note', NoteController.UponNote);
+	app.get('/note/user/:id', NoteController.NoteUser);
 	//note create
+	app.get('/note/create/:activityid', NoteController.NoteRelatedCreate);
+	app.post('/note/create/:activityid', NoteController.UponNoteRelatedCreate);
 	app.get('/note/create', NoteController.NoteCreate);
 	app.post('/note/create', NoteController.UponNoteCreate);
 	//note modify
@@ -105,7 +81,9 @@ module.exports = function(app){
     app.post('/user/reg', UserController.UponCreate);
     app.get('/user', UserController.Index);
     app.get('/user/modify', UserController.Modify);
-    app.post('/user/modify', UserController.UponModify);
+    app.post('/user/modify', uploading.single('avatar'), UserController.UponModify);
     app.get('/user/delete_all', UserController.DeleteAll);
+    app.post('/user/follow_actions', UserController.FollowActions);
+    app.post('/user/get_users_api', UserController.GetUsersAPI);
     app.get('/user/:id', UserController.View);
 };

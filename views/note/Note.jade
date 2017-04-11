@@ -1,9 +1,28 @@
 extends ../layout
 
 block content
-	h1= title
-	p Welcome to #{title}.
-	p Choose the note:
-		each note in notes
-			p 
-				a(href="/note/view/#{note._id}") #{note.title}
+	script.
+		$(document).ready(function() {
+			$('.ui.float.segment').hover(function(){
+				$(this).css("background-color","#F0F0F0");
+			}, function(){
+				$(this).css("background-color","white");
+			});
+		});
+	each note in notes
+		div(class='ui main text container', style="color:inherit")
+			a(href="/note/view/#{note._id}")
+				div(class="ui float segment")
+					div(class="ui grid")
+						div(class="four wide column")
+							img(class="ui small image" src="/images/#{note.note_type}.png")
+						div(class="twelve wide column")
+							h1(class='ui header') #{note.title}
+							h5(class='ui grey header') 
+								div
+									i(class="user icon")
+									|#{note.authorname}
+								div
+									i(class="calendar icon") 
+									|#{note.modified_at}
+			div(class='ui divider')
