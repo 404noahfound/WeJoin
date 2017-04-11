@@ -86,7 +86,7 @@ exports.UponModify = function(req, res){
 	}
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
-			// res.json({message:'success', docs: docs});
+			req.flash('error', 'success');
 			res.redirect('/user/Modify');
 		},
 		function(err) {
