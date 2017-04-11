@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins
 
 block content
 	div(class="ui four column stackable grid container")
@@ -85,12 +86,32 @@ block content
 	div(class="ui stackable grid container")
 		div(class="four wide column", id="notes_time_line")
 			div(class="ui raised segment")
-				p test
+				a(href="/note/create/#{activity._id}")
+					button(class="ui tiny labeled icon button", id="search_more")
+						i(class="add icon")
+						| Create More Notes...
+				each note in activity.notes
+					div(class='ui main text container')
+						h1(class='ui header') 
+							a(href="/note/view/#{note._id}") #{note.title}
+						h5(class='ui grey header') by 
+							em #{note.authorname} on 
+							em #{note.modified_at}	
+					br
+					div(class='ui justified text container')!= note.content
+						div(class='ui divider')
 
 		div(class="ten wide column", id="activity_info")
 			div(class="ui raised segment", style="z-index: 0")
 				div(class="row", style="margin: 10px")
-					p organizer card
+					+user_label(activity.organizer_info)
+					a(href="/user/#{activity.organizer_info._id}")
+						div(class="ui tiny icon button" data-content="View his/her personal page", id="user_label", style="margin-left: 10px")
+							i(class="newspaper icon")
+						script.
+							$(document).ready(function(){
+								$("#user_label").popup();
+							});
 
 				div(class="row", style="margin: 10px")
 					h4(class="ui grey header", id="time")

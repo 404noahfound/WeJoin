@@ -11,11 +11,15 @@ html
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css')
 		style.
 			body{
-				background-image: url('/images/Sports.png')
+				background-image: url('/images/Sports.png');
+				background-attachment: fixed
 			}
 	body
-		block header
-			include layouts/header
+		block sidebar
 
-		#wrapper
-			block content
+		div(class="pusher", style="background-image: url('/images/Sports.png'); background-attachment: fixed")
+			block header
+				include layouts/header
+
+			#wrapper
+				block content

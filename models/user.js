@@ -5,6 +5,7 @@ const Activity = mongoose.model('Activity');
 const only = require('only');
 const faker = require('faker');
 
+
 const UserSchema = new Schema({
 	password: { type : String},
 	username: { type : String, unique: true, index: true/*the unique constraint is not working*/ },
@@ -18,7 +19,7 @@ const UserSchema = new Schema({
 	marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
 	own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
 	created_at  : { type : Date, default : Date.now },
-	avatar : {type : String}
+	avatar : {type : String, default : "https://semantic-ui.com/examples/assets/images/wireframe/image.png" }
 });
 
 UserSchema.path('password').required(true, 'User name cannot be blank');
@@ -145,6 +146,22 @@ UserSchema.statics = {
 			if(err) console.log(err);
 		});
 		return user_info;
+	},
+
+	getInfoForGuest: function(user_id_list, callback) {
+		this.find({_id: { $in: user_id_list} },
+			function(err, docs){
+				if (err) {
+
+				}
+				else {
+					res = {};
+					for (var i = 0; i < docs.length; i++) {
+						res[docs[i]._id] = only(docs[i], "_id username nickname avatar")
+					}
+					callback(res);
+				}
+			});
 	}
 	// const UserSchema = new Schema({
 	// password: { type : String},

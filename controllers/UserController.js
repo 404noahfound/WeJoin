@@ -73,8 +73,10 @@ exports.UponModify = function(req, res){
 	if(req.file){
 		var path = require('path');
 		var appDir = path.dirname(require.main.filename);
+		console.log(appDir);
 		updateInfo.avatar = req.file.path;
 		var avatar = path.join(appDir, updateInfo.avatar);
+		console.log(avatar);
 		var im = require('imagemagick');
 		im.convert(
 			// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
