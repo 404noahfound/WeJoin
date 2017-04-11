@@ -193,10 +193,6 @@ exports.GetUsersAPI = function(req, res){
 	}
 }
 
-exports.Fake = function(req,res){
-	res.json(User.fake(req.params.num));
-}
-
 
 
 

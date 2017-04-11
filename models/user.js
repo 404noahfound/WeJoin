@@ -81,6 +81,24 @@ UserSchema.methods = {
 		if(i == -1) return 0;
 		return 1;
 	},	
+
+	fakeActivity: function(){
+		var info = {organizer: this._id};
+		console.log('arrive here');
+		return new Promise(function(fulfill, reject){
+			Activity.Fake(info).then(
+				function(activity) {
+					console.log('success fake');
+					fulfill(activity);
+				},
+				function(err) {
+					console.log(err);
+					reject(err);
+				}
+			);
+
+		});
+	}
 };
 
 UserSchema.statics = {
