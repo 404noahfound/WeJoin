@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const only = require('only');
 const Note = mongoose.model('Note');
 const Activity = mongoose.model('Activity');
+const User = mongoose.model('User');
 exports.Note = function(request, response){
 	response.pageInfo.title = "Note";
 	response.pageInfo.functionality = "Note. Generate page to view my notes";
@@ -76,16 +77,18 @@ exports.NoteViewEach = function(request, response){
 	else{
 		var id = request.params.id;
 		response.pageInfo.id=id;
-		response.pageInfo.user=request.user;
 		Note.findOne({'_id':id}, function(err, docs){
 			response.pageInfo.note = docs;
-			Activity.find({'_id': docs.associated_activity}, function(err, docss){
-				console.log(docss)
-				response.pageInfo.activities = docss;
-				if(String(docs.author)==String(request.user._id)) 
-					response.pageInfo.auth = 1;
-				else response.pageInfo.auth = 0;
-				response.render('note/ViewEach', response.pageInfo);
+			Activity.findOne({'_id': docs.associated_activity}, function(err, docss){
+				response.pageInfo.user=request.user;
+				response.pageInfo.activity = docss;
+				User.findOne({'_id': docss.organizer}, function(err, docsss){
+					response.pageInfo.activity.organizer_info=docsss;
+					if(String(docs.author)==String(request.user._id)) 
+						response.pageInfo.auth = 1;
+					else response.pageInfo.auth = 0;
+					response.render('note/ViewEach', response.pageInfo);
+				});
 			});
 		});
 	}

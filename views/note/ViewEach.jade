@@ -32,10 +32,8 @@ block content
 		h5(class="ui horizontal divider header")
 			i(class="linkify icon")
 			| Related Activity
-		if (activities)
-			script.
-				alert("enters");
-			+ListActivities(activities)
+		if (activity)
+			+ListActivity(activity)
 		h5(class="ui horizontal divider header")
 			i(class="comment outline icon")
 			| Comment
