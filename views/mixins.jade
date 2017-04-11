@@ -115,7 +115,7 @@ mixin user_card(user)
 
 //- followee{_id: String}
 mixin follow(followee)
-  div(class="ui tiny follow button", followee = followee._id)
+  div(class="ui tiny follow button", followee = followee._id, style="margin-left:20px")
     div.unfollowed
       i.plus.icon
       |follow

@@ -3,115 +3,127 @@ include ../mixins
 
 block content
 	div(class="ui four column stackable grid container")
-		div(class="column")
-		div(class="three column", style="z-index: 0")
-			div(class="ui header") #{activity.title}
-			
-			button(class="ui animated teal fade button", tabindex="0", id="join")
-				div(class="visible content") Join
-				div(class="hidden content")
-					i(class="add square icon")
-			script.
-				$(document).ready(function(){
-					if (user_status == "guest") {
-						$('#join').prop('disabled', true);
-					}
-
-					$('#join').click(function(){
-						//alert("click join");
-						$.post({
-							"url": "/activity/#{activity._id}/customermodify",
-							"data": { "join": "1" },
-							"success": function(new_data){
-											//alert("repsonse");
-											if (new_data.err) {
-												alert(new_data.err);
-											}
-											else{
-												alert(new_data.join);
-												window.location.reload(true);
-											}
-										},
-							"dataType": "JSON"
-						});
-					});
-				});
-
-
-			button(class="ui animated teal fade button", tabindex="0", id="quit")
-				div(class="visible content") Quit
-				div(class="hidden content")
-					i(class="minus square icon")
-			script.
-				$(document).ready(function(){
-					if (user_status == "guest") {
-						$('#quit').prop('disabled', true);
-					}
-
-					$('#quit').click(function(){
-						//alert("click quit");
-						$.post({
-							"url": "/activity/#{activity._id}/customermodify",
-							"data": { "quit": "1" },
-							"success": function(new_data){
-											//alert("repsonse");
-											if (new_data.err) {
-												alert(new_data.err);
-											}
-											else{
-												alert(new_data.quit);
-												window.location.reload(true);
-											}
-										},
-							"dataType": "JSON"
-						});
-					});
-				});
-
-			a(id="modify_link")
-				button(class="ui animated teal fade button", tabindex="0", id="modify")
-					div(class="visible content") Modify
+		div(class="two wide column")
+		div(class="three wide column")
+			img(src=activity.picture.replace('static', ''), style="width:150px;height:150px")
+		div(class="five wide column", style="z-index: 0")
+			div(class="row", style="position:absolute; bottom:20px;")
+				div(class="ui header") #{activity.title}
+				
+				button(class="ui animated teal fade button", tabindex="0", id="join")
+					div(class="visible content") Join
 					div(class="hidden content")
-						i(class="write icon")
-			script.
-				$(document).ready(function(){
-					if (user_status != "organizer") {
-						$('#modify').prop('disabled', true);
-					}
-					else {
-						$('#modify_link').prop('href', "/activity/#{activity._id}/organizermodify");
-					}
-				});
+						i(class="add square icon")
+				script.
+					$(document).ready(function(){
+						if (user_status == "guest") {
+							$('#join').prop('disabled', true);
+						}
+
+						$('#join').click(function(){
+							//alert("click join");
+							$.post({
+								"url": "/activity/#{activity._id}/customermodify",
+								"data": { "join": "1" },
+								"success": function(new_data){
+												//alert("repsonse");
+												if (new_data.err) {
+													alert(new_data.err);
+												}
+												else{
+													alert(new_data.join);
+													window.location.reload(true);
+												}
+											},
+								"dataType": "JSON"
+							});
+						});
+					});
+
+
+				button(class="ui animated teal fade button", tabindex="0", id="quit")
+					div(class="visible content") Quit
+					div(class="hidden content")
+						i(class="minus square icon")
+				script.
+					$(document).ready(function(){
+						if (user_status == "guest") {
+							$('#quit').prop('disabled', true);
+						}
+
+						$('#quit').click(function(){
+							//alert("click quit");
+							$.post({
+								"url": "/activity/#{activity._id}/customermodify",
+								"data": { "quit": "1" },
+								"success": function(new_data){
+												//alert("repsonse");
+												if (new_data.err) {
+													alert(new_data.err);
+												}
+												else{
+													alert(new_data.quit);
+													window.location.reload(true);
+												}
+											},
+								"dataType": "JSON"
+							});
+						});
+					});
+
+				a(id="modify_link")
+					button(class="ui animated teal fade button", tabindex="0", id="modify")
+						div(class="visible content") Modify
+						div(class="hidden content")
+							i(class="write icon")
+				script.
+					$(document).ready(function(){
+						if (user_status != "organizer") {
+							$('#modify').prop('disabled', true);
+						}
+						else {
+							$('#modify_link').prop('href', "/activity/#{activity._id}/organizermodify");
+						}
+					});
+
+		div(class="column")
+			a(href="/user/#{activity.organizer_info._id}")
+				div(class="ui violet raised link card", href="/user/#{activity.organizer_info._id}", style="margin-top: 40px; margin-left:60px")
+					div(class="content")
+						img(class="right floated mini ui image" src=activity.organizer_info.avatar.replace('static', ''))
+						div(class="header") #{activity.organizer_info.nickname}
+						div(class="meta") Organizer
+						div(class="description") Elliot requested permission to view your contact details
 
 	div(class="ui stackable grid container")
+		div(class="column")
 		div(class="four wide column", id="notes_time_line")
-			div(class="ui raised segment")
+			div(class="ui container")
 				a(href="/note/create/#{activity._id}")
 					button(class="ui tiny labeled icon button", id="search_more")
 						i(class="add icon")
 						| Create More Notes...
+
 				each note in activity.notes
-					div(class='ui main text container')
-						h1(class='ui header') 
-							a(href="/note/view/#{note._id}") #{note.title}
-						h5(class='ui grey header') by 
-							em #{note.authorname} on 
-							em #{note.modified_at}	
-					br
-					div(class='ui justified text container')!= note.content
-						div(class='ui divider')
+					div(class="ui orange card")
+						div(class="content")
+							div(class="header") #{note.title}
+						div(class="content") #{note.description}
+						div(class="extra content")
+							a(href="/note/view/#{note._id}")
+								button(class="ui mini button") View Detail
 
 		div(class="ten wide column", id="activity_info")
 			div(class="ui raised segment", style="z-index: 0")
 				div(class="row", style="margin: 10px")
-					+user_label(activity.organizer_info)
-					a(href="/user/#{activity.organizer_info._id}")
-						div(class="ui tiny icon button" data-content="View his/her personal page", id="user_label", style="margin-left: 10px")
-							i(class="newspaper icon")
-						script.
-							$(document).ready(function(){
-								$("#user_label").popup();
-							});
+					//- +user_label(activity.organizer_info)
+					//- a(href="/user/#{activity.organizer_info._id}")
+					//- 	div(class="ui tiny icon button" data-content="View his/her personal page", id="user_label", style="margin-left: 10px")
+					//- 		i(class="newspaper icon")
+					//- 	script.
+					//- 		$(document).ready(function(){
+					//- 			$("#user_label").popup();
+					//- 		});
 
 				div(class="row", style="margin: 10px")
 					h4(class="ui grey header", id="time")

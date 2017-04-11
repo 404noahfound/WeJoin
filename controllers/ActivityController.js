@@ -26,7 +26,7 @@ var ToView = function(activity, callback){
 						function(res){
 							activity.organizer_info = res[activity.organizer];
 							// console.log(activity.organizer_info);
-							Note.find({ '_id': activity._id },
+							Note.find({ 'associated_activity': activity._id },
 								function(err, docs){
 									if (err) {
 										console.log(err);
@@ -54,9 +54,9 @@ exports.Search = function(request, response){
 			}
 			else response.pageInfo.activities = docs;
 			response.pageInfo.activities.sort(function(a, b){
-				if(b.time == null) return -1;
-				else if(a.time == null) return 1;
-				else return a.time - b.time;
+				if(b.start_time == null) return -1;
+				else if(a.start_time == null) return 1;
+				else return a.start_time.getTime() - b.start_time.getTime();
 			});
 
 			var user_id_list = new Array();
