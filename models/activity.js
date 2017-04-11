@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const faker = require('faker');
 const Schema = mongoose.Schema;
 
 
@@ -165,9 +166,7 @@ ActivitySchema.methods = {
 	 */
 	Rate: function(rating) {
 		console.log("activity.Rate");
-	},
-	
-
+	}
 };
 
 ActivitySchema.statics = {
@@ -298,7 +297,56 @@ ActivitySchema.statics = {
 				console.log(user._id);
 				callback(res);
 			});
+	},
+	/**
+	 * fake an new activity
+	 *  @param {Object} info info should at least include the organizer
+	 *  @return {Promise} [fulfill: created user document, reject: err]
+	 */
+	Fake: function(info){
+		var Activity = this;
+		function sample(myArray){
+			return myArray[Math.floor(Math.random() * myArray.length)];
+		}
+		new_info = {
+			title: faker.lorem.words(),
+			description: faker.lorem.paragraphs(),
+			expense: faker.finance.amount(),
+			status: sample(['future', 'going', 'finished', 'cancelled']),
+			content_for_participants: faker.lorem.paragraphs(),
+			participation_method: sample(['public', 'approval', 'only_invite'])
+		};
+		Object.assign(new_info, info);
+		console.log(new_info);
+		return new Promise(function(fulfill, reject){
+			if (!new_info.organizer) reject('organizer should be provided for fake');
+			else {
+				Activity.create(new_info)
+				.then(
+					function(activity) {fulfill(activity);},
+					function(err) {reject(err);}
+				);
+			}
+		});
 	}
+	// organizer: { type : Schema.Types.ObjectId, ref: 'User', required: 'Activity organizer cannot be empty.' }, // store the _id of the organizer
+	// title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
+	// location_id: { type : String, trim : true }, // store the google API place_id of the location
+	// location_name: { type : String, trim : true },
+	// start_time: { type : Date, default : Date.now },
+	// end_time: { type : Date, default : Date.now },
+	// type: { type : String, default : null, trim : true },
+	// description: { type : String, default : 'This Activity has no description', trim : true },
+	// expense: { type : Number, default : 0, min : 0 },
+	// status: { type : String, enum : ['future', 'going', 'finished', 'cancelled'], default : 'future' },
+	// rating: { type : Number, min : 0, max : 5, default : null },
+	// rated_participants: [{ type : Schema.Types.ObjectId, ref: 'User' }],
+	// content_for_participants: { type : String, default : null, trim : true },
+	// participation_method: { type : String, enum : ['public', 'approval', 'only_invite'], default : 'public' },
+	// remind_time: { type : Date, default : null },
+	// participants: [{ type : Schema.Types.ObjectId, ref: 'User' }],
+	// wait_for_approval: [{ type : Schema.Types.ObjectId, ref: 'User' }],
+	// created_at: { type : Date, default : Date.now }
 };
 
 mongoose.model('Activity', ActivitySchema);

@@ -86,7 +86,7 @@ exports.UponModify = function(req, res){
 	}
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
-			// res.json({message:'success', docs: docs});
+			req.flash('error', 'success');
 			res.redirect('/user/Modify');
 		},
 		function(err) {
@@ -191,10 +191,6 @@ exports.GetUsersAPI = function(req, res){
 			}
 		});
 	}
-}
-
-exports.Fake = function(req,res){
-	res.json(User.fake(req.params.num));
 }
 
 

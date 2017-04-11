@@ -15,6 +15,7 @@ module.exports = function(app){
 	// Main Routes
 	app.get('/', HomeController.Index);
 	app.get('/other', HomeController.Other);
+	app.get('/fake/:type/:num', HomeController.Fake);
 
 	//Activity Routes
 	//GetByUser for test
@@ -78,6 +79,5 @@ module.exports = function(app){
     app.get('/user/delete_all', UserController.DeleteAll);
     app.post('/user/follow_actions', UserController.FollowActions);
     app.post('/user/get_users_api', UserController.GetUsersAPI);
-    app.get('/user/fake/:num', UserController.Fake);
     app.get('/user/:id', UserController.View);
 };
