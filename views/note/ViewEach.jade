@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins
 block content
 	script.
 		$(document).ready(function(){
@@ -27,8 +28,14 @@ block content
 			i(class="share alternate icon")
 			| Share
 		div
-			<!-- Go to www.addthis.com/dashboard to customize your tools -->
 			div(class="addthis_inline_share_toolbox")
+		h5(class="ui horizontal divider header")
+			i(class="linkify icon")
+			| Related Activity
+		if (activities)
+			script.
+				alert("enters");
+			+ListActivities(activities)
 		h5(class="ui horizontal divider header")
 			i(class="comment outline icon")
 			| Comment

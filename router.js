@@ -48,6 +48,8 @@ module.exports = function(app){
 	app.get('/note', NoteController.Note);
 	app.get('/note/user/:id', NoteController.NoteUser);
 	//note create
+	app.get('/note/create/:activityid', NoteController.NoteRelatedCreate);
+	app.post('/note/create/:activityid', NoteController.UponNoteRelatedCreate);
 	app.get('/note/create', NoteController.NoteCreate);
 	app.post('/note/create', NoteController.UponNoteCreate);
 	//note modify

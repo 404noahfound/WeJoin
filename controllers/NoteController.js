@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const only = require('only');
 const Note = mongoose.model('Note');
+const Activity = mongoose.model('Activity');
 exports.Note = function(request, response){
 	response.pageInfo.title = "Note";
 	response.pageInfo.functionality = "Note. Generate page to view my notes";
@@ -78,11 +79,14 @@ exports.NoteViewEach = function(request, response){
 		response.pageInfo.user=request.user;
 		Note.findOne({'_id':id}, function(err, docs){
 			response.pageInfo.note = docs;
-
-			if(String(docs.author)==String(request.user._id)) 
-				response.pageInfo.auth = 1;
-			else response.pageInfo.auth = 0;
-			response.render('note/ViewEach', response.pageInfo);
+			Activity.find({'_id': docs.associated_activity}, function(err, docss){
+				console.log(docss)
+				response.pageInfo.activities = docss;
+				if(String(docs.author)==String(request.user._id)) 
+					response.pageInfo.auth = 1;
+				else response.pageInfo.auth = 0;
+				response.render('note/ViewEach', response.pageInfo);
+			});
 		});
 	}
 };
@@ -108,6 +112,33 @@ exports.UponNoteCreate = function(request, response){
 		request.body.author = request.user._id;
 		request.body.authorname = request.user.username;
 		const note = new Note(only(request.body, "title author content authorname note_type"));
+		note.save();
+		response.render('note/Return', response.pageInfo);
+	}
+};
+
+exports.NoteRelatedCreate = function(request, response){
+	response.pageInfo.title = "Note Create";
+	response.pageInfo.functionality = "Note.Create. Generate create Note editor page.";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		response.render('note/Create', response.pageInfo);
+	}
+};
+
+exports.UponNoteRelatedCreate = function(request, response){
+	response.pageInfo.title = "Note Upon Create";
+	response.pageInfo.functionality = "Note.UponCreate";
+	if (!request.user) {
+		response.redirect('/user/login');
+	}
+	else {
+		request.body.associated_activity = request.params.activityid;
+		request.body.author = request.user._id;
+		request.body.authorname = request.user.username;
+		const note = new Note(only(request.body, "title author content authorname note_type associated_activity"));
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}
