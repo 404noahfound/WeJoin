@@ -2,12 +2,42 @@ const mongoose = require('mongoose');
 const only = require('only');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
+const Note = mongoose.model('Note');
 const flash = require('express-flash');
-//const RegUser = mongoose.model('RegUser');
-//const Guest = mongoose.model('Guest');
-//const Note = mongoose.model('Note');
-//const Notification = mongoose.model('Notification');
-//const Request = mongoose.model('Request');
+
+var ToView = function(activity, callback){
+	User.getInfoForGuest(activity.participants,
+		function(res){
+			var res_list = new Array();
+			for (var i = 0; i < activity.participants.length; i++) {
+				res_list.push(res[activity.participants[i]]);
+			}
+			activity.participants_info = res_list;
+			// console.log(res_list);
+			User.getInfoForGuest(activity.wait_for_approval,
+				function(res){
+					var res_list = new Array();
+					for (var i = 0; i < activity.wait_for_approval.length; i++) {
+						res_list.push(res[activity.wait_for_approval[i]]);
+					}
+					activity.wait_for_approval_info = res_list;
+					// console.log(res_list);
+					User.getInfoForGuest([ activity.organizer ],
+						function(res){
+							activity.organizer_info = res[activity.organizer];
+							// console.log(activity.organizer_info);
+							Note.find({ '_id': activity._id },
+								function(err, docs){
+									if (err) {
+										console.log(err);
+									}
+									activity.notes = docs;
+									callback(activity);
+								})
+						});
+				});
+		});
+};
 
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
@@ -16,50 +46,44 @@ exports.Search = function(request, response){
 	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");
-	response.pageInfo.activities = {};
 	Activity.find(attr,
 		function(err, docs){
 			if(err){
 				console.log("Find (Search) activity Error!");
-				response.pageInfo.activities.search_results = new Array();
+				response.pageInfo.activities = new Array();
 			}
-			else response.pageInfo.activities.search_results = docs;
-			response.pageInfo.activities.search_results.sort(function(a, b){
+			else response.pageInfo.activities = docs;
+			response.pageInfo.activities.sort(function(a, b){
 				if(b.time == null) return -1;
 				else if(a.time == null) return 1;
 				else return a.time - b.time;
 			});
-			console.log(response.pageInfo.activities.search_results);
-			response.pageInfo.activities.joined = new Array();
-			response.pageInfo.activities.organized = new Array();
-			response.render('activity/ViewList', response.pageInfo);
-			/*
-			Activity.ToView(response.pageInfo.search_results,
-				function(err){
-					if(err) {
-						console.log("Activity ToView Error!");
+
+			var user_id_list = new Array();
+			for (var i = 0; i < response.pageInfo.activities.length; i++) {
+				user_id_list.push(response.pageInfo.activities[i].organizer);
+			}
+
+			User.getInfoForGuest(user_id_list,
+				function(res){
+					for (var i = 0; i < response.pageInfo.activities.length; i++) {
+						response.pageInfo.activities[i].organizer_info = res[response.pageInfo.activities[i].organizer];
+						console.log(response.pageInfo.activities[i].organizer_info);
 					}
-					console.log(response.pageInfo.search_results);
-					response.render('activity/ViewList', response.pageInfo);
+					// console.log(res);
+					// console.log(user_id_list);
+					//console.log(response.pageInfo.activities);
+					response.render('activity/ViewList', response.pageInfo);				
 				});
-			*/
 		});
 };
-
-/*
-exports.UponSearch = function(request, response){
-	response.pageInfo.title = "Search Result"
-	response.pageInfo.functionality = "Activity.UponSearch";
-	response.render('activity/UponSearch',response.pageInfo);
-};
-*/
 
 exports.View = function(request, response){
 	response.pageInfo.functionality = "Activity.View. Generate page for viewing activity";
 	response.pageInfo.title = "Activity Information";
 	Activity.find({ '_id': request.params.id }).then(
 		function(docs){
-			console.log(docs);
+			// console.log(docs);
 			response.pageInfo.activity = docs[0];
 			if (!request.user) {
 				response.pageInfo.user_status = "guest";
@@ -74,7 +98,12 @@ exports.View = function(request, response){
 				response.pageInfo.user_status = "login";
 			}
 			console.log(response.pageInfo.user_status);
-			response.render('activity/ViewSingle',response.pageInfo);
+
+			ToView(docs[0],
+				function(res){
+					response.pageInfo.activity = res;
+					response.render('activity/ViewSingle',response.pageInfo);
+				});
 		},
 		function(err){
 			console.log("Find (View) activity Error!");
@@ -92,44 +121,8 @@ exports.Create = function(request, response){
 		var activity = new Activity({'title': 'New Activity', 'organizer': request.user._id});
 		activity.save().then(
 			function(doc){
-				console.log(activity);
-				response.pageInfo.activity = activity;
+				// console.log(activity);
 				response.redirect('/activity/' + activity._id + '/organizermodify');
-			},
-			function(err){
-				console.log("Create activity Error!\n" + err);
-				response.render('home/Other',response.pageInfo);
-			});
-	}
-};
-
-exports.UponCreate = function(request, response){
-	response.pageInfo.functionality = "Create Activity";
-	response.pageInfo.title = "Create Activity";
-	console.log(request.body);
-	if (!request.user) {
-		response.redirect('/user/login');
-	}
-	else{
-		request.body.organizer = request.user._id;
-		var activity = new Activity(only(request.body, "organizer " +
-														"title " +
-														"location_id " +
-														"location_name " +
-														"time " +
-														"type " +
-														"description " +
-														"expense " +
-														"status " +
-														"content_for_participants " +
-														"participation_method " +
-														"remind_time " +
-														"created_at"));
-		activity.save().then(
-			function(doc){
-				console.log(activity);
-				response.pageInfo.activities = new Array(activity);
-				response.redirect('/activity/' + activity._id);
 			},
 			function(err){
 				console.log("Create activity Error!\n" + err);
@@ -157,9 +150,7 @@ exports.CustomerModify = function(request, response){
 						function(err, res){
 							if(err){
 								console.log("CustomerModify activity Error!\n" + err);
-								res_json = {
-									"err": err
-								}
+								res_json = { "err": err };
 								response.json(res_json);
 							}
 							else{
@@ -188,8 +179,11 @@ exports.OrganizerModify = function(request, response){
 					console.log("Error! Can't find activity organized by current user!");
 				}
 				else {
-					response.pageInfo.activity = docs[0];
-					response.render('activity/OrganizerModify', response.pageInfo);
+					ToView(docs[0],
+						function(res){
+							response.pageInfo.activity = res;
+							response.render('activity/OrganizerModify', response.pageInfo);
+						});
 				}
 			});
 	}
@@ -202,6 +196,23 @@ exports.UponOrganizerModify = function(request, response){
 		response.redirect('/user/login');
 	}
 	else{
+		console.log(request.file);
+		if(request.file){
+			var path = require('path');
+			var appDir = path.dirname(require.main.filename);
+			console.log(appDir);
+			request.body.picture = request.file.path;
+			var picture = path.join(appDir, request.body.picture);
+			console.log(picture);
+			var im = require('imagemagick');
+			im.convert(
+				// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+				[picture, '-resize', "256x256!", picture],
+				function(err, stdout, stderr){
+					if (err) throw err;
+					console.log('resized new avatar to fit within 200x200px');
+			})
+		}
 		Activity.find({ '_id': request.params.id, 'organizer': request.user._id }).then(
 			function(docs){
 				if(docs.length == 0){
@@ -223,17 +234,21 @@ exports.UponOrganizerModify = function(request, response){
 																	"participation_method " +
 																	"remind_time " +
 																	"new_participants " +
-																	"removed_participants"
+																	"removed_participants " +
+																	"picture"
 																	),
 						function(err, res){
 							if(err){
 								console.log("OrganizerModify activity Error!\n" + err);
-								response.pageInfo.activity = activity;
-								response.pageInfo.error = err;
-								response.render('activity/OrganizerModify', response.pageInfo);
+								ToView(activity,
+									function(res){
+										response.pageInfo.activity = res;
+										response.pageInfo.error = err;
+										response.render('activity/OrganizerModify', response.pageInfo);
+
+									});
 							}
 							else{
-								response.pageInfo.activity = activity;
 								response.redirect('/activity/' + activity._id);
 							}
 						});
@@ -259,7 +274,7 @@ exports.AddParticipant = function(request, response){
 	response.render('activity/View',response.pageInfo);
 };
 */
-
+/*
 // for test
 exports.GetByUser = function(request, response){
 	response.pageInfo.title = "User's activities";
@@ -273,4 +288,5 @@ exports.GetByUser = function(request, response){
 			});
 	}
 };
+*/
 

@@ -15,15 +15,15 @@ module.exports = function(app){
 	// Main Routes
 	app.get('/', HomeController.Index);
 	app.get('/other', HomeController.Other);
+	app.get('/fake/:type/:num', HomeController.Fake);
 
 	//Activity Routes
 	//GetByUser for test
-	app.get('/activity/getbyuser', ActivityController.GetByUser);
+	//app.get('/activity/getbyuser', ActivityController.GetByUser);
 	//DeleteAll
 	app.get('/activity/delete_all', ActivityController.DeleteAll);
 	//Create
 	app.get('/activity/create', ActivityController.Create);
-	app.post('/activity/create', ActivityController.UponCreate);
 	//Search
 	app.post('/activity/search', ActivityController.Search);
 	//View
@@ -32,7 +32,7 @@ module.exports = function(app){
 	app.post('/activity/:id/customermodify', ActivityController.CustomerModify);
 	//OrganizerModify
 	app.get('/activity/:id/organizermodify', ActivityController.OrganizerModify);
-	app.post('/activity/:id/organizermodify', ActivityController.UponOrganizerModify);
+	app.post('/activity/:id/organizermodify', uploading.single('picture'), ActivityController.UponOrganizerModify);
 
 	//notification
 	app.get('/notification', AccountController.Notification);
@@ -80,6 +80,5 @@ module.exports = function(app){
     app.get('/user/delete_all', UserController.DeleteAll);
     app.post('/user/follow_actions', UserController.FollowActions);
     app.post('/user/get_users_api', UserController.GetUsersAPI);
-    app.get('/user/fake/:num', UserController.Fake);
     app.get('/user/:id', UserController.View);
 };

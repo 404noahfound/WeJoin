@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins
 
 block content
 	link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
@@ -10,7 +11,7 @@ block content
 		if (error)
 			div(class="ui error message") #{error}
 
-		form(class="ui form", id="modify", method="post", style="margin: 0px 10px")
+		form(class="ui form", id="modify", method="post", style="margin: 0px 10px", enctype="multipart/form-data")
 			div(class="field")
 				label Title
 				input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)")
@@ -78,6 +79,34 @@ block content
 					label Expense
 					input(type="text", id="expense", name="expense", placeholder="Activity Expense")
 
+			div(class="two fields")
+				div(class="field")
+					label Approve Waiting Users
+					div(class="ui fluid multiple selection dropdown", id="new_participants")
+						input(type="hidden" name="new_participants")
+						i(class="dropdown icon")
+						div(class="default text") Approval
+						div(class="menu")
+							each user in activity.wait_for_approval_info
+								div(class="item", data-value="#{user._id}")
+									+user_label(user)
+					script.
+						$('#new_participants').dropdown();
+
+				div(class="field")
+					label Remove Participants
+					div(class="ui fluid multiple selection dropdown", id="removed_participants")
+						input(type="hidden" name="removed_participants")
+						i(class="dropdown icon")
+						div(class="default text") Remove Participants
+						div(class="menu")
+							each user in activity.participants_info
+								div(class="item", data-value="#{user._id}")
+									+user_label(user)
+					script.
+						$('#removed_participants').dropdown();
+
+
 			div(class="field")
 				label Content for Participants
 				textarea(name="content_for_participants", id="content_for_participants", rows="3")
@@ -87,37 +116,12 @@ block content
 				label Description
 				textarea(name="description", id="description")
 
-			button(class="ui tiny button" type="submit") Submit
+			label Current Picture
+			div(class="ui fluid bordered rounded image")
+				img(src=activity.picture.replace('static',''), style="width:200px;height:200px")
+			div(class="field")
+				label Upload Picture
+				input(type="file" name="picture")
 
-
-
-
-
-
-	h1 #{activity.title}
-	form(name="activity", method="post")
-		span.label Title
-		br
-		input(type="text", name="title")
-		br
-
-		span.label Description
-		br
-		input(type="text", name="description")
-		br
-
-		span.label Location_name
-		br
-		input(type="text", name="location_name")
-		br
-
-		input(type="submit", value="Create")
-	p
-	link(href="https://cdn.quilljs.com/1.2.2/quill.snow.css", rel="stylesheet")
-	div#editor
-		p Hello World!
-	script(src="https://cdn.quilljs.com/1.2.2/quill.js")
-	script.
-		var quill = new Quill('#editor', {
-			theme: 'snow'
-		});
+			div(class="actions")
+				input(class="ui tiny button" type="submit" value="Submit")

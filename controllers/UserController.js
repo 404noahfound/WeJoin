@@ -73,8 +73,10 @@ exports.UponModify = function(req, res){
 	if(req.file){
 		var path = require('path');
 		var appDir = path.dirname(require.main.filename);
+		console.log(appDir);
 		updateInfo.avatar = req.file.path;
 		var avatar = path.join(appDir, updateInfo.avatar);
+		console.log(avatar);
 		var im = require('imagemagick');
 		im.convert(
 			// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
@@ -86,7 +88,7 @@ exports.UponModify = function(req, res){
 	}
 	User.update({_id: req.user._id}, updateInfo).then(
 		function(docs) {
-			// res.json({message:'success', docs: docs});
+			req.flash('error', 'success');
 			res.redirect('/user/Modify');
 		},
 		function(err) {
@@ -191,10 +193,6 @@ exports.GetUsersAPI = function(req, res){
 			}
 		});
 	}
-}
-
-exports.Fake = function(req,res){
-	res.json(User.fake(req.params.num));
 }
 
 
