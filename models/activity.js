@@ -20,7 +20,8 @@ const ActivitySchema = new Schema({
 	remind_time: { type : Date, default : null },
 	participants: [{ type : Schema.Types.ObjectId, ref: 'User' }],
 	wait_for_approval: [{ type : Schema.Types.ObjectId, ref: 'User' }],
-	created_at: { type : Date, default : Date.now }
+	created_at: { type : Date, default : Date.now },
+	picture: { type : String, default : "https://semantic-ui.com/examples/assets/images/wireframe/image.png" }
 });
 
 
@@ -90,23 +91,25 @@ ActivitySchema.methods = {
 		else {
 			console.log("activity.DirectlyModify");
 			const directly_modified_keys = ["title", "location_id", "location_name", "start_time", "end_time", "type ", "description",
-								"expense", "status", "content_for_participants", "participation_method", "remind_time"];
+								"expense", "status", "content_for_participants", "participation_method", "remind_time", "picture"];
 			//attr = this.PurifyForm(attr); // ?????? what the fuck? why it can stuck here???
 			console.log(attr);
 			for (key in attr) {
 				if (!attr[key]) continue;
 				if (directly_modified_keys.indexOf(key) != -1) { this[key] = attr[key]; }
 				else if (key == 'new_participants') {
-					for (each in attr.new_participants) {
-						var i = this.wait_for_approval.indexOf(each);
-						this.wait_for_approval.splice(i, 1);
-						this.participants.push(each);
+					var list = attr.new_participants.split(',');
+					for (var i = 0; i < list.length; i++) {
+						var j = this.wait_for_approval.indexOf(list[i]);
+						this.wait_for_approval.splice(j, 1);
+						this.participants.push(list[i]);
 					}
 				}
 				else if (key == 'removed_participants') {
-					for (each in attr.removed_participants) {
-						var i = this.participants.indexOf(each);
-						this.participants.splice(i, 1);
+					var list = attr.removed_participants.split(',');
+					for (var i = 0; i < list.length; i++) {
+						var j = this.participants.indexOf(list[i]);
+						this.participants.splice(j, 1);
 					}
 				}
 			}
@@ -139,7 +142,31 @@ ActivitySchema.methods = {
 			return false;
 		}
 	},
-
+/*
+	ToView: function(callback){
+		User.getInfoForGuest(this.participants,
+			function(res){
+				var res_list = new Array();
+				for (var i = 0; i < this.participants.length; i++) {
+					res_list.push(res[this.participants[i]]);
+				}
+				this.participants_info = res_list;
+				User.getInfoForGuest(this.wait_for_approval,
+					function(res){
+						var res_list = new Array();
+						for (var i = 0; i < this.wait_for_approval.length; i++) {
+							res_list.push(res[this.wait_for_approval[i]]);
+						}
+						this.wait_for_approval_info = res_list;
+						User.getInfoForGuest([ this.organizer ],
+							function(res){
+								this.organizer_info = res[this.organizer];
+								callback(this);
+							});
+					});
+			});
+	},
+*/
 	/**
 	 * Delete function:
 	 *   @param {String} activity_id (the ObjectId of a activity)
@@ -228,77 +255,110 @@ ActivitySchema.statics = {
 		return searchForm;
 	},
 
+	// /**
+	//  * GetByUser function:
+	//  *   @param {JSON} user
+	//  *   @return {[doc]} an array of activities
+	//  *   get the activities joined by the given user
+	//  */
+	// GetByUser: function(user, callback) {
+	// 	console.log("Activity.GetByUser");
+	// 	var activities = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
+	// 	this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
+	// 		function(err, docs){
+	// 			if (err) {
+	// 				console.log("Find (GetByUser) activity Error!");
+	// 				callback(null);
+	// 			}
+	// 			else {
+	// 				for (var i = 0; i < docs.length; i++){
+	// 					var activity = docs[i];
+	// 					var j = activity.participants.indexOf(user._id);
+	// 					if (j != -1) {
+	// 						activities.joined.push(activity);
+	// 					}
+	// 					j = activity.wait_for_approval.indexOf(user._id);
+	// 					if (j != -1) {
+	// 						activities.wait_for_approval.push(activity);
+	// 					}
+	// 					if (activity.organizer.equals(user._id)) {
+	// 						activities.organized.push(activity);
+	// 					}
+	// 				}
+	// 				callback(activities);
+	// 			}
+	// 		});
+	// },
+
 	/**
 	 * GetByUser function:
 	 *   @param {JSON} user
 	 *   @return {[doc]} an array of activities
 	 *   get the activities joined by the given user
 	 */
+
 	GetByUser: function(user, callback) {
-		// console.log("Activity.GetByUser");
-		var res = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
+		console.log("Activity.GetByUser");
+		var activities = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
 		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
 			function(err, docs){
 				if (err) {
 					console.log("Find (GetByUser) activity Error!");
+					callback(null);
 				}
 				else {
 					for (var i = 0; i < docs.length; i++){
 						var activity = docs[i];
 						var j = activity.participants.indexOf(user._id);
 						if (j != -1) {
-							res.joined.push(activity);
+							activities.joined.push(activity);
 						}
 						j = activity.wait_for_approval.indexOf(user._id);
 						if (j != -1) {
-							res.wait_for_approval.push(activity);
+							activities.wait_for_approval.push(activity);
 						}
 						if (activity.organizer.equals(user._id)) {
-							res.organized.push(activity);
+							activities.organized.push(activity);
 						}
 					}
+
+					var user_id_list = new Array();
+					for (var i = 0; i < activities.joined.length; i++) {
+						user_id_list.push(activities.joined[i].organizer);
+					}
+					mongoose.model('User').getInfoForGuest(user_id_list,
+						function(res){
+							for (var i = 0; i < activities.joined.length; i++) {
+								activities.joined[i].organizer_info = res[activities.joined[i].organizer];
+							}
+
+							var user_id_list = new Array();
+							for (var i = 0; i < activities.wait_for_approval.length; i++) {
+								user_id_list.push(activities.wait_for_approval[i].organizer);
+							}
+							mongoose.model('User').getInfoForGuest(user_id_list,
+								function(res){
+									for (var i = 0; i < activities.wait_for_approval.length; i++) {
+										activities.wait_for_approval[i].organizer_info = res[activities.wait_for_approval[i].organizer];
+									}
+
+									var user_id_list = new Array();
+									for (var i = 0; i < activities.organized.length; i++) {
+										user_id_list.push(activities.organized[i].organizer);
+									}
+									mongoose.model('User').getInfoForGuest(user_id_list,
+										function(res){
+											for (var i = 0; i < activities.organized.length; i++) {
+												activities.organized[i].organizer_info = res[activities.organized[i].organizer];
+											}
+											callback(activities);
+										});		
+								});
+						});
 				}
-				// console.log(docs);
-				// console.log(user._id);
-				callback(res);
 			});
 	},
 
-	/**
-	 * ToView function:
-	 *   @param {JSON} user
-	 *   @return {[doc]} an array of activities
-	 *   get the activities joined by the given user
-	 */
-	ToView: function(activities, callback) {
-		console.log("Activity.GetByUser");
-		var res = { 'joined': [], 'wait_for_approval': [], 'organized': [] };
-		this.find({ $or: [{'participants': user._id}, {'wait_for_approval': user._id}, {'organizer': user._id}] },
-			function(err, docs){
-				if (err) {
-					console.log("Find (GetByUser) activity Error!");
-				}
-				else {
-					for (var i = 0; i < docs.length; i++){
-						var activity = docs[i];
-						var j = activity.participants.indexOf(user._id);
-						if (j != -1) {
-							res.joined.push(activity);
-						}
-						j = activity.wait_for_approval.indexOf(user._id);
-						if (j != -1) {
-							res.wait_for_approval.push(activity);
-						}
-						if (activity.organizer.equals(user._id)) {
-							res.organized.push(activity);
-						}
-					}
-				}
-				console.log(docs);
-				console.log(user._id);
-				callback(res);
-			});
-	}
 };
 
 mongoose.model('Activity', ActivitySchema);
