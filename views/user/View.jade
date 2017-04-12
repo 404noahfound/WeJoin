@@ -82,15 +82,32 @@ block content
                 a.item(href="/user/modify") My Profile
 
       div.twelve.wide.column
-        - var cl = "ui segment section "
+        - var cl = "section "
         div(class=cl + segment_ids[0])
-          +ListActivities(activities.organized)
+          if (activities.organized && activities.organized.length > 0)
+            div.ui.segment
+              +ListActivities(activities.organized)
+          else
+            div.ui.message
+              p No Activities Found.
         div(class=cl + segment_ids[1])
-          +ListActivities(activities.joined)
+          if (activities.joined && activities.joined.length > 0)
+            div.ui.segment
+              +ListActivities(activities.joined)
+          else
+            div.ui.message
+              p No Activities Found.
         div(class=cl + segment_ids[2])
-          +ListActivities(activities.wait_for_approval)
+          if (activities.wait_for_approval && activities.wait_for_approval.length > 0)
+            div.ui.segment
+              +ListActivities(activities.wait_for_approval)
+          else
+            div.ui.message
+              p No Activities Found.
         div(class="section " + segment_ids[3])
-          +ListNotes(notes)
+          if (notes && notes.length > 0)
+            div.ui.segment
+              +ListNotes(notes)
         div(class=cl + segment_ids[4])
           div.ui.grid
             - for (i = 0; i < follows.length; i++)
