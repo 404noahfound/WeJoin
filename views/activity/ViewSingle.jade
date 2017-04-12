@@ -167,6 +167,13 @@ block content
                     h4(class="ui grey header", id="location")
                         i(class="location arrow icon")
                         | #{activity.location_name}
+                if activity.participants_info
+                    div.row(style="margin: 10px")
+                        h4.ui.grey.header
+                            //- i.left.floated.user.icon
+                            |&nbsp&nbspParticipants:
+                            for participant in activity.participants_info
+                                +user_label(participant)
 
                 div(class="row", style="margin: 10px")
                     if activity.status == "future"
