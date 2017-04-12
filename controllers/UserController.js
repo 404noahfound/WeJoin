@@ -99,19 +99,19 @@ exports.UponModify = function(req, res){
 
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
+	console.log(req.params.id);
 	User.findById(req.params.id)
 	.exec(
-		function(user){
-			user.getInfoForView(function(info){
-				// console.log(info);
-				Object.assign(res.pageInfo, info);
-				res.pageInfo.pp = 'His';
-				res.render('user/View', res.pageInfo);
-		},
-		function(err){
-			res.json(err);
-		}
-	);
+		function(err, user){
+			if (err){
+				res.json(err);
+			} else {
+				user.getInfoForView(function(info){
+					Object.assign(res.pageInfo, info);
+					res.pageInfo.pp = 'His';
+					res.render('user/View', res.pageInfo);
+				});
+			}
 	});
 };
 

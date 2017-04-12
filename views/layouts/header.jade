@@ -3,10 +3,12 @@ div(class="ui borderless main menu")
     a( href="/")
       img(class="ui image" src="/images/wejoin.png", style="width:120px;height:50px")
     div.ui.dropdown.item._search
+      div.text Activity
+      i.caret.right.icon
       div.menu
-        div.item(meta-search-url = '/activity/search') Activities
-        div.item(meta-search-url = '/note/search') Notes
-        div.item(meta-search-url = '/user/search') Users
+        div.item(meta-search-url = '/activity/search', meta-ph = 'Search Activities...') Activities
+        div.item(meta-search-url = '/note/search', meta-ph = 'Search Notes...') Notes
+        div.item(meta-search-url = '/user/search', meta-ph = 'Search Users...') Users
     div(class="ui search item")
       form(id="search_activities_by_keyword", method="post", action="/activity/search")
         div(class="field")
@@ -37,9 +39,13 @@ div(class="ui borderless main menu")
       $('.main.menu  .ui.dropdown').dropdown({
           on: 'hover'
         });
-      $('._search.dropdown').dropdown();
+      $('._search.dropdown').dropdown({
+        on: 'hover'
+      });
       $('._search.dropdown .item').click(function(){
         var url = $(this).attr('meta-search-url');
+        var ph = $(this).attr('meta-ph');
         $('#search_activities_by_keyword').attr('action', url);
+        $('#search_activities_by_keyword input').attr('placeholder', ph);
       })
     });
