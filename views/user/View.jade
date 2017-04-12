@@ -68,7 +68,7 @@ block content
           div.item
             div.header Notes
             div.menu
-              a.item(href="/note") #{pp} Notes
+              a.item(class="item " + segment_ids[3]) #{pp} Notes
               if (pp == 'My')
                 a.item(href="/note/create") Create New Note
           div.item
@@ -89,11 +89,14 @@ block content
           +ListActivities(activities.joined)
         div(class=cl + segment_ids[2])
           +ListActivities(activities.wait_for_approval)
+        div(class="section " + segment_ids[3])
+          +ListNotes(notes)
         div(class=cl + segment_ids[4])
           div.ui.grid
             - for (i = 0; i < follows.length; i++)
               div.four.wide.column
                 +user_card(follows[i])
+
 
           
 
