@@ -4,7 +4,7 @@ meta(charset="utf-8")
 block content
 	div(class='ui main text container')
 		br
-		form(name="note", method="post", class="ui form", autocomplete="off")
+		form(name="note", method="post", class="ui form", autocomplete="off", enctype="multipart/form-data")
 			div(class="input")
 				h5(class="ui horizontal divider header")
 					i(class="pin icon")
@@ -15,19 +15,29 @@ block content
 				h5(class="ui horizontal divider header")
 					i(class="edit icon")
 					| Content
-				select(class="ui fluid dropdown", name="note_type")
-					option(value="activity") Choose a type
+				select(class="ui fluid dropdown")
 					option(value="activity") Activity Diary
 					option(value="share") Experience Sharing
 					option(value="life") Personal Life
-				textarea(type="text", name="content")
+			br
+			div(class=field)
+				input(type="text", name="short_description", placeholder="Input on line description...")
+			br
+			textarea(type="text", name="content", placeholder="This activity is perfect...")
 			div(class="ui divider")
+			br
+			div(class="field")
+				label Upload Picture
+				input(type="file" name="picture")
 			button(class="ui primary button" type="submit") Save
 			button(class="ui button" type="reset") Reset
 
 
 	script(src="https://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js")
 	script.
+		$(document).ready(function(){
+			$('.ui.fluid.dropdown').dropdown();
+		});
 		CKEDITOR.replace( 'content', {
 			// Define the toolbar: http://docs.ckeditor.com/#!/guide/dev_toolbar
 			// The standard preset from CDN which we used as a base provides more features than we need.

@@ -18,8 +18,7 @@ mixin ListActivities(activities)
             br
             a(style="margin-right: 50px") Location: #{activity.location_name}
             br
-          div(class="description").
-            #{activity.description}
+          div(class="description")!= activity.description
           div(class="extra")
             if activity.status == "future"
               div(class="ui purple label") #{activity.status}
@@ -53,8 +52,7 @@ mixin ListActivity(activity)
           br
           a(style="margin-right: 50px") Location: #{activity.location_name}
           br
-        div(class="description").
-          #{activity.description}
+        div(class="description")!= activity.description
         div(class="extra")
           if activity.status == "future"
             div(class="ui purple label") #{activity.status}
@@ -88,7 +86,7 @@ mixin ListNotes(notes)
                 div(class="ui float segment")
                     div(class="ui grid")
                         div(class="four wide column")
-                            img(class="ui small rounded image" src="/images/#{note.note_type}.png")
+                            img(class="ui small rounded image" src=note.picture)
                         div(class="twelve wide column")
                             h1(class='ui header') #{note.title}
                             h5(class='ui grey header') 
@@ -98,6 +96,7 @@ mixin ListNotes(notes)
                                 div
                                     i(class="calendar icon") 
                                     |#{note.modified_at}
+                            h4(class='ui text container', style="color:grey") #{note.short_description}
             div(class='ui divider')
 
 //- user{avatar: String, nickname: String}

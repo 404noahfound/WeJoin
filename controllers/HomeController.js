@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
-
+const Note = mongoose.model('Note');
 
 exports.Index = function(req, res){
 	res.pageInfo.title = 'HomePage';
@@ -25,7 +25,10 @@ exports.Index = function(req, res){
 
 exports.Fake = function(req,res){
 	if(req.params.type == 'user') res.json(User.fake(req.params.num));
-	else if(req.params.type == 'activity'){
+	else if (req.params.type == 'note'){
+		res.json(Note.fake(req.params.num,req.user));
+	}
+	else if (req.params.type == 'activity'){
 		User.findOne({id: req.user._id}).exec()
 		.then(
 			function(user){

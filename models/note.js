@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const relationship = require("mongoose-relationship");
+const faker = require('faker');
 
 const NoteSchema = new Schema({
 	title: {
@@ -16,6 +17,11 @@ const NoteSchema = new Schema({
 			type: String,
 			default: "activity"
 	},
+	short_description: {
+			type: String,
+			default : "This Note has no description",
+			trim: true
+	},
 	content:{ 
 			type : String, 
 			default : 'This Note has no content', 
@@ -23,7 +29,7 @@ const NoteSchema = new Schema({
 	associated_activity: {
 			type : Schema.Types.ObjectId,
 			default: null},
-
+	picture : { type :String, default: "/images/snowball.jpg"},
 	created_at  : { type : Date, default : Date.now },
 	modified_at : { type : Date, default : Date.now },
 	highlighted: { type : Boolean, default : false }
@@ -80,14 +86,33 @@ NoteSchema.statics = {
 		});
 	},
 
-	/**
-	 * search function:
-	 *   @param {JSON} attr (attributes of a note)
-	 *   @return {[doc]} an array of activities
-	 *   search for activities that fit the requirements
-	 */
-	Search: function(attr) {
-		return new Array();
+	fake: function(num,user){
+		var note_info = [];
+		for(var i = 0; i < num; i++){
+			var paragraphs="";
+			for(var j=0 ; j<10; j++){
+				if(j==4){
+					var picture ="<p><img src="+faker.image.image()+"></p>"
+					paragraphs=paragraphs.concat(picture);
+				}
+				var paragraph = "<p>"+ faker.lorem.sentences()+"</p>"
+				console.log(paragraph)
+				paragraphs= paragraphs.concat(paragraph);
+				console.log(paragraphs)
+			};
+			note_info.push({
+				title: faker.lorem.sentence(),
+				author: user._id,
+				authorname: user.username,
+				content: paragraphs,
+				short_description: faker.lorem.sentence(),
+				picture : faker.image.image()
+			});
+		}
+		this.create(note_info, function(err, users){
+			if(err) console.log(err);
+		});
+		return note_info;
 	},
 	/**
 	 * GetByUser function:

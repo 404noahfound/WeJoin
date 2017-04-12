@@ -10,12 +10,12 @@ block content
 			});
 		});
 	each note in notes
-		div(class='ui main text container', style="color:inherit")
+		div(class='ui main text container')
 			a(href="/note/view/#{note._id}")
 				div(class="ui float segment")
 					div(class="ui grid")
 						div(class="four wide column")
-							img(class="ui small image" src="/images/#{note.note_type}.png")
+							img(class="ui small image" src=note.picture.replace('static', ''))
 						div(class="twelve wide column")
 							h1(class='ui header') #{note.title}
 							h5(class='ui grey header') 
@@ -25,4 +25,5 @@ block content
 								div
 									i(class="calendar icon") 
 									|#{note.modified_at}
+							h4(class='ui text container', style="color:grey") #{note.short_description}
 			div(class='ui divider')
