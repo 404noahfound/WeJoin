@@ -158,11 +158,14 @@ block content
                         i(class="calendar outline icon")
                         | To: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#{activity.end_time}
 
+                style.
+                    #location:hover{
+                        cursor: pointer;
+                    }
                 div(class="row", style="margin: 10px")
                     h4(class="ui grey header", id="location")
                         i(class="location arrow icon")
                         | #{activity.location_name}
-                div(id="map", style="z-index: 0")
 
                 div(class="row", style="margin: 10px")
                     if activity.status == "future"
@@ -237,3 +240,16 @@ block content
                     div(class="ui piled segment")
                         h4(class="header") Description
                         div!= activity.description
+
+    div(class="ui basic modal", id="map_container")
+        div.content
+            iframe(width="800" height="500" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDcab1nkLhhjx3FLg6Ve7TCzUfsOQsEdTk&q="+activity.location_name.replace(' ', '+'), allowfullscreen)
+        script.
+            $(document).ready(function(){
+                $('#location').click(function(){
+                    $('#map_container').modal('show');
+                });
+                //- $('.iframe').prop('src', "https://www.google.com/maps/embed/v1/place?key=AIzaSyDcab1nkLhhjx3FLg6Ve7TCzUfsOQsEdTk&q="+activity.location_name.replace(' ', '+'));
+                $('.iframe').attr('src', "https://www.google.com/maps/embed/v1/place?key=AIzaSyDcab1nkLhhjx3FLg6Ve7TCzUfsOQsEdTk&q="+activity.location_name.replace(' ', '+'))
+            });
+
