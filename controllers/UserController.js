@@ -121,7 +121,7 @@ exports.Index = function(req, res){
 	// 	res.pageInfo.users = docs;
 	// 	res.render('user/Index', res.pageInfo);
 	// });
-	User.find({}).then(
+	User.find({}).limit(100).then(
 		function(docs){
 			res.pageInfo.users = docs;
 			res.render('user/Index', res.pageInfo);
@@ -129,6 +129,21 @@ exports.Index = function(req, res){
 
 		});
 };
+
+exports.Search = function(req, res){
+	res.pageInfo.title = "Search Result";
+	User.find({nickname: req.params.keyword}).limit(100)
+	.then(
+		function(users){
+			console.log(users);
+			res.pageInfo.users = users;
+			res.render('user/Index');
+		},
+		function(err){
+			res.json(err);
+		}
+	);
+}
 
 exports.LogOut = function(req,res){
 	req.logout();
