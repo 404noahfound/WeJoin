@@ -72,32 +72,23 @@ mixin ListActivity(activity)
               i(class="right chevron icon")
 
 mixin ListNotes(notes)
-    script.
-        $(document).ready(function() {
-            $('.ui.float.segment').hover(function(){
-                $(this).css("background-color","#F0F0F0");
-            }, function(){
-                $(this).css("background-color","white");
-            });
-        });
+  div(class='ui main container', style="color:inherit")
     each note in notes
-        div(class='ui main text container', style="color:inherit")
-            a(href="/note/view/#{note._id}")
-                div(class="ui float segment")
-                    div(class="ui grid")
-                        div(class="four wide column")
-                            img(class="ui small rounded image" src=note.picture)
-                        div(class="twelve wide column")
-                            h1(class='ui header') #{note.title}
-                            h5(class='ui grey header') 
-                                div
-                                    i(class="user icon")
-                                    |#{note.authorname}
-                                div
-                                    i(class="calendar icon") 
-                                    |#{note.modified_at}
-                            h4(class='ui text container', style="color:grey") #{note.short_description}
-            div(class='ui divider')
+      a(href="/note/view/#{note._id}")
+          div(class="ui float segment note")
+              div(class="ui grid")
+                  div(class="four wide column")
+                      img(class="ui small rounded image" src=note.picture)
+                  div(class="twelve wide column")
+                      h1(class='ui header') #{note.title}
+                      h5(class='ui grey header') 
+                          div
+                              i(class="user icon")
+                              |#{note.authorname}
+                          div
+                              i(class="calendar icon") 
+                              |#{note.modified_at}
+                      h4(class='ui text container', style="color:grey") #{note.short_description}
 
 //- user{avatar: String, nickname: String}
 mixin user_label(user)
@@ -111,7 +102,7 @@ mixin user_card(user)
   - if (user.gender == 'Female') {color = 'red';}
   a(class="ui raised link card " + color, href= "/user/" + user._id)
     div.image
-     img(src=user.avatar)
+     img(src=user.avatar.replace('static', ''))
     div.content
       div.header #{user.nickname}
 

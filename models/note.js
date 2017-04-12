@@ -119,7 +119,8 @@ NoteSchema.statics = {
 	 *   get the notes written by the given user
 	 */
 	GetByUser: function(user) {
-		return new Array();
+		if (user._id) user = user._id;
+		return this.find({'author': user});
 	},
 	Search: function(keyword) {
 		return this

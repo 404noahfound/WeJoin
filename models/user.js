@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const relationship = require("mongoose-relationship");
 const Activity = mongoose.model('Activity');
+const Note = mongoose.model('Note');
 const only = require('only');
 const faker = require('faker');
 
@@ -61,7 +62,14 @@ UserSchema.methods = {
 					follows[i] = only(follows[i], "_id avatar nickname username");
 				}
 				info.follows = follows;
-				callback(info);
+				Note.GetByUser(this_user)
+				.then(
+					function(notes){
+						info.notes = notes;
+						console.log(info);
+						callback(info);
+					}
+				);
 			});
 		});
 	},

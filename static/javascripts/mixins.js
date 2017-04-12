@@ -41,4 +41,9 @@ $(document).ready(function(){
 		// console.log(followee);
 		setFollowButtonState(this);
 	});
+    $('.ui.float.segment.note').hover(function(){
+                $(this).css("background-color","#F0F0F0");
+            }, function(){
+                $(this).css("background-color","white");
+            });
 });
