@@ -61,7 +61,7 @@ module.exports = function(app){
 	app.get('/note/delete', NoteController.NoteDelete);
 	app.get('/note/delete/:id', NoteController.NoteDeleteEach);
 	app.post('/note/delete/:id', NoteController.UponNoteDeleteEach);
-	app.get('/note/deleteall',NoteController.DeleteAll);
+	app.get('/note/delete_all',NoteController.DeleteAll);
 	//note search
 	app.get('/note/search', NoteController.NoteSearch);
 	app.post('/note/search', NoteController.UponNoteSearch);
