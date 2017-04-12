@@ -42,6 +42,10 @@ var ToView = function(activity, callback){
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.body;
+	if(attr.keyword) {
+		attr.title = attr.keyword;
+		attr.keyword = "";
+	}
 	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");
