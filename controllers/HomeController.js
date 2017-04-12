@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+	const mongoose = require('mongoose');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
 const Note = mongoose.model('Note');
@@ -49,7 +49,12 @@ exports.Fake = function(req,res){
 		);
 	}
 }
- 
+
+exports.Test = function(req, res){
+	res.pageInfo.title = "Test";
+	res.render('home/Test', res.pageInfo);
+}
+
 exports.Other = function(request, response){
 	response.pageInfo.title = 'Other';
     response.render('home/Other', response.pageInfo);
