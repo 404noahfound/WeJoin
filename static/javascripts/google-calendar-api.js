@@ -19,7 +19,7 @@ function initClient() {
 }
 function updateSigninStatus(isSignedIn) {
   var cbutton = $('#google-calendar-button');
-  cbuton.off('click');
+  cbutton.off('click');
   if (isSignedIn) {
     cbutton.click(function(){
       // console.log('signed in!');
