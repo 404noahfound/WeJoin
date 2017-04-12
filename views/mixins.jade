@@ -92,7 +92,7 @@ mixin ListNotes(notes)
 
 //- user{avatar: String, nickname: String}
 mixin user_label(user)
-  div.ui.image.label
+  a.ui.image.label(href='/user/'+user._id)
     img(src=user.avatar.replace('static', ''))
     //- | &nbsp&nbsp&nbsp#{user.nickname}
     |#{user.nickname}
