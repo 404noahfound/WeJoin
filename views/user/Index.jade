@@ -7,13 +7,14 @@ block content
   //-   div 
   //-     a(href='user/' + user._id) #{user.username}
   //-     spam #{user}
+  br
   div.ui.grid.container
     if users && users.length > 0
       each user in users
         div.four.wide.column
           +user_card(user)
     else
-      div.fluid.column
+      div.ui.main.text.container
         div.ui.floating.error.message
           div.header No User Found
           p Please try another keyword.

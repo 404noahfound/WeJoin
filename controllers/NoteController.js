@@ -79,7 +79,6 @@ exports.NoteViewEach = function(request, response){
 		response.pageInfo.id=id;
 		Note.findOne({'_id':id}, function(err, docs){
 			response.pageInfo.note = docs;
-			console.log(docs);
 			Activity.findOne({'_id': docs.associated_activity}, function(err, docss){
 				response.pageInfo.user=request.user;
 				response.pageInfo.activity = docss;
@@ -139,9 +138,7 @@ exports.UponNoteCreate = function(request, response){
 		}
 		request.body.author = request.user._id;
 		request.body.authorname = request.user.username;
-		console.log(request.body);
 		const note = new Note(only(request.body, "title author content authorname note_type short_description picture"));
-		console.log(request.body);
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}

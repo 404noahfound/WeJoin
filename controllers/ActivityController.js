@@ -42,7 +42,6 @@ var ToView = function(activity, callback){
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.body;
-	console.log(request.body);
 	attr = Activity.SearchForm(attr);
 	console.log(attr);
 	console.log("Activity.Search");

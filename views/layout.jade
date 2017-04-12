@@ -10,16 +10,21 @@ html
 			script(src="/javascripts/mixins.js")
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css')
 		style.
+			body{height:100%;margin:0;padding:0;}
+			.pusher{min-height:100%;}
+			main{padding-bottom:100px;}
+			footer{height:100px;margin-top:-100px;}
 			body{
 				background-image: url('/images/Sports.png');
 				background-attachment: fixed
 			}
-	body
+	body(class="Site")
 		block sidebar
-
 		div(class="pusher", style="background-image: url('/images/Sports.png'); background-attachment: fixed")
 			block header
 				include layouts/header
-
-			#wrapper
-				block content
+			div(class="main")
+				#wrapper
+					block content
+		block footer
+			include layouts/footer

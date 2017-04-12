@@ -66,7 +66,6 @@ UserSchema.methods = {
 				.then(
 					function(notes){
 						info.notes = notes;
-						console.log(info);
 						callback(info);
 					}
 				);

@@ -14,7 +14,8 @@ block content
 		form(class="ui form", id="modify", method="post", style="margin: 0px 10px", enctype="multipart/form-data")
 			div(class="field")
 				label Title
-				input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)")
+				input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)",
+				value=activity.title)
 
 			div(class="two fields")
 				div(class="field")
@@ -22,7 +23,7 @@ block content
 					div(class="ui calendar", id="start_time")
 						div(class="ui input left icon")
 							i(class="calendar icon")
-							input(type="text", name="start_time", placeholder="From")
+							input(type="text", name="start_time", placeholder="From",value=activity.start_time)
 					script.
 						$(document).ready(function() {
 							$('#start_time').calendar({
@@ -35,7 +36,7 @@ block content
 					div(class="ui calendar", id="end_time")
 						div(class="ui input left icon")
 							i(class="calendar icon")
-							input(type="text",name="end_time", placeholder="To")
+							input(type="text",name="end_time", placeholder="To",value=activity.end_time)
 					script.
 						$(document).ready(function() {
 							$('#end_time').calendar({
@@ -45,13 +46,14 @@ block content
 
 			div(class="field")
 				label Location
-				input(type="text", id="location", name="location_name", placeholder="Activity Location")
+				input(type="text", id="location", name="location_name", placeholder="Activity Location",
+				value=activity.location_name)
 
 			div(class="three fields")
 				div(class="field")
 					label Status
 					div(class="ui selection dropdown", id="status")
-						input(type="hidden" name="status")
+						input(type="hidden" name="status",value=activity.status)
 						i(class="dropdown icon")
 						div(class="default text") Status
 						div(class="menu")
@@ -65,7 +67,7 @@ block content
 				div(class="field")
 					label Participation Method
 					div(class="ui selection dropdown", id="participation_method")
-						input(type="hidden" name="participation_method")
+						input(type="hidden" name="participation_method", value=activity.participation_method)
 						i(class="dropdown icon")
 						div(class="default text") Participation Method
 						div(class="menu")
@@ -77,7 +79,7 @@ block content
 
 				div(class="field")
 					label Expense
-					input(type="text", id="expense", name="expense", placeholder="Activity Expense")
+					input(type="text", id="expense", name="expense", placeholder="Activity Expense", value=activity.expense)
 
 			div(class="two fields")
 				div(class="field")
@@ -109,12 +111,12 @@ block content
 
 			div(class="field")
 				label Content for Participants
-				textarea(name="content_for_participants", id="content_for_participants", rows="3")
+				textarea(name="content_for_participants", id="content_for_participants", rows="3") #{activity.content_for_participants}
 
 
 			div(class="field")
 				label Description
-				textarea(name="description", id="description")
+				textarea(name="description", id="description")!= activity.description
 
 			label Current Picture
 			div(class="ui fluid bordered rounded image")

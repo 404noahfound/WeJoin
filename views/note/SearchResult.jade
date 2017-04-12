@@ -10,8 +10,11 @@ block content
 			});
 		});
 	if notes == false
-		div(class='ui center aligned text container') 
-			h1 No Search Result
+		div.ui.grid.container
+			div.ui.main.text.container
+				div.ui.floating.error.message
+					div.header No Note Found
+					p Please try another keyword.
 	each note in notes
 		div(class='ui main text container')
 			a(href="/note/view/#{note._id}")

@@ -99,7 +99,6 @@ exports.UponModify = function(req, res){
 
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
-	console.log(req.params.id);
 	User.findById(req.params.id)
 	.exec(
 		function(err, user){
