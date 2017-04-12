@@ -108,7 +108,9 @@ mixin user_label(user)
     |#{user.nickname}
 
 mixin user_card(user)
-  a(class="ui raised link card", href= "/user/" + user._id)
+  - var color = 'blue'
+  - if (user.gender == 'Female') {color = 'red';}
+  a(class="ui raised link card " + color, href= "/user/" + user._id)
     div.image
      img(src=user.avatar)
     div.content

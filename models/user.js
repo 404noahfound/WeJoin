@@ -19,11 +19,14 @@ const UserSchema = new Schema({
 	marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
 	own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
 	created_at  : { type : Date, default : Date.now },
-	avatar : {type : String, default : "https://semantic-ui.com/examples/assets/images/wireframe/image.png" }
+	avatar : {type : String, default : "https://semantic-ui.com/examples/assets/images/wireframe/image.png" },
+	email : {type : String}
 });
 
 UserSchema.path('password').required(true, 'User name cannot be blank');
 UserSchema.path('username').required(true, 'User password cannot be blank');
+UserSchema.path('email').required(true, 'Email cannot be blank');
+
 
 UserSchema.methods = {
 	/**
@@ -129,17 +132,21 @@ UserSchema.statics = {
 	},
 
 	fake: function(num){
+		function sample(myArray){
+			return myArray[Math.floor(Math.random() * myArray.length)];
+		}
 		var user_info = [];
 		for(var i = 0; i < num; i++){
 			user_info.push({
 				password: '123456',
 				username: faker.internet.userName(),
 				nickname: faker.name.findName(),
-				gender: 'Male',
+				gender: sample(['Male', 'Female']),
 				// birthday: faker.date.past(),
 				city: faker.address.city(),
 				description: faker.lorem.sentences(),
-				avatar: faker.image.avatar()
+				avatar: faker.image.avatar(),
+				email: faker.internet.email()
 			});
 		}
 		this.create(user_info, function(err, users){

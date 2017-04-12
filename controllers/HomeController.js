@@ -24,6 +24,7 @@ exports.Index = function(req, res){
 };
 
 exports.Fake = function(req,res){
+	console.log(req.params);
 	if(req.params.type == 'user') res.json(User.fake(req.params.num));
 	else if(req.params.type == 'activity'){
 		var username = 'fds';

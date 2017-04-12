@@ -35,11 +35,10 @@ exports.LogIn = function(req, response){
 exports.UponCreate = function(req, res){
 	res.pageInfo.title = "Reg success";
 	res.pageInfo.functionality = "Reg success";
-	const user = new User(only(req.body, "username password"));
+	const user = new User(only(req.body, "username password email"));
 	user.nickname = user.username;
 	user.save().then(
 		function(doc) {
-			// res.render('home/Functionality', res.pageInfo);
 			res.redirect('/user/login');
 		}, 
 		function(err) {
