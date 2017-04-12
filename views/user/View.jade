@@ -42,7 +42,7 @@ block content
           |#{user.nickname}
           if (username && pp != 'My')
             +follow(user)
-          div.sub.header @#{username}
+          div.sub.header @#{user.username}
         div.ui.list
           div.item
             i.marker.icon
