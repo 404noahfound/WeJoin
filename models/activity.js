@@ -7,7 +7,7 @@ const ActivitySchema = new Schema({
 	organizer: { type : Schema.Types.ObjectId, ref: 'User', required: 'Activity organizer cannot be empty.' }, // store the _id of the organizer
 	title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
 	location_id: { type : String, trim : true }, // store the google API place_id of the location
-	location_name: { type : String, trim : true },
+	location_name: { type : String, trim : true, default : "" },
 	start_time: { type : Date, default : Date.now },
 	end_time: { type : Date, default : Date.now },
 	type: { type : String, default : null, trim : true },
