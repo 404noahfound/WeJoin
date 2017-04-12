@@ -88,20 +88,21 @@ block content
                         });
                     });
 
-                a(id="modify_link")
-                    button(class="ui animated teal fade button", tabindex="0", id="modify")
-                        div(class="visible content") Modify
-                        div(class="hidden content")
-                            i(class="write icon")
-                script.
-                    $(document).ready(function(){
-                        if (user_status != "organizer") {
-                            $('#modify').prop('disabled', true);
-                        }
-                        else {
-                            $('#modify_link').prop('href', "/activity/#{activity._id}/organizermodify");
-                        }
-                    });
+                if (user_status == 'organizer')
+                    a(id="modify_link")
+                        button(class="ui animated teal fade button", tabindex="0", id="modify")
+                            div(class="visible content") Modify
+                            div(class="hidden content")
+                                i(class="write icon")
+                    script.
+                        $(document).ready(function(){
+                            if (user_status != "organizer") {
+                                $('#modify').prop('disabled', true);
+                            }
+                            else {
+                                $('#modify_link').prop('href', "/activity/#{activity._id}/organizermodify");
+                            }
+                        });
 
         div(class="column")
             a(href="/user/#{activity.organizer_info._id}")
