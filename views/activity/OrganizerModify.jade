@@ -1,219 +1,290 @@
 extends ../layout
 include ../mixins
 
+block append scripts
+    style.
+        #map {
+           width: 100%;
+           height: 400px;
+           background-color: grey;
+           z-index: 5;
+        }
+
 block content
-	link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
-	script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
-	
-	div(class="ui text container segment")
-		div(class="ui header", style="margin-left: 10px") #{activity.title}
-		
-		if (error)
-			div(class="ui error message") #{error}
+    link(href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css", rel="stylesheet", type="text/css")
+    script(src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js")
+    
+    div(class="ui text container segment")
+        div(class="ui header", style="margin-left: 10px") #{activity.title}
+        
+        if (error)
+            div(class="ui error message") #{error}
 
-		form(class="ui form", id="modify", method="post", style="margin: 0px 10px", enctype="multipart/form-data")
-			div(class="field")
-				label Title
-				input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)")
+        form(class="ui form", id="modify", method="post", style="margin: 0px 10px", enctype="multipart/form-data")
+            div(class="field")
+                label Title
+                input(type="text", id="title", name="title", placeholder="Activity Title (cannot be empty!)")
 
-			div(class="two fields")
-				div(class="field")
-					label Start Time
-					div(class="ui calendar", id="start_time")
-						div(class="ui input left icon")
-							i(class="calendar icon")
-							input(type="text", name="start_time", placeholder="From")
-					script.
-						$(document).ready(function() {
-							$('#start_time').calendar({
-								type: 'datetime'
-							});
-						});
+            div(class="two fields")
+                div(class="field")
+                    label Start Time
+                    div(class="ui calendar", id="start_time")
+                        div(class="ui input left icon")
+                            i(class="calendar icon")
+                            input(type="text", name="start_time", placeholder="From")
+                    script.
+                        $(document).ready(function() {
+                            $('#start_time').calendar({
+                                type: 'datetime'
+                            });
+                        });
 
-				div(class="field")
-					label End Time
-					div(class="ui calendar", id="end_time")
-						div(class="ui input left icon")
-							i(class="calendar icon")
-							input(type="text",name="end_time", placeholder="To")
-					script.
-						$(document).ready(function() {
-							$('#end_time').calendar({
-								type: 'datetime'
-							});
-						});
+                div(class="field")
+                    label End Time
+                    div(class="ui calendar", id="end_time")
+                        div(class="ui input left icon")
+                            i(class="calendar icon")
+                            input(type="text",name="end_time", placeholder="To")
+                    script.
+                        $(document).ready(function() {
+                            $('#end_time').calendar({
+                                type: 'datetime'
+                            });
+                        });
 
-			div(class="field")
-				label Location
-				input(type="text", id="location", name="location_name", placeholder="Activity Location")
+            div(class="field")
+                label Location
+                input(type="text", id="location", name="location_name", placeholder="Activity Location")
+                div(id="map", style="z-index: 0")
 
-			div(class="three fields")
-				div(class="field")
-					label Status
-					div(class="ui selection dropdown", id="status")
-						input(type="hidden" name="status")
-						i(class="dropdown icon")
-						div(class="default text") Status
-						div(class="menu")
-							div(class="item" data-value="future") Future
-							div(class="item" data-value="going") Going
-							div(class="item" data-value="finished") Finished
-							div(class="item" data-value="cancelled") Cancelled
-					script.
-						$('#status').dropdown();
+            div(class="three fields")
+                div(class="field")
+                    label Status
+                    div(class="ui selection dropdown", id="status")
+                        input(type="hidden" name="status")
+                        i(class="dropdown icon")
+                        div(class="default text") Status
+                        div(class="menu")
+                            div(class="item" data-value="future") Future
+                            div(class="item" data-value="going") Going
+                            div(class="item" data-value="finished") Finished
+                            div(class="item" data-value="cancelled") Cancelled
+                    script.
+                        $('#status').dropdown();
 
-				div(class="field")
-					label Participation Method
-					div(class="ui selection dropdown", id="participation_method")
-						input(type="hidden" name="participation_method")
-						i(class="dropdown icon")
-						div(class="default text") Participation Method
-						div(class="menu")
-							div(class="item" data-value="public") Public
-							div(class="item" data-value="approval") Approval
-							div(class="item" data-value="only_invite") Only Invite
-					script.
-						$('#participation_method').dropdown();
+                div(class="field")
+                    label Participation Method
+                    div(class="ui selection dropdown", id="participation_method")
+                        input(type="hidden" name="participation_method")
+                        i(class="dropdown icon")
+                        div(class="default text") Participation Method
+                        div(class="menu")
+                            div(class="item" data-value="public") Public
+                            div(class="item" data-value="approval") Approval
+                            div(class="item" data-value="only_invite") Only Invite
+                    script.
+                        $('#participation_method').dropdown();
 
-				div(class="field")
-					label Expense
-					input(type="text", id="expense", name="expense", placeholder="Activity Expense")
+                div(class="field")
+                    label Expense
+                    input(type="text", id="expense", name="expense", placeholder="Activity Expense")
 
-			div(class="two fields")
-				div(class="field")
-					label Approve Waiting Users
-					div(class="ui fluid multiple selection dropdown", id="new_participants")
-						input(type="hidden" name="new_participants")
-						i(class="dropdown icon")
-						div(class="default text") Approval
-						div(class="menu")
-							each user in activity.wait_for_approval_info
-								div(class="item", data-value="#{user._id}")
-									+user_label(user)
-					script.
-						$('#new_participants').dropdown();
+            div(class="two fields")
+                div(class="field")
+                    label Approve Waiting Users
+                    div(class="ui fluid multiple selection dropdown", id="new_participants")
+                        input(type="hidden" name="new_participants")
+                        i(class="dropdown icon")
+                        div(class="default text") Approval
+                        div(class="menu")
+                            each user in activity.wait_for_approval_info
+                                div(class="item", data-value="#{user._id}")
+                                    +user_label(user)
+                    script.
+                        $('#new_participants').dropdown();
 
-				div(class="field")
-					label Remove Participants
-					div(class="ui fluid multiple selection dropdown", id="removed_participants")
-						input(type="hidden" name="removed_participants")
-						i(class="dropdown icon")
-						div(class="default text") Remove Participants
-						div(class="menu")
-							each user in activity.participants_info
-								div(class="item", data-value="#{user._id}")
-									+user_label(user)
-					script.
-						$('#removed_participants').dropdown();
-
-
-			div(class="field")
-				label Content for Participants
-				textarea(name="content_for_participants", id="content_for_participants", rows="3")
+                div(class="field")
+                    label Remove Participants
+                    div(class="ui fluid multiple selection dropdown", id="removed_participants")
+                        input(type="hidden" name="removed_participants")
+                        i(class="dropdown icon")
+                        div(class="default text") Remove Participants
+                        div(class="menu")
+                            each user in activity.participants_info
+                                div(class="item", data-value="#{user._id}")
+                                    +user_label(user)
+                    script.
+                        $('#removed_participants').dropdown();
 
 
-			div(class="field")
-				label Description
-				textarea(name="description", id="description")
-
-			label Current Picture
-			div(class="ui fluid bordered rounded image")
-				img(src=activity.picture.replace('static',''), style="width:200px;height:200px")
-			div(class="field")
-				label Upload Picture
-				input(type="file" name="picture")
-
-			div(class="actions")
-				input(class="ui tiny button" type="submit" value="Submit")
+            div(class="field")
+                label Content for Participants
+                textarea(name="content_for_participants", id="content_for_participants", rows="3")
 
 
-	script(src="https://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js")
-	script.
-		CKEDITOR.replace( 'description', {
-			// Define the toolbar: http://docs.ckeditor.com/#!/guide/dev_toolbar
-			// The standard preset from CDN which we used as a base provides more features than we need.
-			// Also by default it comes with a 2-line toolbar. Here we put all buttons in a single row.
-			toolbar: [
-				{ name: 'clipboard', items: [ 'Undo', 'Redo' ] },
-				{ name: 'styles', items: [ 'Styles', 'Format' ] },
-				{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
-				{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
-				{ name: 'links', items: [ 'Link', 'Unlink' ] },
-				{ name: 'insert', items: [ 'Image', 'EmbedSemantic', 'Table' ] },
-				{ name: 'tools', items: [ 'Maximize' ] },
-				{ name: 'editing', items: [ 'Scayt' ] }
-			],
-			// Since we define all configuration options here, let's instruct CKEditor to not load config.js which it does by default.
-			// One HTTP request less will result in a faster startup time.
-			// For more information check http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-customConfig
-			customConfig: '',
-			// Enabling extra plugins, available in the standard-all preset: http://ckeditor.com/presets-all
-			extraPlugins: 'autoembed,embedsemantic,image2,uploadimage,uploadfile',
-			/*********************** File management support ***********************/
-			// In order to turn on support for file uploads, CKEditor has to be configured to use some server side
-			// solution with file upload/management capabilities, like for example CKFinder.
-			// For more information see http://docs.ckeditor.com/#!/guide/dev_ckfinder_integration
-			// Uncomment and correct these lines after you setup your local CKFinder instance.
-			// filebrowserBrowseUrl: 'http://example.com/ckfinder/ckfinder.html',
-			// filebrowserUploadUrl: 'http://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
-			/*********************** File management support ***********************/
-			// Remove the default image plugin because image2, which offers captions for images, was enabled above.
-			removePlugins: 'image',
-			// Make the editing area bigger than default.
-			height: 461,
-			// An array of stylesheets to style the WYSIWYG area.
-			// Note: it is recommended to keep your own styles in a separate file in order to make future updates painless.
-			contentsCss: [ 'https://cdn.ckeditor.com/4.6.1/standard-all/contents.css', 'mystyles.css' ],
-			// This is optional, but will let us define multiple different styles for multiple editors using the same CSS file.
-			bodyClass: 'article-editor',
-			// Reduce the list of block elements listed in the Format dropdown to the most commonly used.
-			format_tags: 'p;h1;h2;h3;pre',
-			// Simplify the Image and Link dialog windows. The "Advanced" tab is not needed in most cases.
-			removeDialogTabs: 'image:advanced;link:advanced',
-			// Define the list of styles which should be available in the Styles dropdown list.
-			// If the "class" attribute is used to style an element, make sure to define the style for the class in "mystyles.css"
-			// (and on your website so that it rendered in the same way).
-			// Note: by default CKEditor looks for styles.js file. Defining stylesSet inline (as below) stops CKEditor from loading
-			// that file, which means one HTTP request less (and a faster startup).
-			// For more information see http://docs.ckeditor.com/#!/guide/dev_styles
-			stylesSet: [
-				/* Inline Styles */
-				{ name: 'Marker',			element: 'span', attributes: { 'class': 'marker' } },
-				{ name: 'Cited Work',		element: 'cite' },
-				{ name: 'Inline Quotation',	element: 'q' },
-				/* Object Styles */
-				{
-					name: 'Special Container',
-					element: 'div',
-					styles: {
-						padding: '5px 10px',
-						background: '#eee',
-						border: '1px solid #ccc'
-					}
-				},
-				{
-					name: 'Compact table',
-					element: 'table',
-					attributes: {
-						cellpadding: '5',
-						cellspacing: '0',
-						border: '1',
-						bordercolor: '#ccc'
-					},
-					styles: {
-						'border-collapse': 'collapse'
-					}
-				},
-				{ name: 'Borderless Table',		element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
-				{ name: 'Square Bulleted List',	element: 'ul',		styles: { 'list-style-type': 'square' } },
-				/* Widget Styles */
-				// We use this one to style the brownie picture.
-				{ name: 'Illustration', type: 'widget', widget: 'image', attributes: { 'class': 'image-illustration' } },
-				// Media embed
-				{ name: '240p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-240p' } },
-				{ name: '360p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-360p' } },
-				{ name: '480p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-480p' } },
-				{ name: '720p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-720p' } },
-				{ name: '1080p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-1080p' } }
-			]
-		} );
+            div(class="field")
+                label Description
+                textarea(name="description", id="description")
+
+            label Current Picture
+            div(class="ui fluid bordered rounded image")
+                img(src=activity.picture.replace('static',''), style="width:200px;height:200px")
+            div(class="field")
+                label Upload Picture
+                input(type="file" name="picture")
+
+            div(class="actions")
+                input(class="ui tiny button" type="submit" value="Submit")
+
+
+    script(src="https://cdn.ckeditor.com/4.6.1/standard-all/ckeditor.js")
+    script.
+        CKEDITOR.replace( 'description', {
+            // Define the toolbar: http://docs.ckeditor.com/#!/guide/dev_toolbar
+            // The standard preset from CDN which we used as a base provides more features than we need.
+            // Also by default it comes with a 2-line toolbar. Here we put all buttons in a single row.
+            toolbar: [
+                { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+                { name: 'styles', items: [ 'Styles', 'Format' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+                { name: 'links', items: [ 'Link', 'Unlink' ] },
+                { name: 'insert', items: [ 'Image', 'EmbedSemantic', 'Table' ] },
+                { name: 'tools', items: [ 'Maximize' ] },
+                { name: 'editing', items: [ 'Scayt' ] }
+            ],
+            // Since we define all configuration options here, let's instruct CKEditor to not load config.js which it does by default.
+            // One HTTP request less will result in a faster startup time.
+            // For more information check http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-customConfig
+            customConfig: '',
+            // Enabling extra plugins, available in the standard-all preset: http://ckeditor.com/presets-all
+            extraPlugins: 'autoembed,embedsemantic,image2,uploadimage,uploadfile',
+            /*********************** File management support ***********************/
+            // In order to turn on support for file uploads, CKEditor has to be configured to use some server side
+            // solution with file upload/management capabilities, like for example CKFinder.
+            // For more information see http://docs.ckeditor.com/#!/guide/dev_ckfinder_integration
+            // Uncomment and correct these lines after you setup your local CKFinder instance.
+            // filebrowserBrowseUrl: 'http://example.com/ckfinder/ckfinder.html',
+            // filebrowserUploadUrl: 'http://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+            /*********************** File management support ***********************/
+            // Remove the default image plugin because image2, which offers captions for images, was enabled above.
+            removePlugins: 'image',
+            // Make the editing area bigger than default.
+            height: 461,
+            // An array of stylesheets to style the WYSIWYG area.
+            // Note: it is recommended to keep your own styles in a separate file in order to make future updates painless.
+            contentsCss: [ 'https://cdn.ckeditor.com/4.6.1/standard-all/contents.css', 'mystyles.css' ],
+            // This is optional, but will let us define multiple different styles for multiple editors using the same CSS file.
+            bodyClass: 'article-editor',
+            // Reduce the list of block elements listed in the Format dropdown to the most commonly used.
+            format_tags: 'p;h1;h2;h3;pre',
+            // Simplify the Image and Link dialog windows. The "Advanced" tab is not needed in most cases.
+            removeDialogTabs: 'image:advanced;link:advanced',
+            // Define the list of styles which should be available in the Styles dropdown list.
+            // If the "class" attribute is used to style an element, make sure to define the style for the class in "mystyles.css"
+            // (and on your website so that it rendered in the same way).
+            // Note: by default CKEditor looks for styles.js file. Defining stylesSet inline (as below) stops CKEditor from loading
+            // that file, which means one HTTP request less (and a faster startup).
+            // For more information see http://docs.ckeditor.com/#!/guide/dev_styles
+            stylesSet: [
+                /* Inline Styles */
+                { name: 'Marker',           element: 'span', attributes: { 'class': 'marker' } },
+                { name: 'Cited Work',       element: 'cite' },
+                { name: 'Inline Quotation', element: 'q' },
+                /* Object Styles */
+                {
+                    name: 'Special Container',
+                    element: 'div',
+                    styles: {
+                        padding: '5px 10px',
+                        background: '#eee',
+                        border: '1px solid #ccc'
+                    }
+                },
+                {
+                    name: 'Compact table',
+                    element: 'table',
+                    attributes: {
+                        cellpadding: '5',
+                        cellspacing: '0',
+                        border: '1',
+                        bordercolor: '#ccc'
+                    },
+                    styles: {
+                        'border-collapse': 'collapse'
+                    }
+                },
+                { name: 'Borderless Table',     element: 'table',   styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
+                { name: 'Square Bulleted List', element: 'ul',      styles: { 'list-style-type': 'square' } },
+                /* Widget Styles */
+                // We use this one to style the brownie picture.
+                { name: 'Illustration', type: 'widget', widget: 'image', attributes: { 'class': 'image-illustration' } },
+                // Media embed
+                { name: '240p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-240p' } },
+                { name: '360p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-360p' } },
+                { name: '480p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-480p' } },
+                { name: '720p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-720p' } },
+                { name: '1080p', type: 'widget', widget: 'embedSemantic', attributes: { 'class': 'embed-1080p' } }
+            ]
+        } );
+
+    script.
+        function initialize() {
+              var mapOptions = {
+                center: {lat: -33.8688, lng: 151.2195},
+                zoom: 13,
+                scrollwheel: false
+              };
+              var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+              var input = /** @type {HTMLInputElement} */(
+                  document.getElementById('location'));
+
+              // Create the autocomplete helper, and associate it with
+              // an HTML text input box.
+              var autocomplete = new google.maps.places.Autocomplete(input);
+              autocomplete.bindTo('bounds', map);
+
+              var infowindow = new google.maps.InfoWindow();
+              var marker = new google.maps.Marker({
+                map: map
+              });
+              google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map, marker);
+              });
+
+              // Get the full place details when the user selects a place from the
+              // list of suggestions.
+              google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                infowindow.close();
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                  return;
+                }
+
+                if (place.geometry.viewport) {
+                  map.fitBounds(place.geometry.viewport);
+                } else {
+                  map.setCenter(place.geometry.location);
+                  map.setZoom(17);
+                }
+
+                // Set the position of the marker using the place ID and location.
+                marker.setPlace(/** @type {!google.maps.Place} */ ({
+                  placeId: place.place_id,
+                  location: place.geometry.location
+                }));
+                marker.setVisible(true);
+
+                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                    'Place ID: ' + place.place_id + '<br>' +
+                    place.formatted_address + '</div>');
+                infowindow.open(map, marker);
+              });
+        }
+    
+    script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcab1nkLhhjx3FLg6Ve7TCzUfsOQsEdTk&libraries=places&callback=initialize" type="text/javascript")
+
+        
+
+
