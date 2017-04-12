@@ -25,15 +25,15 @@ block content
 		div(class='ui divider')
 	div(class='ui justified text container')!= note.content
 		h5(class="ui horizontal divider header")
-			i(class="share alternate icon")
-			| Share
-		div
-			div(class="addthis_inline_share_toolbox")
-		h5(class="ui horizontal divider header")
 			i(class="linkify icon")
 			| Related Activity
 		if (activity)
 			+ListActivity(activity)
+		h5(class="ui horizontal divider header")
+			i(class="share alternate icon")
+			| Share
+		div
+			div(class="addthis_inline_share_toolbox")
 		h5(class="ui horizontal divider header")
 			i(class="comment outline icon")
 			| Comment

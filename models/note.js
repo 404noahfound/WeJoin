@@ -35,7 +35,7 @@ const NoteSchema = new Schema({
 	highlighted: { type : Boolean, default : false }
 });
 
-
+NoteSchema.index({title: 'text', authorname: 'text', content: 'text'});
 NoteSchema.methods = {
 	/**
 	 * Create function:
@@ -96,9 +96,7 @@ NoteSchema.statics = {
 					paragraphs=paragraphs.concat(picture);
 				}
 				var paragraph = "<p>"+ faker.lorem.sentences()+"</p>"
-				console.log(paragraph)
 				paragraphs= paragraphs.concat(paragraph);
-				console.log(paragraphs)
 			};
 			note_info.push({
 				title: faker.lorem.sentence(),
@@ -123,7 +121,21 @@ NoteSchema.statics = {
 	GetByUser: function(user) {
 		return new Array();
 	},
-
+	Search: function(keyword) {
+		return this
+		    .find(
+		        { $text : { $search : keyword } }, 
+		        { score : { $meta: "textScore" } }
+		    )
+		    .sort({ score : { $meta : 'textScore' } })
+		    .limit(100)
+		    .exec()
+		    .then(
+		    	function(notes){
+		    		return notes;
+		    	}
+		    );
+	}
 };
 
 mongoose.model('Note', NoteSchema);
