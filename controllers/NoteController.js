@@ -3,6 +3,8 @@ const only = require('only');
 const Note = mongoose.model('Note');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
+const flash = require('express-flash');
+
 exports.Note = function(request, response){
 	response.pageInfo.title = "Note";
 	response.pageInfo.functionality = "Note. Generate page to view my notes";
@@ -17,6 +19,7 @@ exports.Note = function(request, response){
 			}
 			else {
 				response.pageInfo.notes = docs;
+				console.log(docs);
 				response.render('note/Note', response.pageInfo);
 			}
 		});
@@ -120,9 +123,27 @@ exports.UponNoteCreate = function(request, response){
 		response.redirect('/user/login');
 	}
 	else {
+		if(request.file){
+			var path = require('path');
+			var appDir = path.dirname(require.main.filename);
+			console.log(appDir);
+			request.body.picture = request.file.path;
+			var picture = path.join(appDir, request.body.picture);
+			console.log(picture);
+			var im = require('imagemagick');
+			im.convert(
+				// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+				[picture, '-resize', "256x256!", picture],
+				function(err, stdout, stderr){
+					if (err) throw err;
+					console.log('resized new avatar to fit within 200x200px');
+			})
+		}
 		request.body.author = request.user._id;
 		request.body.authorname = request.user.username;
-		const note = new Note(only(request.body, "title author content authorname note_type"));
+		console.log(request.body);
+		const note = new Note(only(request.body, "title author content authorname note_type short_description picture"));
+		console.log(request.body);
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}
@@ -147,9 +168,27 @@ exports.UponNoteRelatedCreate = function(request, response){
 	}
 	else {
 		request.body.associated_activity = request.params.activityid;
+		if(request.file){
+			var path = require('path');
+			var appDir = path.dirname(require.main.filename);
+			console.log(appDir);
+			request.body.picture = request.file.path;
+			var picture = path.join(appDir, request.body.picture);
+			console.log(picture);
+			var im = require('imagemagick');
+			im.convert(
+				// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+				[picture, '-resize', "256x256!", picture],
+				function(err, stdout, stderr){
+					if (err) throw err;
+					console.log('resized new avatar to fit within 200x200px');
+			})
+		}
 		request.body.author = request.user._id;
 		request.body.authorname = request.user.username;
-		const note = new Note(only(request.body, "title author content authorname note_type associated_activity"));
+		console.log(request.body);
+		const note = new Note(only(request.body, "title author content authorname note_type short_description picture"));
+		console.log(request.body);
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}
@@ -195,9 +234,29 @@ exports.NoteModifyEach = function(request, response){
 exports.UponNoteModifyEach = function(request, response){
 	var id = request.params.id;
 	var new_content=request.body.content;
+	var new_description= request.body.short_description;
+	var new_title= request.body.title;
 	response.pageInfo.title="Upon Modify Each";
 	response.pageInfo.functionality = "Upon.Note.Modify";
-	Note.findOneAndUpdate({'_id':id}, { $set :{'content': new_content} , $currentDate:{'modified_at': 'date'}},
+	if(request.file){
+		var path = require('path');
+		var appDir = path.dirname(require.main.filename);
+		console.log(appDir);
+		request.body.picture = request.file.path;
+		var picture = path.join(appDir, request.body.picture);
+		console.log(picture);
+		var im = require('imagemagick');
+		im.convert(
+			// {srcPath: avatar, dstPath: updateInfo.avatar, width: 200, height: 200}, 
+			[picture, '-resize', "256x256!", picture],
+			function(err, stdout, stderr){
+				if (err) throw err;
+				console.log('resized new avatar to fit within 200x200px');
+		})
+	}
+	Note.findOneAndUpdate({'_id':id}, { $set :{'content': new_content , 'title': new_title ,
+		"picture": request.body.picture, "short_description":new_description } 
+		, $currentDate:{'modified_at': 'date'}},
 	 function(err, doc){
 		if(err) console.log('error!');
 		response.pageInfo.description=new_content;
@@ -249,4 +308,14 @@ exports.UponNoteDeleteEach = function(request, response){
 		if(err) console.log('error!');
 		response.render('note/Return', response.pageInfo);
 	});
+};
+
+exports.DeleteAll = function(request, response){
+	response.pageInfo.title="DeleteAll";
+	response.pageInfo.functionality = "Delete all notes";
+	id=request.user._id;
+	Note.find({'author': id},function(err, docs){
+		if(err) console.log('error!');
+		response.redirect('/');
+	}).remove().exec();
 };

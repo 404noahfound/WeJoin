@@ -49,17 +49,18 @@ module.exports = function(app){
 	app.get('/note/user/:id', NoteController.NoteUser);
 	//note create
 	app.get('/note/create/:activityid', NoteController.NoteRelatedCreate);
-	app.post('/note/create/:activityid', NoteController.UponNoteRelatedCreate);
+	app.post('/note/create/:activityid', uploading.single('picture'),NoteController.UponNoteRelatedCreate);
 	app.get('/note/create', NoteController.NoteCreate);
-	app.post('/note/create', NoteController.UponNoteCreate);
+	app.post('/note/create', uploading.single('picture'), NoteController.UponNoteCreate);
 	//note modify
 	app.get('/note/modify', NoteController.NoteModify);
 	app.get('/note/modify/:id', NoteController.NoteModifyEach);
-	app.post('/note/modify/:id', NoteController.UponNoteModifyEach);
+	app.post('/note/modify/:id', uploading.single('picture'),NoteController.UponNoteModifyEach);
 	//note delete
 	app.get('/note/delete', NoteController.NoteDelete);
 	app.get('/note/delete/:id', NoteController.NoteDeleteEach);
 	app.post('/note/delete/:id', NoteController.UponNoteDeleteEach);
+	app.get('/note/deleteall',NoteController.DeleteAll);
 	//note search
 	app.get('/note/search', NoteController.NoteSearch);
 	app.post('/note/search', NoteController.UponNoteSearch);

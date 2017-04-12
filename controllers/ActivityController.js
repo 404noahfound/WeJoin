@@ -68,7 +68,7 @@ exports.Search = function(request, response){
 				function(res){
 					for (var i = 0; i < response.pageInfo.activities.length; i++) {
 						response.pageInfo.activities[i].organizer_info = res[response.pageInfo.activities[i].organizer];
-						console.log(response.pageInfo.activities[i].organizer_info);
+						//console.log(response.pageInfo.activities[i].organizer_info);
 					}
 					// console.log(res);
 					// console.log(user_id_list);
@@ -196,7 +196,7 @@ exports.UponOrganizerModify = function(request, response){
 		response.redirect('/user/login');
 	}
 	else{
-		console.log(request.file);
+		//console.log(request.file);
 		if(request.file){
 			var path = require('path');
 			var appDir = path.dirname(require.main.filename);

@@ -5,7 +5,7 @@ block content
 		h1(class='ui header') #{note.title}
 		div(class='ui divider')
 	div(class='ui main text container')
-		form(name="note", method="post", class="ui form", autocomplete="off")
+		form(name="note", method="post", class="ui form", autocomplete="off", enctype="multipart/form-data")
 			div(class="input")
 				input(type="text", name="title", rows=1, value= note.title)
 			div.input
@@ -13,8 +13,16 @@ block content
 				h5(class="ui horizontal divider header")
 					i(class="edit icon")
 					| Content
+				br
+				div(class=field)
+					input(type="text", name="short_description", value=note.short_description)
+				br
 				textarea(type="text", name="content")!= note.content
 			div(class="ui divider")
+			br
+			div(class="field")
+				label Upload Picture
+				input(type="file" name="picture")
 			button(class="ui primary button" type="submit") Save
 			button(class="ui button" type="reset") Reset
 

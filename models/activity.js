@@ -283,7 +283,7 @@ ActivitySchema.statics = {
 					activities.joined.sort(cmp);
 					activities.wait_for_approval.sort(cmp);
 					activities.organized.sort(cmp);
-					console.log(activities.organized);
+					//console.log(activities.organized);
 
 					var user_id_list = new Array();
 					for (var i = 0; i < activities.joined.length; i++) {

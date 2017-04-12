@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
-
+const Note = mongoose.model('Note');
 
 exports.Index = function(req, res){
 	res.pageInfo.title = 'HomePage';
@@ -26,6 +26,9 @@ exports.Index = function(req, res){
 exports.Fake = function(req,res){
 	console.log(req.params);
 	if(req.params.type == 'user') res.json(User.fake(req.params.num));
+	else if (req.params.type == 'note'){
+		res.json(Note.fake(req.params.num,req.user));
+	}
 	else if(req.params.type == 'activity'){
 		var username = 'fds';
 		if (req.user) username = req.user.username;
