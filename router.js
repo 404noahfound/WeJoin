@@ -16,6 +16,7 @@ module.exports = function(app){
 	app.get('/', HomeController.Index);
 	app.get('/other', HomeController.Other);
 	app.get('/fake/:type/:num', HomeController.Fake);
+	app.get('/test', HomeController.Test);
 
 	//Activity Routes
 	//GetByUser for test
