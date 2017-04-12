@@ -236,7 +236,6 @@ exports.UponNoteModifyEach = function(request, response){
 	var new_content=request.body.content;
 	var new_description= request.body.short_description;
 	var new_title= request.body.title;
-	var new_picture = request.body.picture;
 	response.pageInfo.title="Upon Modify Each";
 	response.pageInfo.functionality = "Upon.Note.Modify";
 	if(request.file){
@@ -256,7 +255,7 @@ exports.UponNoteModifyEach = function(request, response){
 		})
 	}
 	Note.findOneAndUpdate({'_id':id}, { $set :{'content': new_content , 'title': new_title ,
-		"picture": new_picture, "short_description":new_description } 
+		"picture": request.body.picture, "short_description":new_description } 
 		, $currentDate:{'modified_at': 'date'}},
 	 function(err, doc){
 		if(err) console.log('error!');
