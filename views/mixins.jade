@@ -104,7 +104,8 @@ mixin ListNotes(notes)
 mixin user_label(user)
   div.ui.image.label
     img(src=user.avatar.replace('static', ''))
-    | &nbsp&nbsp&nbsp#{user.nickname}
+    //- | &nbsp&nbsp&nbsp#{user.nickname}
+    |#{user.nickname}
 
 mixin user_card(user)
   a(class="ui raised link card", href= "/user/" + user._id)

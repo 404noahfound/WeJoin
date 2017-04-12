@@ -37,13 +37,22 @@ block content
             img(src=user.avatar, style="width:200px;height:200px")
           else
             img(src="/avatars/1204845.png", style="width:200px;height:200px")
-      div(class="eight wide column" style="position:relative")
-        div(style="position:absolute; bottom:0px;")
-          h1.ui.header 
-            |#{user.nickname}
-            if (username && pp != 'My')
-              +follow(user)
-          h4(class="ui grey header") #{user.description}
+      div(class="twelve wide bottom aligned column")
+        h1.ui.header 
+          |#{user.nickname}
+          if (username && pp != 'My')
+            +follow(user)
+          div.sub.header @#{username}
+        div.ui.list
+          div.item
+            i.marker.icon
+            div.content #{user.city}
+        h4(class="ui grey header") #{user.description}
+      //- div(class="four wide bottom aligned column")
+        div(class="ui list")
+          div.item
+            div.content China
+            i.marker.icon
     div.ui.divider
     div.row
       div.four.wide.column
