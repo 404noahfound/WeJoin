@@ -8,7 +8,7 @@ block content
   //-     a(href='user/' + user._id) #{user.username}
   //-     spam #{user}
   div.ui.grid.container
-    if users
+    if users && users.length > 0
       each user in users
         div.four.wide.column
           +user_card(user)

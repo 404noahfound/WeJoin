@@ -26,6 +26,7 @@ const UserSchema = new Schema({
 UserSchema.path('password').required(true, 'User name cannot be blank');
 UserSchema.path('username').required(true, 'User password cannot be blank');
 UserSchema.path('email').required(true, 'Email cannot be blank');
+UserSchema.index({nickname: 'text', username: 'text', description: 'text', city: 'text'});
 
 
 UserSchema.methods = {
@@ -169,22 +170,23 @@ UserSchema.statics = {
 					callback(res);
 				}
 			});
-	}
-	// const UserSchema = new Schema({
-	// password: { type : String},
-	// username: { type : String, unique: true, index: true/*the unique constraint is not working*/ },
-	// nickname: { type : String, trim : true},
-	// gender: { type : String, enum : {values : ['Male', 'Female'], message : 'gender must be male or female'}},
-	// birthday: { type : Date},
-	// city: {type : String},
-	// description: {type : String},
-	// marked_activities: [{type : Schema.Types.ObjectId, ref: 'Activity'}],
-	// follow_to: [{type : Schema.Types.ObjectId, ref: 'User'}],
-	// marked_notes: [{type : Schema.Types.ObjectId, ref: 'Note'}],
-	// own_notes:[{type : Schema.Types.ObjectId, ref: 'Note'}],
-	// created_at  : { type : Date, default : Date.now },
-	// avatar : {type : String}
+	},
 
+	Search: function(keyword) {
+		return this
+		    .find(
+		        { $text : { $search : keyword } }, 
+		        { score : { $meta: "textScore" } }
+		    )
+		    .sort({ score : { $meta : 'textScore' } })
+		    .limit(100)
+		    .exec()
+		    .then(
+		    	function(users){
+		    		return users;
+		    	}
+		    );
+	}
 };
 
 mongoose.model('User', UserSchema);

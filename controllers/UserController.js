@@ -100,13 +100,18 @@ exports.UponModify = function(req, res){
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
 	User.findById(req.params.id)
-	.exec(function(err, user){
-		user.getInfoForView(function(info){
-			// console.log(info);
-			Object.assign(res.pageInfo, info);
-			res.pageInfo.pp = 'His';
-			res.render('user/View', res.pageInfo);
-		});
+	.exec(
+		function(user){
+			user.getInfoForView(function(info){
+				// console.log(info);
+				Object.assign(res.pageInfo, info);
+				res.pageInfo.pp = 'His';
+				res.render('user/View', res.pageInfo);
+		},
+		function(err){
+			res.json(err);
+		}
+	);
 	});
 };
 
@@ -132,12 +137,21 @@ exports.Index = function(req, res){
 
 exports.Search = function(req, res){
 	res.pageInfo.title = "Search Result";
-	User.find({nickname: req.params.keyword}).limit(100)
-	.then(
+	// User.find({nickname: req.params.keyword}).limit(100)
+	// .then(
+	// 	function(users){
+	// 		console.log(users);
+	// 		res.pageInfo.users = users;
+	// 		res.render('user/Index');
+	// 	},
+	// 	function(err){
+	// 		res.json(err);
+	// 	}
+	// );
+	User.Search(req.params.keyword).then(
 		function(users){
-			console.log(users);
 			res.pageInfo.users = users;
-			res.render('user/Index');
+			res.render('user/Index', res.pageInfo);
 		},
 		function(err){
 			res.json(err);
