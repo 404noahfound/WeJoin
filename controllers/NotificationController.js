@@ -23,45 +23,21 @@ exports.Create = function(request,response){
 		response.redirect('/user/login');
 	}
 	else{
-		response.render('notification/Create',response.pageInfo);
+		for(participant in request.activity.participants){
+		    var notification = new Notification({'title': request.activity.title, 'sender': request.user._id,'receiver': participant._id,'activity': request.activity._id});
+		
+		    notification.save().then(
+			    function(doc){
+				    response.redirect('/notification/'+notification._id + '/write/');
+			    },
+			    function(err){
+				    console.log("Create notification Error!\n"+ err);
+				    response.render('home/Other',response.pageInfo);
+			    }
+		    );
+	    }
 	}
 	
-};
-
-/**
- * UponCreate:
- *
- *return to the page viewing all notifications
- * @class      UponCreate (name)
- * @param      {<type>}  request  The request
- * @param      {<type>}  response The response
- * author     Tim
- */
-exports.UponCreate = function(request,response){
-	response.pageInfo.title='Send Success';
-	response.pageInfo.functionality="Notification.UponCreate";
-	console.log(request.body);
-	if(!request.user){
-		response.redirect('/user/login');
-	}
-	else{
-		request.body.sender = request.user._id;
-		var notification=new Notification(only(request.body, "sender" +
-			                                                "receiver"+
-			                                                "description"+
-			                                                "status"+
-			                                                "created_at"));
-		notification.save().then(
-			function(doc){
-				console.log(notificaiton);
-				response.pageInfo.notifications = new Array(notification);
-				response.redirect('/activity'+activity.id);
-			},
-			function(err){
-				console.log("Create notification error!"+err);
-				response.render('home/Other',response.pageInfo);
-			});
-	}
 };
 
 
@@ -104,12 +80,37 @@ exports.MarkAsUnread = function(request,response){
 };
 
 exports.View = function(request,response){
-	response.pageInfo.title="Notifications Info";
+	response.pageInfo.title="Notifications Information";
+//    Notification.find({'_id': response.params.id}).then()
 	console.log("In View function");
+	console.log(request.user);
+
+	Notification.find({ 'receiver': request.user._id }).then(
+		function(docs){
+			consele.log(docs);
+			response.pageInfo.notifications = docs;
+			if(!request.user){
+				response.redirect('/user/login');
+			}
+		},
+		function(err){
+			console.log("View norification Error!");
+			response.render('home/Other',response.pageInfo);
+		});
+
+};
+
+exports.ViewSingle=function(request,response){
+	response.pageInfo.title="Notifications Information";
+	console.log("In ViewSingle function");
+
 	Notification.find({ '_id': request.params.id }).then(
 		function(docs){
 			consele.log(docs);
 			response.pageInfo.notifications = docs;
+			if(!request.user){
+				response.redirect('/user/login');
+			}
 			response.render('notification/ViewSingle',response.pageInfo);
 		},
 		function(err){

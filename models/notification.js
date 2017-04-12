@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+//const activity = require('')
 //const User = mongoose.model('User');
 
 const Notification = new Schema({
 	sender: { type : Schema.Types.ObjectId, ref: 'User', required: 'Notification sender cannot be empty.', trim : true }, //store the _id of the sender
 	receiver: { type : Schema.Types.ObjectId, ref: 'User', required: 'Notification receiver cannot be empty.', trim : true }, //store the _id of the receiver
+	title:{type: String, trim: true},
+	activity: {type : Schema.Types.ObjectId, default: null},
 	description: { type : String, default : 'This Notification has no description', trim : true }, 
 	status: {type : Boolean, trim : true }, //if status is true, it is unread. Otherwise, it is read
     created_at: {type: Date, default: Date.now}

@@ -1,12 +1,10 @@
 extends ../layout
 
 block content
-    p Below is the list of notifications
-        each notification in notifications
-            p 
-                if notification.status
-                    style
-                        {color: #464646}
-                    a(href="/notifications/#{notification_id}") #{notification.sender} : #{activity.description}
-                else
-                    a(href="/notifications/#{notification_id}") #{notification.sender} : #{activity.description}
+	each notification in notifications
+		notification.status=false
+		p Sender: #{notification.sender}  Receiver : #{notification.receiver}
+		div.action
+			input(type="submit", value="MarkAsUnread")
+		p #{notification.description}
+		

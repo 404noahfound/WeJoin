@@ -40,7 +40,7 @@ module.exports = function(app){
 //	app.post('/notification', AccountController.UponNotification);
 	//create notification
 	app.get('/notification/create', NotificationController.Create);
-	app.post('/notification/create', NotificationController.UponCreate);
+//	app.post('/notification/create', NotificationController.UponCreate);
 	//delete notification
 	app.get('/notification/delete', NotificationController.Delete);
 //	app.post('/notification/delete', NotificationController.UponNotificationDelete);
