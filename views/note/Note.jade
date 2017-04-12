@@ -9,6 +9,9 @@ block content
 				$(this).css("background-color","white");
 			});
 		});
+	if notes == false
+		div(class='ui center aligned text container') 
+			h1 No Result
 	each note in notes
 		div(class='ui main text container')
 			a(href="/note/view/#{note._id}")

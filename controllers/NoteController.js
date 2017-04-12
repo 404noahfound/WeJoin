@@ -19,7 +19,6 @@ exports.Note = function(request, response){
 			}
 			else {
 				response.pageInfo.notes = docs;
-				console.log(docs);
 				response.render('note/Note', response.pageInfo);
 			}
 		});
@@ -58,17 +57,15 @@ exports.NoteSearch = function(request, response){
 
 exports.UponNoteSearch = function(request, response){
 	response.pageInfo.functionality = "UponNote.Search. Generate page for relevant notes";
-	var attr = request.body;
-	attr.title = {$regex: attr.title};
-	Note.find(attr,
-		function(err, res){
-			if(err){
-				console.log("Search note Error!");
-				response.pageInfo.note = new Array();
-			}
-			else response.pageInfo.notes = res;
+	Note.Search(request.body.keyword).then(
+		function(notes){
+			response.pageInfo.notes = notes;
 			response.render('note/SearchResult', response.pageInfo);
-		});
+		},
+		function(err){
+			response.json(err);
+		}
+	);
 };
 
 exports.NoteViewEach = function(request, response){
@@ -82,6 +79,7 @@ exports.NoteViewEach = function(request, response){
 		response.pageInfo.id=id;
 		Note.findOne({'_id':id}, function(err, docs){
 			response.pageInfo.note = docs;
+			console.log(docs);
 			Activity.findOne({'_id': docs.associated_activity}, function(err, docss){
 				response.pageInfo.user=request.user;
 				response.pageInfo.activity = docss;
@@ -186,9 +184,8 @@ exports.UponNoteRelatedCreate = function(request, response){
 		}
 		request.body.author = request.user._id;
 		request.body.authorname = request.user.username;
-		console.log(request.body);
-		const note = new Note(only(request.body, "title author content authorname note_type short_description picture"));
-		console.log(request.body);
+		const note = new Note(only(request.body,
+		 "title author content authorname note_type short_description picture associated_activity"));
 		note.save();
 		response.render('note/Return', response.pageInfo);
 	}
