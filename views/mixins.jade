@@ -78,7 +78,7 @@ mixin ListNotes(notes)
           div(class="ui float segment note")
               div(class="ui grid")
                   div(class="four wide column")
-                      img(class="ui small rounded image" src=note.picture)
+                      img(class="ui small rounded image" src=note.picture.replace('static',''))
                   div(class="twelve wide column")
                       h1(class='ui header') #{note.title}
                       h5(class='ui grey header') 
