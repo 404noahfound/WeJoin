@@ -248,9 +248,17 @@ exports.UponNoteModifyEach = function(request, response){
 				console.log('resized new avatar to fit within 200x200px');
 		})
 	}
-	Note.findOneAndUpdate({'_id':id}, { $set :{'content': new_content , 'title': new_title ,
-		"picture": request.body.picture, "short_description":new_description } 
-		, $currentDate:{'modified_at': 'date'}},
+	var options;
+	if(request.body.picture)
+	{	options = { $set :{'content': new_content , 'title': new_title ,
+			"picture": request.body.picture, "short_description":new_description } 
+			, $currentDate:{'modified_at': 'date'}};
+	}
+	else{	
+		options = { $set :{'content': new_content , 'title': new_title , "short_description":new_description } 
+			, $currentDate:{'modified_at': 'date'}};
+	}
+	Note.findOneAndUpdate({'_id':id}, options,
 	 function(err, doc){
 		if(err) console.log('error!');
 		response.pageInfo.description=new_content;
