@@ -2,37 +2,17 @@ div(class="ui borderless main menu")
   div(class="ui text container")
     a( href="/")
       img(class="ui image" src="/images/wejoin.png", style="width:120px;height:50px")
-    //- a.item Home
-    //- div.ui.dropdown.item
-    //-   a(href="/activity" style="color:inherit")
-    //-     | Activities
-    //-     i(class="dropdown icon")
-    //-   div.menu
-    //-     a.item(href="/activity/getbyuser") My Activities
-    //-     a.item(href="/activity/create") Create(for test)
-    //-     a.item(href="/activity/organizermodify") Modify(for test)
-    //-     a.item(href="/activity/delete_all") Delete all(for test)
-    //- div.ui.dropdown.item
-    //-   a(href="/note" style="color:inherit")
-    //-     | Notes
-    //-     i(class="dropdown icon")
-    //-   div.menu
-    //-     a.item(href="/note/search") Search
-    //-     a.item(href="/note/create") Create
-    //-     a.item(href="/note/modify") Modify
-    //-     a.item(href="/note/delete") Delete
-    //- a.item Notes
     div.ui.dropdown.item._search
       div.menu
-        div.item Activities
-        div.item Notes
-        div.item Users
+        div.item(meta-search-url = '/activity/search') Activities
+        div.item(meta-search-url = '/note/search') Notes
+        div.item(meta-search-url = '/user/search') Users
     div(class="ui search item")
       form(id="search_activities_by_keyword", method="post", action="/activity/search")
         div(class="field")
           div(class="ui transparent icon input")
             i(class="search link icon", onclick="$('#search_activities_by_keyword').submit()")
-            input.prompt(type="text", name="title", placeholder="Search Anything...")
+            input.prompt(type="text", name="keyword", placeholder="Search Anything...")
     if (username)
       div(class="ui right floated dropdown item")
         | Welcome, #{username}
@@ -58,4 +38,8 @@ div(class="ui borderless main menu")
           on: 'hover'
         });
       $('._search.dropdown').dropdown();
+      $('._search.dropdown .item').click(function(){
+        var url = $(this).attr('meta-search-url');
+        $('#search_activities_by_keyword').attr('action', url);
+      })
     });

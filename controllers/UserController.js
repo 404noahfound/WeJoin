@@ -148,7 +148,7 @@ exports.Search = function(req, res){
 	// 		res.json(err);
 	// 	}
 	// );
-	User.Search(req.params.keyword).then(
+	User.Search(req.body.keyword).then(
 		function(users){
 			res.pageInfo.users = users;
 			res.render('user/Index', res.pageInfo);
