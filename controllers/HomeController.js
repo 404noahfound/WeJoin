@@ -24,12 +24,15 @@ exports.Index = function(req, res){
 };
 
 exports.Fake = function(req,res){
+	console.log(req.params);
 	if(req.params.type == 'user') res.json(User.fake(req.params.num));
 	else if (req.params.type == 'note'){
 		res.json(Note.fake(req.params.num,req.user));
 	}
-	else if (req.params.type == 'activity'){
-		User.findOne({id: req.user._id}).exec()
+	else if(req.params.type == 'activity'){
+		var username = 'fds';
+		if (req.user) username = req.user.username;
+		User.findOne({username: req.user.username}).exec()
 		.then(
 			function(user){
 				console.log('found user' + user._id);

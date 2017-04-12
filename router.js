@@ -81,5 +81,6 @@ module.exports = function(app){
     app.get('/user/delete_all', UserController.DeleteAll);
     app.post('/user/follow_actions', UserController.FollowActions);
     app.post('/user/get_users_api', UserController.GetUsersAPI);
+    app.get('/user/search/:keyword', UserController.Search)
     app.get('/user/:id', UserController.View);
 };

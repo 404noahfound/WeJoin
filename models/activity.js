@@ -332,13 +332,19 @@ ActivitySchema.statics = {
 		function sample(myArray){
 			return myArray[Math.floor(Math.random() * myArray.length)];
 		}
+		var start_time = new Date(faker.date.recent());
+		var end_time = new Date(faker.date.recent());
+		if (end_time < start_time) {var tmp; tmp = end_time; end_time = start_time; start_time = tmp;}
 		new_info = {
 			title: faker.lorem.words(),
 			description: faker.lorem.paragraphs(),
 			expense: faker.finance.amount(),
 			status: sample(['future', 'going', 'finished', 'cancelled']),
 			content_for_participants: faker.lorem.paragraphs(),
-			participation_method: sample(['public', 'approval', 'only_invite'])
+			participation_method: sample(['public', 'approval', 'only_invite']),
+			start_time: start_time,
+			end_time: end_time
+
 		};
 		Object.assign(new_info, info);
 		console.log(new_info);
