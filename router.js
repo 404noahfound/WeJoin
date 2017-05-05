@@ -1,6 +1,5 @@
 var HomeController = require('./controllers/HomeController');
 var ActivityController = require('./controllers/ActivityController');
-var AccountController = require('./controllers/AccountController');
 var UserController = require('./controllers/UserController');
 var NoteController = require('./controllers/NoteController');
 var passport = require('passport');
@@ -34,16 +33,6 @@ module.exports = function(app){
 	//OrganizerModify
 	app.get('/activity/:id/organizermodify', ActivityController.OrganizerModify);
 	app.post('/activity/:id/organizermodify', uploading.single('picture'), ActivityController.UponOrganizerModify);
-
-	//notification
-	app.get('/notification', AccountController.Notification);
-	app.post('/notification', AccountController.UponNotification);
-	//create notification
-	app.get('/notification/create', AccountController.NotificationCreate);
-	app.post('/notification/create', AccountController.UponNotificationCreate);
-	//delete notification
-	app.get('/notification/delete', AccountController.NotificationDelete);
-	app.post('/notification/delete', AccountController.UponNotificationDelete);
 
 	//note
 	app.get('/note', NoteController.Note);

@@ -32,7 +32,7 @@ UserSchema.index({nickname: 'text', username: 'text', description: 'text', city:
 
 UserSchema.methods = {
 	/**
-	 * check if the password matches the password in the database
+	 * @description check if the password matches the password in the database
 	 * @param  {String}
 	 * @return {Boolean}
 	 * @author Su
@@ -40,14 +40,25 @@ UserSchema.methods = {
 	validPassword: function(password) {
 		return this.password === password;
 	},
+
+	/**
+	 * @description transform the local path of avatar to web path
+	 * @return {string} the web path for avatar
+	 */
 	getAvatarUrl: function(){
 		if(this.avatar) return this.avatar.replace('static','');
 		return null;
 	},
+	/**
+	 * @description get all the users followed
+	 */
 	getFollowsInfo: function(callback){
 		// console.log('arrive here');
 		this.model('User').find({_id: {$in: this.follow_to}}, callback);
 	},
+	/**
+	 * @description get all information for user homepage
+	 */
 	getInfoForView: function(callback){
 		var info = {user: this};
 		var this_user = this;
@@ -72,6 +83,9 @@ UserSchema.methods = {
 			});
 		});
 	},
+	/**
+	 * @description follow the followee
+	 */
 	follow: function(followee, callback){
 		var i = this.follow_to.indexOf(followee._id);
 		var err = null;
@@ -80,6 +94,9 @@ UserSchema.methods = {
 		}
 		this.save().then(callback(err, { "follow": "Follow success."}));
 	},
+	/**
+	 * @description unfollow the followee
+	 */
 	unfollow: function(followee, callback){
 		var i = this.follow_to.indexOf(followee._id);
 		var err = null;
@@ -88,12 +105,18 @@ UserSchema.methods = {
 		}
 		this.save().then(callback(err, { "unfollow": "Unfollow success."}));
 	},
+	/**
+	 * @description check if the user has followed followee
+	 */
 	hasFollow: function(followee){
 		var i = this.follow_to.indexOf(followee._id);
 		if(i == -1) return 0;
 		return 1;
 	},	
 
+	/**
+	 * @description generate fake activity for the user
+	 */
 	fakeActivity: function(){
 		var info = {organizer: this._id};
 		console.log('arrive here');
@@ -139,6 +162,9 @@ UserSchema.statics = {
 		return purifiedForm;
 	},
 
+	/**
+	 * @description fake 'num' amount of new users 
+	 */
 	fake: function(num){
 		function sample(myArray){
 			return myArray[Math.floor(Math.random() * myArray.length)];
@@ -163,6 +189,9 @@ UserSchema.statics = {
 		return user_info;
 	},
 
+	/**
+	 * @description get info for showing user label
+	 */
 	getInfoForGuest: function(user_id_list, callback) {
 		this.find({_id: { $in: user_id_list} },
 			function(err, docs){
@@ -179,6 +208,9 @@ UserSchema.statics = {
 			});
 	},
 
+	/**
+	 * @description search user by keyword
+	 */
 	Search: function(keyword) {
 		return this
 		    .find(

@@ -56,6 +56,9 @@ exports.UponCreate = function(req, res){
 	// res.render('home/Functionality', res.pageInfo);
 };
 
+/**
+ * @description show the modify page for current user's profile
+ */
 exports.Modify = function(req, res){
 	if (!req.user) {
 		res.redirect('/user/login');
@@ -67,6 +70,9 @@ exports.Modify = function(req, res){
 	}
 };
 
+/**
+ * @description update user's profile upon receiving the form of modify
+ */
 exports.UponModify = function(req, res){
 	var updateInfo = User.purifyForm(req.body);
 	if(req.file){
@@ -97,6 +103,9 @@ exports.UponModify = function(req, res){
 	);
 };
 
+/**
+ * @description show the personal homepage of the required user
+ */
 exports.View = function(req, res){
 	res.pageInfo.title = "User Info";
 	User.findById(req.params.id)
@@ -134,6 +143,10 @@ exports.Index = function(req, res){
 		});
 };
 
+/**
+ * @description search user by keyword
+ * @require keyword in req.body
+ */
 exports.Search = function(req, res){
 	res.pageInfo.title = "Search Result";
 	User.Search(req.body.keyword).then(
@@ -147,6 +160,9 @@ exports.Search = function(req, res){
 	);
 }
 
+/**
+ * @description log out the current user
+ */
 exports.LogOut = function(req,res){
 	req.logout();
 	res.redirect('/');
@@ -160,9 +176,7 @@ exports.DeleteAll = function(req, res){
 };
 
 /**
- * all actions related to follow are sent to this action
- * @param {[type]} req [description]
- * @param {[type]} res [description]
+ * @description all actions related to follow are sent to this action
  * @req req.body{followee_id: String, [follow: int], [unfollow: int]}
  * @res json{followee_id: String, exist: int, hasFollow: int}
  */
@@ -196,6 +210,10 @@ exports.FollowActions = function(req, res){
 	});
 }
 
+/**
+ * @description get json file of user information for various purpose
+ * @required res.body.ids the id of the user whose information wanted
+ */
 exports.GetUsersAPI = function(req, res){
 	if (!req.body || !req.body.ids){
 		res.json('error!');

@@ -5,9 +5,11 @@ const Activity = mongoose.model('Activity');
 const User = mongoose.model('User');
 const flash = require('express-flash');
 
+/**
+ * @description Note. Generate page to view my notes
+ */
 exports.Note = function(request, response){
 	response.pageInfo.title = "Note";
-	response.pageInfo.functionality = "Note. Generate page to view my notes";
 	if (!request.user) {
 		response.redirect('/user/login');
 	}
@@ -25,6 +27,9 @@ exports.Note = function(request, response){
 	}
 };
 
+/**
+ * @description  Generate page to view user's notes
+ */
 exports.NoteUser = function(request, response){
 	response.pageInfo.title = "Note User";
 	response.pageInfo.functionality = "Note User. Generate page to view user's notes";
@@ -45,7 +50,9 @@ exports.NoteUser = function(request, response){
 	}
 };
 
-
+/**
+ * @description Generate search page.
+ */
 exports.NoteSearch = function(request, response){
 	response.pageInfo.title = "Note Search";
 	response.pageInfo.functionality = "Note.Search. Generate search page.";
@@ -55,6 +62,9 @@ exports.NoteSearch = function(request, response){
 	else{response.render('note/Search', response.pageInfo);}
 };
 
+/**
+ * @description Generate page for relevant notes
+ */
 exports.UponNoteSearch = function(request, response){
 	response.pageInfo.functionality = "UponNote.Search. Generate page for relevant notes";
 	Note.Search(request.body.keyword).then(
@@ -68,6 +78,9 @@ exports.UponNoteSearch = function(request, response){
 	);
 };
 
+/**
+ * @description get the page for note details
+ */
 exports.NoteViewEach = function(request, response){
 	response.pageInfo.title = "Note View";
 	response.pageInfo.functionality = "Note.View";
@@ -102,6 +115,9 @@ exports.NoteViewEach = function(request, response){
 	}
 };
 
+/**
+ * @description get the create page for note
+ */
 exports.NoteCreate = function(request, response){
 	response.pageInfo.title = "Note Create";
 	response.pageInfo.functionality = "Note.Create. Generate create Note editor page.";
@@ -113,6 +129,9 @@ exports.NoteCreate = function(request, response){
 	}
 };
 
+/**
+ * @description create note upon receiving the form
+ */
 exports.UponNoteCreate = function(request, response){
 	response.pageInfo.title = "Note Upon Create";
 	response.pageInfo.functionality = "Note.UponCreate";
@@ -144,6 +163,9 @@ exports.UponNoteCreate = function(request, response){
 	}
 };
 
+/**
+ * @description get the page for create note of related activity
+ */
 exports.NoteRelatedCreate = function(request, response){
 	response.pageInfo.title = "Note Create";
 	response.pageInfo.functionality = "Note.Create. Generate create Note editor page.";
@@ -155,6 +177,9 @@ exports.NoteRelatedCreate = function(request, response){
 	}
 };
 
+/**
+ * @description upon receiving the form, create the note of related activity
+ */
 exports.UponNoteRelatedCreate = function(request, response){
 	response.pageInfo.title = "Note Upon Create";
 	response.pageInfo.functionality = "Note.UponCreate";
@@ -188,6 +213,11 @@ exports.UponNoteRelatedCreate = function(request, response){
 	}
 };
 
+
+/**
+ * @warning abandoned method
+ * @description get the page for modifying note
+ */
 exports.NoteModify = function(request, response){
 	response.pageInfo.title = "Note Modify";
 	response.pageInfo.functionality = "Note.Modify. Modify the content of the note.";
@@ -208,6 +238,9 @@ exports.NoteModify = function(request, response){
 	}
 };
 
+/**
+ * @description get the page for modifying note
+ */
 exports.NoteModifyEach = function(request, response){
 	if (!request.user) {
 		response.redirect('/user/login');
@@ -225,6 +258,9 @@ exports.NoteModifyEach = function(request, response){
 	}
 };
 
+/**
+ * @description upon receiving the form for modifying note, update the note
+ */
 exports.UponNoteModifyEach = function(request, response){
 	var id = request.params.id;
 	var new_content=request.body.content;
@@ -266,6 +302,10 @@ exports.UponNoteModifyEach = function(request, response){
 	response.render('note/Return', response.pageInfo);
 };
 
+/**
+ * @warning abandoned method
+ * @description delete the note
+ */
 exports.NoteDelete = function(request, response){
 	response.pageInfo.title = "Note Delete";
 	response.pageInfo.functionality = "Note.Modify. Delete the note.";
@@ -286,6 +326,9 @@ exports.NoteDelete = function(request, response){
 	}
 };
 
+/**
+ * @description delete the note
+ */
 exports.NoteDeleteEach = function(request, response){
 	if (!request.user) {
 		response.redirect('/user/login');
@@ -302,6 +345,9 @@ exports.NoteDeleteEach = function(request, response){
 	}
 };
 
+/**
+ * @description upon receiving the form for delete note, delete the note
+ */
 exports.UponNoteDeleteEach = function(request, response){
 	var id = request.params.id;
 	response.pageInfo.title="Upon Delete Each";
@@ -312,6 +358,10 @@ exports.UponNoteDeleteEach = function(request, response){
 	});
 };
 
+/**
+ * @warning only for test
+ * @description delete all notes of all users
+ */
 exports.DeleteAll = function(request, response){
 	response.pageInfo.title="DeleteAll";
 	response.pageInfo.functionality = "Delete all notes";

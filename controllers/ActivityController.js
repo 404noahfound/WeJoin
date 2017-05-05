@@ -5,6 +5,9 @@ const User = mongoose.model('User');
 const Note = mongoose.model('Note');
 const flash = require('express-flash');
 
+/**
+ * @description get the activity information for view
+ */
 var ToView = function(activity, callback){
 	User.getInfoForGuest(activity.participants,
 		function(res){
@@ -39,6 +42,9 @@ var ToView = function(activity, callback){
 		});
 };
 
+/**
+ * @description search activity by keyword
+ */
 exports.Search = function(request, response){
 	response.pageInfo.functionality = "Activity.Search. Generate page for relevant activitys";
 	var attr = request.body;
@@ -81,6 +87,9 @@ exports.Search = function(request, response){
 		});
 };
 
+/**
+ * @description get the details page for the activity
+ */
 exports.View = function(request, response){
 	response.pageInfo.functionality = "Activity.View. Generate page for viewing activity";
 	response.pageInfo.title = "Activity Information";
@@ -114,6 +123,9 @@ exports.View = function(request, response){
 		});
 };
 
+/**
+ * @description get the create page for new activity
+ */
 exports.Create = function(request, response){
 	response.pageInfo.functionality = "Activity.Create. Generate create account page.";
 	response.pageInfo.title = "Create Activity";
@@ -134,6 +146,9 @@ exports.Create = function(request, response){
 	}
 };
 
+/**
+ * @description non-organizers operate on the activities by this method
+ */
 exports.CustomerModify = function(request, response){
 	response.pageInfo.functionality = "Activity.CustomerModify. Include Join/Quit/Rate";
 	response.pageInfo.title = "Customer Modify";
@@ -169,6 +184,9 @@ exports.CustomerModify = function(request, response){
 	}
 };
 
+/**
+ * @description organizers can change any information of the activity, get the form for organizer to change information
+ */
 exports.OrganizerModify = function(request, response){
 	response.pageInfo.functionality = "Activity.OrganizerModify. Generate page for modifying the activity by organizer.";
 	response.pageInfo.title = "OrganizerModify";
@@ -192,6 +210,9 @@ exports.OrganizerModify = function(request, response){
 	}
 };
 
+/**
+ * @description organizers can change any information of the activity, update the activity information upon receiving the form
+ */
 exports.UponOrganizerModify = function(request, response){
 	response.pageInfo.functionality = "Activity.UponOrganizerModify";
 	response.pageInfo.title= "Organizer modify success";
@@ -264,32 +285,13 @@ exports.UponOrganizerModify = function(request, response){
 	}
 };
 
+/**
+ * @warning this is only for testing
+ * @description delete all activities
+ */
 exports.DeleteAll = function(req, res){
 	Activity.remove({},function(err){
 		if (err) res.json(err);
 		else res.redirect('/');
 	});
 };
-
-/*
-exports.AddParticipant = function(request, response){
-	if(!Activity.AddParticipant(RegUser._id)) console.log("Add participant failed!");
-	response.render('activity/View',response.pageInfo);
-};
-*/
-/*
-// for test
-exports.GetByUser = function(request, response){
-	response.pageInfo.title = "User's activities";
-	if (!request.user) {
-		response.redirect('/user/login');
-	}
-	else{
-		Activity.GetByUser(request.user,
-			function(docs){
-				response.json(docs);
-			});
-	}
-};
-*/
-

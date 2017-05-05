@@ -124,6 +124,9 @@ ActivitySchema.methods = {
 		}
 	},
 
+	/**
+	 * @description check if user is the participant of this activity
+	 */
 	IsParticipant: function(user) {
 		var i = this.participants.indexOf(user._id);
 		if (i != -1) {
@@ -134,7 +137,9 @@ ActivitySchema.methods = {
 		}
 	},
 
-
+	/**
+	 * @description check if user is the organizer of the activity
+	 */
 	IsOrganizer: function(user) {
 		if (this.organizer.equals(user._id))  {
 			return true;
@@ -359,24 +364,6 @@ ActivitySchema.statics = {
 			}
 		});
 	}
-	// organizer: { type : Schema.Types.ObjectId, ref: 'User', required: 'Activity organizer cannot be empty.' }, // store the _id of the organizer
-	// title: { type : String, required: 'Acitivity title cannot be blank', trim : true },
-	// location_id: { type : String, trim : true }, // store the google API place_id of the location
-	// location_name: { type : String, trim : true },
-	// start_time: { type : Date, default : Date.now },
-	// end_time: { type : Date, default : Date.now },
-	// type: { type : String, default : null, trim : true },
-	// description: { type : String, default : 'This Activity has no description', trim : true },
-	// expense: { type : Number, default : 0, min : 0 },
-	// status: { type : String, enum : ['future', 'going', 'finished', 'cancelled'], default : 'future' },
-	// rating: { type : Number, min : 0, max : 5, default : null },
-	// rated_participants: [{ type : Schema.Types.ObjectId, ref: 'User' }],
-	// content_for_participants: { type : String, default : null, trim : true },
-	// participation_method: { type : String, enum : ['public', 'approval', 'only_invite'], default : 'public' },
-	// remind_time: { type : Date, default : null },
-	// participants: [{ type : Schema.Types.ObjectId, ref: 'User' }],
-	// wait_for_approval: [{ type : Schema.Types.ObjectId, ref: 'User' }],
-	// created_at: { type : Date, default : Date.now }
 };
 
 mongoose.model('Activity', ActivitySchema);
